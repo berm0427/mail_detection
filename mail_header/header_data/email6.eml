@@ -1,0 +1,10 @@
+Received-SPF: pass (kakao.com: domain of webmaster@wooribank.com designates 115.89.128.18 as permitted sender)
+X-Hanmail-Peer-IP: 115.89.128.18
+X-Hanmail-Env-From: webmaster@wooribank.com
+X-Hanmail-Class: I
+X-Kakaomail-MID: Cj3z+AAAcPIAAAGVyveeyQGa7V8=
+X-Hermes-Message-Id: t2PAh0X1e947881922
+Received: from etsmail.wooribank.com ([115.89.128.18]) by hermes of kmail-rmail-pgvm02 (10.61.243.248) with ESMTP id t2PAh0X1e947881922 for <berm0427@kakao.com> (version=TLSv1.2 cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Tue, 25 Mar 2025 10:43:00 +0900 (KST)
+X-Verify: 0000000019
+Message-ID: <1742866978618.63892@wetsap1p>
+From: "=?UTF-8?B?7Jqw66as7J2A7ZaJ?=" <webmaster@wooribank.com>

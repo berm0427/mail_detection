@@ -1,0 +1,31 @@
+{
+  "final_verdict": "unknown",
+  "sender_domain": "korea.kr",
+  "from_domain": "korea.kr",
+  "organization_type": "public",
+  "organization_subtype": "government",
+  "spf_check": "match",
+  "dkim_check": "match",
+  "dmarc_check": "unknown",
+  "dnssec_status": "unsigned",
+  "domain_reputation": "established",
+  "reasons": [],
+  "details": {
+    "sender_ip": "125.60.33.71",
+    "domain_info": {
+      "domain_name": "korea.kr",
+      "registrar": "Inames Co., Ltd.(http://www.inames.co.kr)",
+      "creation_date": "2006-09-18 00:00:00",
+      "expiration_date": "2027-09-18 00:00:00",
+      "domain_age_days": 6788,
+      "registrant_address": null,
+      "contact_emails": null
+    },
+    "matching_ips": [
+      [
+        "125.60.33.71",
+        "125.60.33.0/24"
+      ]
+    ]
+  }
+}

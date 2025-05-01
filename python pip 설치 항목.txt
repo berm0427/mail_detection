@@ -1,0 +1,5 @@
+pip3 install dnspython
+pip3 install python-whois
+pip3 install beautifulsoup4 email-validator
+pip3 install tldextract 
+pip3 install anthropic (클로드 API 키가 있고(비용 본인 부담), API를 사용하실 분만)

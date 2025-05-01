@@ -1,0 +1,71 @@
+Delivered-To: berm2222@gmail.com
+Received: by 2002:ac8:4dda:0:b0:475:1ce0:7092 with SMTP id g26csp6240752qtw;
+        Mon, 7 Apr 2025 01:48:58 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEqILygVrgnwPBGTYaK3S3cE824tD9KpHmvtACSW9IdUe7vCtbNPL728T/vkYBpIi9Lq4dY
+X-Received: by 2002:a05:6902:2411:b0:e63:dc61:372f with SMTP id 3f1490d57ef6-e6e316fb437mr13104553276.19.1744015738724;
+        Mon, 07 Apr 2025 01:48:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1744015738; cv=none;
+        d=google.com; s=arc-20240605;
+        b=UMYYJpd9U3+2XZQnMmXvLbMXK7nbwpqakIHwQ9dFoZttpMImvMEnXwaQGWvd7ERDdH
+         BujXTnecmY9Le8Qr0pQj1zoy13o8ACXhwtb5dcgNlusivqEp4Svks6PsBK0xxw42LFcG
+         tqVAGnkhQuMGz9NJkuMpwt89lvNmcVehTS/jK/yj5MisnYhwnpmDRFppGjXCrlEDhvlX
+         kQg4Wi8Gfk/KATO9xuvGjsqffEMguzqqYK7mZsCdoHgIPUaJ5czisqaCBnvSTJSnuovl
+         5dTkBHqIygZDumx/ngpf2gKIevDgTdgorSKxBzTmRqeiXQlCl7Pnss/0X1O+gg27s+Gq
+         l9xA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
+        h=dkim-signature:content-transfer-encoding:mime-version:subject
+         :message-id:to:from:date;
+        bh=9ZtJyYEA/zcQHm/lgzLb78KAF8bTO2ujEe3TAYeWCEY=;
+        fh=WpvuC373ZTMCLZIYagF1v9HrwPtcuIVgj45RAivh5S0=;
+        b=WPJ/RR+WfPCmQcCwfqU7T5azQxK1jPn8uYvhQUmuqVt4LMru2e1x+RzW/6h+ay2gdN
+         25Ca9KooYRD6pMLYo2PTfzgL73kY7fSOoJszIsWQcbiZIjWjc9CSlCDNAclTv8AJ9KFw
+         ZRhhEBzuhlIyDUDerA1lcHqgw8OuMGru8dFvUCvQ6afj4aIWZyAhfOs7haqOerPhz+eu
+         erIFvSTVYiz0rlnXpzkHsQ0zKuMgM74UwVM+hRFx29e3gRbRiWxWCbXZbrtKfYJ+rhoY
+         CWBkzGhWYc7UUbi9bh8zY6a4hMSCp7tSX1Z2/xKzn3EtmKqnGGjBxXnHmQalo9XpUZbY
+         YOcw==;
+        dara=google.com
+ARC-Authentication-Results: i=1; mx.google.com;
+       dkim=pass header.i=@kakao.com header.s=1444202050.kakao header.b=l8onVlPv;
+       spf=pass (google.com: domain of berm0427@kakao.com designates 220.64.109.47 as permitted sender) smtp.mailfrom=berm0427@kakao.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=kakao.com
+Return-Path: <berm0427@kakao.com>
+Received: from kmail-prod-ay-skadi05.mail.kakao.com (kmail-prod-ay-skadi05.mail.kakao.com. [220.64.109.47])
+        by mx.google.com with ESMTPS id 3f1490d57ef6-e6e0cae461bsi11888931276.442.2025.04.07.01.48.57
+        for <berm2222@gmail.com>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 07 Apr 2025 01:48:58 -0700 (PDT)
+Received-SPF: pass (google.com: domain of berm0427@kakao.com designates 220.64.109.47 as permitted sender) client-ip=220.64.109.47;
+Authentication-Results: mx.google.com;
+       dkim=pass header.i=@kakao.com header.s=1444202050.kakao header.b=l8onVlPv;
+       spf=pass (google.com: domain of berm0427@kakao.com designates 220.64.109.47 as permitted sender) smtp.mailfrom=berm0427@kakao.com;
+       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=kakao.com
+Received: from 220.64.108.19 ([125.240.4.157]) by skadi-sender of skadi-sender-normal-prod-deployment-59748456d7-m96td (10.240.13.14) with HTTP id 20250407174855.NtwH-7DvQ1iUg-Cci2MdFg@berm0427.kakao.com for <berm2222@gmail.com>; Mon, 07 Apr 2025 17:48:58 +0900 (KST)
+Date: Mon, 7 Apr 2025 17:48:55 +0900 (KST)
+From: "CHANGBEOM YU." <berm0427@kakao.com>
+To: berm2222@gmail.com
+Message-ID: <20250407174855.NtwH-7DvQ1iUg-Cci2MdFg@berm0427.kakao.com>
+Subject: =?UTF-8?B?7ISc7Jq464Ko67aA6rK97LCw7IScIOyeheuLiOuLpA==?=
+MIME-Version: 1.0
+Content-Type: text/html; charset=utf-8
+Content-Transfer-Encoding: base64
+X-Kakaomail-MID: 20250407174855.NtwH-7DvQ1iUg-Cci2MdFg@berm0427.kakao.com
+X-Mailer: mint
+X-Originating-IP: [125.240.4.157]
+X-HM-UT: fkpmxC6y5UXP+YTIgolUiP9ah1EfVvJbVYSfKXTjVEg=
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple; t=1744015735;
+	s=1444202050.kakao; d=kakao.com;
+	h=Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Message-ID:To:From:Date;
+	bh=9ZtJyYEA/zcQHm/lgzLb78KAF8bTO2ujEe3TAYeWCEY=;
+	b=l8onVlPvu+qycDhk+KuGpi4J2LVKzYk7LdyeJM+Dz+ajQMgA+7bP3EBt8hlba7CM
+	/qEoSVsD6t40SCCR3nM3lAh5AVf6t0AjICymWn1YIH7KdVfhmk18EMBqL17hGQC77uy
+	rQ5xkKmpRguezr0MtXLAOoq0zdCWs0nGt6przri8=
+
+PGh0bWw+CjxoZWFkPgogICAgPHN0eWxlPgogICAgICAgIHB7bWFyZ2luLXRvcDowO21hcmdpbi1i
+b3R0b206MH0KICAgIDwvc3R5bGU+CjwvaGVhZD4KPGJvZHk+CiAgICA8ZGl2IHN0eWxlPSJjb2xv
+cjojMTExO2ZvbnQtZmFtaWx5OkFwcGxlIFNEIEdvdGhpYyBOZW8sTWFsZ3VuIEdvdGhpYywn66eR
+7J2AIOqzoOuUlScsc2Fucy1zZXJpZjtmb250LXNpemU6MTBwdDtsaW5lLWhlaWdodDoxLjU7Ij48
+cD7qsr3ssLDsnoXri4jri6Qg7Iug67aE7KadIOygnOyLnO2VtOyjvOyEuOyalDwvcD48L2Rpdj4K
+PC9ib2R5Pgo8L2h0bWw+CjxpbWcgc3JjPSJodHRwczovL2NvbmZpcm0ubWFpbC5rYWthby5jb20v
+djEvdXNlcnMvYmVybTA0MjclNDBrYWthbyUyRWNvbS9jbWFpbHMvMjAyNTA0MDcxNzQ4NTUlMkVO
+dHdILTdEdlExaVVnLUNjaTJNZEZnJTQwYmVybTA0MjclMkVrYWthbyUyRWNvbS9yZWNpcGllbnRz
+L2Jlcm0yMjIyJTQwZ21haWwlMkVjb20iPg==

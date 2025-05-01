@@ -1,0 +1,61 @@
+Received-SPF: pass (kakao.com: domain of berm2222@gmail.com designates 209.85.160.174 as permitted sender)
+X-Hanmail-Peer-IP: 209.85.160.174
+X-Hanmail-Env-From: berm2222@gmail.com
+X-Hanmail-Class: W
+X-Kakaomail-MID: Cj39WQAAYzwAAAGWV3TOZgAqV/0=
+X-Hermes-Message-Id: t3LHQYmdZ1584541905
+Received: from mail-qt1-f174.google.com ([209.85.160.174]) by hermes of kmail-rmail-pgvm13 (10.61.253.89) with ESMTP id t3LHQYmdZ1584541905 for <berm0427@kakao.com> (version=TLSv1.2 cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 21 Apr 2025 17:26:34 +0900 (KST)
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4772f48f516so48091541cf.1
+        for <berm0427@kakao.com>; Mon, 21 Apr 2025 01:26:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1745223992; x=1745828792; darn=kakao.com;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=o9r9W0ry5deI5WzNd8znBN7A4MraB0Ck3PjOJckdvwE=;
+        b=erLTGacBR/hfwwG9W3g1oKrkezmPbmdpB+3nPPacIOgPBD10GFZqjg5SVAztZPeYWB
+         lb/imjVFuBFqZC9IIpfSO4JbAcycish6V9IJJ0qTRzZlKxgD6smPraynSdGElXRRCMJY
+         XouB6zeejBA2OQgw70CbxvX0SfFUtHYo/7qatmp/dVH7bAUR+4AoKAb/lTJUN+nOjMv6
+         Hy1yjRa6byVeghC97Tuhh2g5S8+HPOnV/1/rPPc8RvnnjVXvqVzIbyLZOyMy5Ai/sU59
+         pK1kXnvIcYI9HQNp4K0fb5nwFpSmXiq5bwQ/BpkSUaSCRLbPYD3P6nQLt75QTFvKZ7PC
+         mx3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745223992; x=1745828792;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=o9r9W0ry5deI5WzNd8znBN7A4MraB0Ck3PjOJckdvwE=;
+        b=KOTC8QjFwLvPi8YrXEKbloYKIyxuvQnUN8015G/6U9YKRZarqJUJMR9LvMRLTSd1pT
+         WeVyod25LGFLpto0nEYt86P9mnBLh7lfu+3H0xY2XAVp+btzW8oHajEYBLSjLdKr/zR6
+         NEorfZXtZlbrVJoLRE+mHZsvOKNCXAvovngw9zOCc5xRLy2atkwWAuCWWbFybjoLNkKY
+         F/My5vXhs3NjFMkOgcL30nTSftzIxYwCnibe02OBcmtqvj1yfNcKgKl8IE/g9MxlwEFs
+         b2+k8ygvtqKuVcvpltJnptCXqhZOFZ83PfB5JV7wvwBFuh8Kp67d3p7rMpSijLECa5mC
+         KuBA==
+X-Gm-Message-State: AOJu0Yxmf00D/HJV+faJepTX6agbeepQZTMccsAN+C8tyMU60eYVF+CM
+	io1Q8GWyzx+oDBYNnZE0xbaBOSJ935MK6Px3ejO1c2f6jWe+zlFBet2P2EUtO2KInTUx9CaF4m+
+	8CspuAeezN1Mzm+wibAL398AbshJZ1pnK
+X-Gm-Gg: ASbGnctGjPHre+bl7GYxvBztnpHgfpcs2QWIhlyG2pkDPECGl2VkdY1KFuTcmDe6z1F
+	fjEmqbl3pkytpWez42X4BJgymwljOzdUGvidh36aBnigaR20D6k0bLpnIsCQzT72L5exFw4VVD6
+	JPEHVoL6tlWJVV68zQVOzI+Q==
+X-Google-Smtp-Source: AGHT+IEzAokyU0vF+xNgqTZU0wLx65Dr+JnCBVMfbkFZIQGzjDR2LpvKq3uQfz/9VscV0gIdHS5mKtJXeeOHstx55Yc=
+X-Received: by 2002:a05:622a:2cd:b0:477:51c:d853 with SMTP id
+ d75a77b69052e-47aec44824cmr154561241cf.9.1745223991999; Mon, 21 Apr 2025
+ 01:26:31 -0700 (PDT)
+MIME-Version: 1.0
+From: =?UTF-8?B?7JyI65SU7JWg7ZSM?= <berm2222@gmail.com>
+Date: Mon, 21 Apr 2025 17:26:20 +0900
+X-Gm-Features: ATxdqUGkVF0DDw0w1B68M2x9NSIFbvpRVEUbHlSvFCZ5kBNvgiXjR-vF5cNU_Pw
+Message-ID: <CAB0nZAfvCzNq=gOXJ9kzJCqBiO6m7_vh737f_s=vANMqtOuEKw@mail.gmail.com>
+Subject: =?UTF-8?B?66Gc6re47J247J20IOuLpOuluCDsnqXshozsl5DshJwg65CY7JeI7Ja07JqU?=
+To: berm0427@kakao.com
+Content-Type: multipart/alternative; boundary="00000000000018c26a063345a074"
+
+--00000000000018c26a063345a074
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+67mE67CA67KI7Zi4IOuwlOq/lOyjvOyEuOyalA0K
+--00000000000018c26a063345a074
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+PGRpdiBkaXI9Imx0ciI+67mE67CA67KI7Zi4IOuwlOq/lOyjvOyEuOyalMKgPC9kaXY+DQo=
+--00000000000018c26a063345a074--

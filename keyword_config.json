@@ -1,0 +1,42 @@
+{
+  "project_path": "C:/Users/berm2/Desktop/mail_detection",
+  "keywords": {
+    "financial": [
+      "은행",
+      "카드",
+      "신한",
+      "우리",
+      "국민",
+      "농협",
+      "하나",
+      "bank",
+      "card"
+    ],
+    "government": [
+      "정부",
+      "공공",
+      "공단",
+      "국세",
+      "세무",
+      "우체국",
+      "우편",
+      "코리아",
+      "한국",
+      "서울시"
+    ],
+    "delivery": [
+      "택배",
+      "배송",
+      "우체국",
+      "우편",
+      "한진",
+      "post",
+      "delivery",
+      "패키지"
+    ],
+    "malicious": [
+      "로그인"
+    ]
+  },
+  "last_saved": "2025-04-29 22:26:04"
+}

@@ -1,0 +1,55 @@
+Received-SPF: pass (kakao.com: domain of berm2002@citizen.seoul.kr designates 115.84.165.163 as permitted sender)
+X-Hanmail-Peer-IP: 115.84.165.163
+X-Hanmail-Env-From: berm2002@citizen.seoul.kr
+X-Hanmail-Class: X
+X-Kakaomail-MID: Cj355AAAak8AAAGWV4J28gAqV/o=
+X-Hermes-Message-Id: t3LHfU5cT1104673659
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple; t=1745224890;
+	s=s20240125; d=citizen.seoul.kr;
+	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type;
+	bh=yScRRXl5J0aGOpDJaGANxyPAiTM3ZIR5L9LCMttDZLM=;
+	b=GvBu/kllAv62UZ27czIMjlfAR7WdpYykOy6U6gUUA4KL0xlYc8VDWNu/TbMbSKpk
+	DPnrY4eFJAuiuCSnYkbgIrHuKJbpJ2AXlsYNaj5Vz84hWQ7ZO8im11bc8GpB/eam3UN
+	c65jPgRgCYo6V7o36Io5bNsl3hMk4W7EysAJFya4=
+Return-Path: berm2002@citizen.seoul.kr
+Received: from mail1.citizen.seoul.kr ([115.84.165.163]) by hermes of kmail-rmail-pgvm08 (10.61.249.228) with ESMTP id t3LHfU5cT1104673659 for <berm0427@kakao.com> (version=TLSv1.2 cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 21 Apr 2025 17:41:30 +0900 (KST)
+Received: from citizen.seoul.kr (127.0.0.1)
+	by citizen.seoul.kr with ESMTP imoxion SensMail SmtpServer 10.0
+	id <d76c51657ebd4c9798b233cdc39fb29e> for <berm0427@kakao.com> from <berm2002@citizen.seoul.kr>;
+	Mon, 21 Apr 2025 17:41:29 +0900
+Date: Mon, 21 Apr 2025 17:41:29 +0900 (KST)
+From: =?UTF-8?B?7Jyg7LC967KU?=<berm2002@citizen.seoul.kr>
+To: berm0427@kakao.com
+Message-ID: <6806054f3fdeb6e6eae92616@citizen.seoul.kr>
+Subject: =?utf-8?B?7ISc7Jq47IucIOyViOuCtA==?=
+MIME-Version: 1.0
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_1021223_1550814101.1745224889658"
+X-Sensmail-Info: M00001;6806054c3f9b3bc5badb20c0;7f82d25c5eaf4e0d98cb3bd7;d0001;10;1
+X-Sensmail-Rcptkey: 6806054d3fe5624ab07b8928
+X-ClientIP: 125.240.4.157
+X-Priority: 3
+X-Hera-Urls: 9c1b4d5c56c223abbcc5d4506f0b93fdb04c8552ee14ef79062e4a460bb1d737
+
+------=_Part_1021223_1550814101.1745224889658
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+DQrsoIDripQg7ISc7Jq47Iuc7LKt7JeQ7IScIOuCmOyZlOyKteuLiOuLpA0KDQo=
+------=_Part_1021223_1550814101.1745224889658
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: base64
+
+PGRpdiBjbGFzcz0ic2Vuc0VkQ29udGVudEFyZWFDbHMiIGRhdGEtaWQ9InNlbnNFZENvbnRlbnRB
+cmVhIiBzdHlsZT0iY29sb3I6IzAwMDtmb250LXNpemU6MTBwdDtmb250LWZhbWlseTrrj4vsm4Ag
+IWltcG9ydGFudDtiYWNrZ3JvdW5kLWNvbG9yOiB0cmFuc3BhcmVudDsiPg0KPHA+7KCA64qUIOyE
+nOyauOyLnOyyreyXkOyEnCDrgpjsmZTsirXri4jri6Q8L3A+DQoNCjwvZGl2Pg0KPGltZyBpZD0n
+bWFpbGV4cCcgd2lkdGg9MCBoZWlnaHQ9MCBib3JkZXI9MCBzcmM9J2h0dHBzOi8vY2l0aXplbi5z
+ZW91bC5rci9yZWNlaXB0L2VuY19ub3RpZmljYXRpb24uZG8/cD0zYjc4MDBmOTExODkwOWM4NGM4
+NWFjNzNjNDI2YmIwMGVhNjg1NGM4ZDFjNmJiMmFhY2Y3YjQwNDJkZGI2MzVjYzU1ZjI5MjI0NmVl
+OTFlMzUyZTFiMTZkNGJkZjJhNjhlM2ViYmM1YjQ0Y2EwNDU3NTc4YTA5NDhmZDg2OTRiMDM0Yzcw
+ZDc4ZmZjOTM1MmJjMDNkZmM5YWY5Nzc0MGNiMDczZjFhNjE5OWUwNWFlMDgwNjFmZjc5N2RlMGMx
+N2QnPg==
+------=_Part_1021223_1550814101.1745224889658--
+
+

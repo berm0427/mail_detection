@@ -1,0 +1,40 @@
+ARC-Seal: i=1; a=rsa-sha256; d=naver.com; s=arc-20180730; t=1673501583;
+	cv=none; b=GS/agiXWkKzWpT4DVceFNki2b8ngaz1Hq/oWrPNkSjXW+Q8Qe9hvWLJhFPF9
+	 EaSnCHXjKhDyp0F5IqGH8Z3cgHSJwrtvJNu0d9vlbCsgmwN7yo3G6wzCbDmI18YBWNV/MZ
+	 FgLPfE9R4EbAhAy56MXRnlb4dJxvRUXm5RiiySS6yIw1SEAi7vH6vOxhilmvnNbXhquYk8
+	 fuUEIMGwLo7oOY3pKtBwj7wykR+r/hkH1Giexu0HCUt4MUTRyGwxUWloPDWc9RQU/Zx6Qy
+	 RGAT0/r075Q++j2XmwfJjaSCTex7VIpEN3acOgKNjJeqtjKodeI7Qp7adcoSb1yp5YUknd
+	 ww==
+ARC-Message-Signature: i=1; a=rsa-sha256; d=naver.com; s=arc-20180730;
+	t=1673501583; c=relaxed/relaxed;
+	bh=aB/dVci71Lz/+hKMRhP65bz3vsJQUlFei6ih8EvkBjQ=;
+	h=date:from:subject:to; b=VMBBHqLbwIqasSssdVxuztVaR4oFYVm5UyiNyhf+JE3bW
+	 ahJ2r4YWEeSrV9djtouhDiACWlK3TN7Jy5Gn0xXEsy1j8X8sgAahAeXpcpRi9sp2EpA8mw
+	 NbPbur3w1wGEets20VEadyfn1R76a5mw4LdOoyIZlmdDtQ+WnkoquDugTGg3AJ7q5SpH+x
+	 itA0CIhoFm0yxgyp6tZnk+DxKiZ47wJUIx3M11vjmfgEPaKyLRGi46rowCJQMPf0/8CmOx
+	 9xw5r8kFMlQawqAY+TP80ssI1YCvakcCLBJPSYoeea1tZUFGz+QXqgkBJdVvLmd8YdVVZH
+	 QMB3AkNje8FWidVnQ==
+ARC-Authentication-Results: i=1; mx.naver.com; 
+  spf=pass (mx.naver.com: domain of master@dongwon.mil.kr designates 125.61.29.145 as permitted sender) smtp.mailfrom=master@dongwon.mil.kr
+Return-Path: <master@dongwon.mil.kr>
+Received-SPF: pass (mx.naver.com: domain of master@dongwon.mil.kr designates 125.61.29.145 as permitted sender)
+  client-ip=125.61.29.145; x-iptype=default;
+Authentication-Results: mx.naver.com;
+  spf=pass (mx.naver.com: domain of master@dongwon.mil.kr designates 125.61.29.145 as permitted sender) smtp.mailfrom=master@dongwon.mil.kr
+X-Naver-ESV: wdFn+6J4p63qMBIYFHwdbXmmFxKqKAFYkXm=
+X-Session-IP: 125.61.29.145
+Message-ID: <1673501583046.7f9c8.15878513@crcvmail106.nm>
+Received: from mail1.dongwon.mil.kr (mail1.dongwon.mil.kr [125.61.29.145])
+  by crcvmail106.nm.naver.com with ESMTP id 5hdyAJA7TQqIYpe81MBKAQ
+  for <captain8609@naver.com>
+  (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
+  Thu, 12 Jan 2023 05:33:03 -0000
+Date: Thu, 12 Jan 2023 14:32:55 +0900
+From: "=?UTF-8?B?6rWt67Cp67aA?="<master@dongwon.mil.kr>
+Subject: =?UTF-8?B?7Jew7LSIIOuzkeugpeuPmeybkCjstJ3rj5nsm5ApIOyngOygleyekCDslYjrgrQ=?=
+ =?UTF-8?B?IOyngO2cmOyEnOyLoA==?=
+To: <captain8609@naver.com>
+MIME-Version: 1.0
+X-Mailer: ThunderMail6.0
+Content-Type: multipart/alternative;
+	boundary="------=_ThunderMail_BOUNDARY_C123O456N789F"
