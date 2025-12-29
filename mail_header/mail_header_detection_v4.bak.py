@@ -60,6 +60,9 @@ class EmailHeaderAnalyzer:
                 "gov.uk",       # 영국 정부
                 "admin.ch",     # 스위스 정부
                 "korea.kr",     # 대한민국 정부
+                "nts.go.kr",    # 대한민국 국세청
+                "hometax.go.kr" # 대한민국 국세청
+             
             ],
             "military": [
                 "mil.kr",       # 한국 군
@@ -524,22 +527,9 @@ class EmailHeaderAnalyzer:
                 return result
                 
             display_name = display_name_match.group(1).strip().lower()
-            
-            # 사칭 의심 키워드
-            impersonation_keywords = {
-
-                'financial': ['은행', '카드', '신한', '우리', '국민', '농협', '하나', 'bank', 'card'],
-
-                'government': ['정부', '공공', '공단', '국세', '세무', '우체국', '우편', '코리아', '한국'],
-
-                'delivery': ['택배', '배송', '우체국', '우편', '한진', 'post', 'delivery'],
-
-                'tech': ['microsoft', 'apple', 'google', 'facebook', 'meta', 'amazon'],
-
-            }
 
 
-            suspicious_patterns = [
+            subject_suspicious_patterns = {
 
 
 
@@ -547,7 +537,15 @@ class EmailHeaderAnalyzer:
 
 
 
-                r'은행|카드|신한|우리|국민|농협|하나|bank|card',
+                'financial': [
+
+
+
+                    r'은행|카드|신한|우리|국민|농협|하나|bank|card'
+
+
+
+                ],
 
 
 
@@ -555,7 +553,15 @@ class EmailHeaderAnalyzer:
 
 
 
-                r'정부|공공|공단|국세|세무|우체국|우편|코리아|한국|서울시',
+                'government': [
+
+
+
+                    r'정부|공공|공단|국세|세무|우체국|우편|코리아|한국|서울시'
+
+
+
+                ],
 
 
 
@@ -563,7 +569,15 @@ class EmailHeaderAnalyzer:
 
 
 
-                r'택배|배송|우체국|우편|한진|post|delivery',
+                'delivery': [
+
+
+
+                    r'택배|배송|우체국|우편|한진|post|delivery'
+
+
+
+                ],
 
 
 
@@ -571,7 +585,15 @@ class EmailHeaderAnalyzer:
 
 
 
-                r'로그인',
+                'malicious': [
+
+
+
+                    r'로그인'
+
+
+
+                ],
 
 
 
@@ -579,23 +601,31 @@ class EmailHeaderAnalyzer:
 
 
 
-                r'(주문|결제).*확인',
+                'general': [
 
 
 
-                r'(지금|즉시).*확인',
+                    r'(주문|결제).*확인',
 
 
 
-                r'링크.*클릭',
+                    r'(지금|즉시).*확인',
 
 
 
-                r'비밀번호|인증|코드'
+                    r'링크.*클릭',
 
 
 
-            ]
+                    r'비밀번호|인증|코드'
+
+
+
+                ]
+
+
+
+            }
             
             # 각 카테고리별 키워드 확인
             found_categories = []
