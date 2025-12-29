@@ -1,0 +1,35 @@
+# Core dependencies
+dnspython>=2.7.0
+python-whois>=0.9.5
+beautifulsoup4>=4.12.3
+email-validator>=2.2.0
+tldextract>=5.2.0
+PyQt5>=5.15.11
+aiohttp>=3.10.5
+requests>=2.32.3
+python-dotenv>=1.0.0
+langdetect>=1.0.9
+
+# AI/ML dependencies
+anthropic>=0.49.0
+openai>=1.107.3
+google-generativeai>=0.8.5
+xai-sdk>=1.1.0
+
+# NLP dependencies
+nltk>=3.9.1
+spacy>=3.8.0
+JPype
+
+# Scientific computing
+numpy>=1.23.5,<2.0
+scipy>=1.14.1,<2.0
+
+# Korean NLP (Windows compatible)
+konlpy>=0.6.0
+
+# Additional parsing
+lxml>=5.0.0
+html5lib>=1.1
+tqdm
+pandas

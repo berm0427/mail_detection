@@ -16,13 +16,14 @@ class KeywordManager:
         # 설정 파일 경로
         self.config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "keyword_config.json")
         
-        # 데이터 초기화 - 기본값
+        # 데이터 초기화 - 기본값 (카테고리별 개별 키워드로 관리)
         self.project_path = tk.StringVar()
         self.keywords = {
             'financial': ['은행', '카드', '신한', '우리', '국민', '농협', '하나', 'bank', 'card'],
             'government': ['정부', '공공', '공단', '국세', '세무', '우체국', '우편', '코리아', '한국'],
             'delivery': ['택배', '배송', '패키지', '우체국', '우편', '한진', 'post', 'delivery'],
-            'tech': ['microsoft', 'apple', 'google', 'facebook', 'meta', 'amazon']
+            'malicious': ['로그인', '계정', '인증', '비밀번호', '코드'],
+            'general': ['주문확인', '결제확인', '긴급확인', '링크클릭']
         }
         self.category_var = tk.StringVar()
         self.keyword_var = tk.StringVar()
@@ -87,9 +88,13 @@ class KeywordManager:
         ttk.Button(key_btn_frame, text="추가", command=self.add_keyword).pack(side=tk.LEFT, padx=2)
         ttk.Button(key_btn_frame, text="삭제", command=self.remove_keyword).pack(side=tk.LEFT, padx=2)
         
-        # 하단 버튼
+        # 하단 버튼 프레임
         bottom_frame = ttk.Frame(frame)
         bottom_frame.pack(fill=tk.X, padx=5, pady=10)
+        
+        ttk.Button(bottom_frame, text="소스 코드 업데이트", command=self.update_source_files).pack(side=tk.LEFT, padx=5)
+        ttk.Button(bottom_frame, text="키워드 저장", command=self.save_keywords).pack(side=tk.LEFT, padx=5)
+        ttk.Button(bottom_frame, text="키워드 불러오기", command=self.load_keywords).pack(side=tk.LEFT, padx=5)
         
         # 초기 데이터 로드
         self.update_category_tree()
@@ -163,8 +168,6 @@ class KeywordManager:
         # 설정 파일 자동 저장
         self.save_config()
         messagebox.showinfo("알림", f"카테고리 '{category}'가 추가되었습니다.")
-      
-
     
     def remove_category(self):
         selected_items = self.category_tree.selection()
@@ -178,16 +181,14 @@ class KeywordManager:
             del self.keywords[category]
             self.update_category_tree()
             self.keyword_listbox.delete(0, tk.END)
-
-        
-        # 설정 파일 자동 저장
-        self.save_config()
-        messagebox.showinfo("알림", f"카테고리 '{category}'가 삭제되었습니다.")
-        
-        # 프로젝트 경로가 설정되어 있으면 자동 업데이트
-        if self.project_path.get():
-            self.update_source_files()
-
+            
+            # 설정 파일 자동 저장
+            self.save_config()
+            messagebox.showinfo("알림", f"카테고리 '{category}'가 삭제되었습니다.")
+            
+            # 프로젝트 경로가 설정되어 있으면 자동 업데이트
+            if self.project_path.get():
+                self.update_source_files()
     
     def add_keyword(self):
         category = self.category_var.get()
@@ -319,7 +320,7 @@ class KeywordManager:
     def save_config(self):
         """현재 상태를 설정 파일에 저장합니다."""
         try:
-            from datetime import datetime  # 함수 내에서 임포트
+            from datetime import datetime
             
             config = {
                 "project_path": self.project_path.get(),
@@ -365,7 +366,7 @@ class KeywordManager:
             traceback.print_exc()
 
     def extract_keywords_from_source(self):
-        """소스 코드에서 현재 사용 중인 키워드를 추출합니다."""
+        """소스 코드에서 현재 사용 중인 키워드를 추출합니다 (딕셔너리 형태)."""
         try:
             # 프로젝트 경로가 설정되어 있지 않으면 건너뜀
             if not self.project_path.get() or not os.path.exists(self.project_path.get()):
@@ -373,108 +374,152 @@ class KeywordManager:
             
             project_root = Path(self.project_path.get())
             integration_path = project_root / "email_analyzer" / "integration.py"
+            header_detection_path = project_root / "mail_header" / "mail_header_detection_v4.py"
             
             if not integration_path.exists():
                 print(f"integration.py 파일을 찾을 수 없습니다: {integration_path}")
                 return
-            
-            with open(integration_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # subject_suspicious_patterns 변수 찾기
-            pattern = r"subject_suspicious_patterns\s*=\s*\[(.*?)\]"
-            matches = re.search(pattern, content, re.DOTALL)
-            
-            if not matches:
-                print("subject_suspicious_patterns 변수를 찾을 수 없습니다.")
+                
+            if not header_detection_path.exists():
+                print(f"header_detection 파일을 찾을 수 없습니다: {header_detection_path}")
                 return
             
-            patterns_block = matches.group(1)
+            # 두 파일 내용 읽기
+            with open(integration_path, 'r', encoding='utf-8') as f:
+                content_I = f.read()
             
-            # 카테고리별 패턴 추출
-            category_patterns = {}
-            current_category = None
+            with open(header_detection_path, 'r', encoding='utf-8') as f:
+                content_H = f.read()
             
-            for line in patterns_block.split('\n'):
-                line = line.strip()
+            # 패턴 검색 함수
+            def extract_patterns_from_content(content, file_name):
+                """파일 내용에서 패턴 딕셔너리 추출"""
+                patterns_found = {}
                 
-                # 카테고리 주석 찾기
-                category_match = re.search(r'#\s*(\w+)\s*카테고리', line)
-                if category_match:
-                    current_category = category_match.group(1)
-                    category_patterns[current_category] = []
-                    continue
+                # subject_suspicious_patterns 딕셔너리 찾기
+                pattern = r"subject_suspicious_patterns\s*=\s*\{(.*?)\}"
+                matches = re.search(pattern, content, re.DOTALL)
                 
-                # 패턴 라인 찾기
-                if line.startswith('r\'') or line.startswith('r"'):
-                    # 정규식 패턴에서 키워드 추출
-                    pattern_match = re.search(r'r[\'"](.+?)[\'"]', line)
-                    if pattern_match and current_category:
-                        pattern = pattern_match.group(1)
-                        # '|' 구분자로 나눠진 키워드 추출
-                        keywords = pattern.split('|')
-                        for keyword in keywords:
-                            # 정규식 이스케이프 문자 제거
-                            keyword = re.sub(r'\\', '', keyword)
-                            if keyword and keyword not in category_patterns[current_category]:
-                                category_patterns[current_category].append(keyword)
+                if matches:
+                    print(f"{file_name}에서 subject_suspicious_patterns 발견")
+                    patterns_found.update(self._parse_patterns_block(matches.group(1), "subject_suspicious_patterns"))
+                
+                # SUSPICIOUS_PATTERNS 클래스 변수도 찾기
+                pattern2 = r"SUSPICIOUS_PATTERNS\s*=\s*\{(.*?)\}"
+                matches2 = re.search(pattern2, content, re.DOTALL)
+                
+                if matches2:
+                    print(f"{file_name}에서 SUSPICIOUS_PATTERNS 발견")
+                    patterns_found.update(self._parse_patterns_block(matches2.group(1), "SUSPICIOUS_PATTERNS"))
+                
+                return patterns_found
+            
+            # 두 파일에서 패턴 추출
+            patterns_I = extract_patterns_from_content(content_I, "integration.py")
+            patterns_H = extract_patterns_from_content(content_H, "mail_header_detection_v4.py")
+            
+            # 패턴 병합 (integration.py 우선, header_detection으로 보완)
+            combined_patterns = {}
+            combined_patterns.update(patterns_H)  # header_detection 패턴 먼저
+            combined_patterns.update(patterns_I)  # integration.py 패턴으로 덮어쓰기 (우선순위)
+            
+            if not combined_patterns:
+                print("두 파일 모두에서 패턴 딕셔너리를 찾을 수 없습니다.")
+                return
             
             # 추출된 카테고리 패턴으로 키워드 딕셔너리 업데이트
-            if category_patterns:
-                self.keywords = category_patterns
-                print(f"소스 코드에서 추출한 키워드: {self.keywords}")
+            if combined_patterns:
+                self.keywords = combined_patterns
+                print(f"소스 코드에서 추출한 키워드 카테고리: {list(combined_patterns.keys())}")
+                print(f"총 키워드 수: {sum(len(keywords) for keywords in combined_patterns.values())}")
                 
         except Exception as e:
             print(f"소스 코드에서 키워드 추출 중 오류: {e}")
             import traceback
             traceback.print_exc()
-    
-    def load_config(self):
+
+    def _parse_patterns_block(self, patterns_block, dict_name):
+        """패턴 블록에서 카테고리별 키워드 추출"""
+        category_patterns = {}
+        
         try:
-            if os.path.exists(self.config_file):
-                with open(self.config_file, 'r', encoding='utf-8') as f:
-                    config = json.load(f)
-                
-                # 마지막으로 저장된 키워드 파일 로드
-                if "last_saved_file" in config and os.path.exists(config["last_saved_file"]):
-                    self.last_saved_file = config["last_saved_file"]
-                    with open(self.last_saved_file, 'r', encoding='utf-8') as f:
-                        self.keywords = json.load(f)
-                    print(f"키워드 파일 로드됨: {self.last_saved_file}")
-                
-                # 프로젝트 경로 설정
-                if "last_project_path" in config and os.path.exists(config["last_project_path"]):
-                    self.project_path.set(config["last_project_path"])
-                    print(f"프로젝트 경로 설정됨: {config['last_project_path']}")
-        except Exception as e:
-            print(f"설정 로드 중 오류: {e}")
-            messagebox.showerror("설정 로드 오류", f"설정 파일을 불러오는 중 오류가 발생했습니다: {e}")
-    
-    def load_saved_config(self):
-        """설정 파일에서 이전 상태를 로드하고, 필요한 경우 소스 코드에서 현재 키워드를 가져옵니다."""
-        try:
-            # 먼저 소스 코드에서 현재 키워드 추출 시도
-            self.extract_keywords_from_source()
+            # 멀티라인 카테고리 패턴 처리
+            current_category = None
+            current_patterns = []
+            bracket_depth = 0
             
-            # 그 다음 설정 파일에서 로드 (설정 파일이 있으면 이것이 우선함)
-            if os.path.exists(self.config_file):
-                with open(self.config_file, 'r', encoding='utf-8') as f:
-                    config = json.load(f)
+            lines = patterns_block.split('\n')
+            for line in lines:
+                line = line.strip()
+                if not line or line.startswith('#'):
+                    continue
                 
-                # 프로젝트 경로 설정
-                if "project_path" in config and os.path.exists(config["project_path"]):
-                    self.project_path.set(config["project_path"])
-                    print(f"프로젝트 경로 로드됨: {config['project_path']}")
+                # 카테고리 시작 찾기 ('category': [)
+                category_start_match = re.search(r"'(\w+)':\s*\[", line)
+                if category_start_match:
+                    # 이전 카테고리 저장
+                    if current_category and current_patterns:
+                        category_patterns[current_category] = current_patterns
+                    
+                    # 새 카테고리 시작
+                    current_category = category_start_match.group(1)
+                    current_patterns = []
+                    bracket_depth = line.count('[') - line.count(']')
+                    
+                    # 같은 라인에 패턴이 있는지 확인
+                    remaining_line = line[category_start_match.end():]
+                    current_patterns.extend(self._extract_keywords_from_line(remaining_line))
+                    
+                elif current_category is not None:
+                    # 현재 카테고리의 패턴 계속 수집
+                    bracket_depth += line.count('[') - line.count(']')
+                    current_patterns.extend(self._extract_keywords_from_line(line))
+                    
+                    # 카테고리 끝 (괄호 닫힘)
+                    if bracket_depth <= 0:
+                        if current_patterns:
+                            category_patterns[current_category] = current_patterns
+                        current_category = None
+                        current_patterns = []
+            
+            # 마지막 카테고리 저장
+            if current_category and current_patterns:
+                category_patterns[current_category] = current_patterns
                 
-                # 키워드 설정
-                if "keywords" in config and isinstance(config["keywords"], dict):
-                    self.keywords = config["keywords"]
-                    print(f"키워드 로드됨: {len(self.keywords)} 카테고리")
-                
+            print(f"{dict_name}에서 추출된 카테고리: {list(category_patterns.keys())}")
+            
         except Exception as e:
-            print(f"설정 로드 중 오류: {e}")
-            import traceback
-            traceback.print_exc()
+            print(f"패턴 블록 파싱 오류: {e}")
+        
+        return category_patterns
+
+    def _extract_keywords_from_line(self, line):
+        """라인에서 키워드 추출"""
+        keywords = []
+        
+        # 정규식 패턴에서 키워드 추출 (r'패턴' 또는 '패턴' 형태)
+        pattern_matches = re.findall(r"r?['\"]([^'\"]+)['\"]", line)
+        
+        for pattern in pattern_matches:
+            # 정규식 특수문자 제거하고 키워드 추출
+            # '|' 구분자로 나눠진 키워드들
+            if '|' in pattern:
+                parts = pattern.split('|')
+                for part in parts:
+                    # 정규식 패턴 정리
+                    keyword = re.sub(r'[\\()\[\].*+?^${}]', '', part).strip()
+                    if keyword and len(keyword) > 1 and keyword not in keywords:
+                        keywords.append(keyword)
+            else:
+                # 단일 키워드 또는 패턴
+                # 정규식에서 실제 키워드 추출
+                clean_pattern = re.sub(r'[\\()\[\].*+?^${}]', ' ', pattern)
+                words = clean_pattern.split()
+                for word in words:
+                    if word and len(word) > 1 and word not in keywords:
+                        keywords.append(word)
+        
+        return keywords
     
     def update_source_files(self):
         """헤더 분석에 사용되는 소스 코드 내 키워드를 업데이트합니다."""
@@ -492,67 +537,71 @@ class KeywordManager:
         
         # 소스 코드 파일 경로
         integration_path = project_root / "email_analyzer" / "integration.py"
-        header_analyzer_path = project_root / "mail_header" / "mail_header_detection_v4.py"
+        header_detection_path = project_root / "mail_header" / "mail_header_detection_v4.py"
         
         print(f"통합 경로: {integration_path} (존재: {integration_path.exists()})")
-        print(f"헤더 분석기 경로: {header_analyzer_path} (존재: {header_analyzer_path.exists()})")
+        print(f"헤더 분석 경로: {header_detection_path} (존재: {header_detection_path.exists()})")
         
         # 파일 백업 생성
-        success = False
+        success_count = 0
+        total_files = 0
         
         try:
             # integration.py 파일 업데이트
             if integration_path.exists():
+                total_files += 1
                 # 백업 생성
                 backup_path = integration_path.with_suffix('.bak.py')
                 import shutil
                 shutil.copy2(integration_path, backup_path)
                 print(f"integration.py 백업 생성: {backup_path}")
                 
-                # 제목 패턴 업데이트 - impersonation_keywords 대신 subject_suspicious_patterns만 사용
-                success_subj = self.update_subject_patterns_in_file(
+                # 딕셔너리 형태의 제목 패턴 업데이트
+                success = self.update_subject_patterns_dict_in_file(
                     integration_path,
-                    "analyze_email",
                     "subject_suspicious_patterns",
                     self.keywords
                 )
                 
-                success = success_subj
-                print(f"integration.py 업데이트 결과: subject_patterns={success_subj}")
-            else:
-                messagebox.showwarning("경고", f"파일을 찾을 수 없습니다: {integration_path}")
+                if success:
+                    success_count += 1
+                print(f"integration.py 업데이트 결과: {success}")
             
-            # mail_header_detection_v4.py 파일 업데이트 - impersonation_keywords 대신 subject_suspicious_patterns 사용
-            if header_analyzer_path.exists():
+            # mail_header_detection_v4.py 파일 업데이트 (동일한 변수명 사용)
+            if header_detection_path.exists():
+                total_files += 1
                 # 백업 생성
-                backup_path = header_analyzer_path.with_suffix('.bak.py')
+                backup_path = header_detection_path.with_suffix('.bak.py')
                 import shutil
-                shutil.copy2(header_analyzer_path, backup_path)
+                shutil.copy2(header_detection_path, backup_path)
                 print(f"mail_header_detection_v4.py 백업 생성: {backup_path}")
                 
-                # 제목 패턴 업데이트
-                success_header = self.update_subject_patterns_in_file(
-                    header_analyzer_path,
-                    "analyze_sender_name",  # 적절한 함수 이름으로 변경하세요
-                    "suspicious_patterns",  # 헤더 분석기에서 사용하는 변수 이름으로 변경하세요
+                # subject_suspicious_patterns 딕셔너리 업데이트 (SUSPICIOUS_PATTERNS가 아님)
+                success = self.update_subject_patterns_dict_in_file(
+                    header_detection_path,
+                    "subject_suspicious_patterns",  # 변경: SUSPICIOUS_PATTERNS → subject_suspicious_patterns
                     self.keywords
                 )
-                success = success or success_header
-                print(f"mail_header_detection_v4.py 업데이트 결과: {success_header}")
-            else:
-                messagebox.showwarning("경고", f"파일을 찾을 수 없습니다: {header_analyzer_path}")
+                
+                if success:
+                    success_count += 1
+                print(f"mail_header_detection_v4.py 업데이트 결과: {success}")
+            
+            if total_files == 0:
+                messagebox.showwarning("경고", "업데이트할 파일을 찾을 수 없습니다.")
+                return False
             
             # 설정 저장 (키워드와 프로젝트 경로)
             self.save_config()
             
-            if success:
+            if success_count == total_files:
                 # GUI 프로그램 재시작 확인
                 self.check_and_restart_main_gui()
                 
-                messagebox.showinfo("알림", "소스 코드가 업데이트되었습니다.")
+                messagebox.showinfo("알림", f"소스 코드 {success_count}/{total_files} 파일이 업데이트되었습니다.")
                 return True
             else:
-                messagebox.showerror("오류", "소스 코드 업데이트에 실패했습니다.")
+                messagebox.showerror("오류", f"소스 코드 업데이트에 일부 실패했습니다. ({success_count}/{total_files})")
                 return False
             
         except Exception as e:
@@ -561,51 +610,138 @@ class KeywordManager:
             traceback.print_exc()
             return False
     
+    def update_subject_patterns_dict_in_file(self, file_path, pattern_var_name, keywords_dict):
+        """subject_suspicious_patterns 변수를 딕셔너리 형태로 생성하여 덮어씁니다."""
+        try:
+            print(f"\n{file_path.name}에서 {pattern_var_name} 딕셔너리 업데이트 시작")
+            
+            with open(file_path, 'r', encoding='utf-8') as f:
+                content = f.read()
+            
+            # 기존 패턴 변수 찾기 (딕셔너리 형태)
+            pattern_regex = r"(\s+)" + pattern_var_name + r"\s*=\s*\{(.*?)\}"
+            pattern_match = re.search(pattern_regex, content, re.DOTALL)
+            
+            if not pattern_match:
+                print(f"{pattern_var_name} 딕셔너리 변수를 찾을 수 없습니다.")
+                return False
+            
+            # 들여쓰기 추출
+            indentation = pattern_match.group(1)
+            
+            # 새로운 딕셔너리 코드 생성
+            subject_patterns_code = pattern_var_name + " = {\n"
+            
+            # 카테고리별 키워드를 딕셔너리 형태로 생성
+            for category, keywords in keywords_dict.items():
+                if keywords:
+                    # 카테고리별 주석 추가
+                    subject_patterns_code += f"{indentation}    # {category} 카테고리 키워드\n"
+                    
+                    # 각 키워드를 정규식 OR 연산자(|)로 연결한 패턴 생성
+                    pattern = '|'.join([re.escape(kw) for kw in keywords])
+                    subject_patterns_code += f"{indentation}    '{category}': [\n"
+                    subject_patterns_code += f"{indentation}        r'{pattern}'\n"
+                    subject_patterns_code += f"{indentation}    ],\n"
+            
+            # 기본 의심 패턴 추가
+            subject_patterns_code += f"{indentation}    # 기본 의심 패턴\n"
+            subject_patterns_code += f"{indentation}    'general': [\n"
+            subject_patterns_code += f"{indentation}        r'(주문|결제).*확인',\n"
+            subject_patterns_code += f"{indentation}        r'(지금|즉시).*확인',\n"
+            subject_patterns_code += f"{indentation}        r'링크.*클릭',\n"
+            subject_patterns_code += f"{indentation}        r'비밀번호|인증|코드'\n"
+            subject_patterns_code += f"{indentation}    ]\n"
+            subject_patterns_code += f"{indentation}}}"
+            
+            # 패턴 변수 업데이트
+            new_content = content[:pattern_match.start()] + indentation + subject_patterns_code + content[pattern_match.end():]
+            
+            # 원본 파일 내용 업데이트
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(new_content)
+            
+            print(f"{pattern_var_name} 딕셔너리 변수 업데이트 완료")
+            return True
+        
+        except Exception as e:
+            print(f"{file_path.name} 파일 업데이트 중 오류: {e}")
+            import traceback
+            traceback.print_exc()
+            return False
+
     def check_and_restart_main_gui(self):
         """main_gui.py가 실행 중인지 확인하고, 재시작합니다."""
         try:
             import subprocess
             import sys
             import time
-            import psutil  # 이 모듈이 없다면 pip install psutil로 설치 필요
+            import psutil
+            import os
             
-            # main_gui.py 프로세스 찾기
+            # 디버깅을 위한 로그 추가
+            print("프로세스 검색 시작...")
+            
             main_gui_running = False
             main_gui_pid = None
+            found_processes = []  # 디버깅용
             
             for proc in psutil.process_iter(['pid', 'name', 'cmdline']):
                 try:
-                    # Python 프로세스 중 main_gui.py를 실행 중인 것 찾기
-                    if proc.info['name'] == 'python.exe' or proc.info['name'] == 'pythonw.exe':
-                        cmdline = proc.info['cmdline']
-                        if cmdline and any('main_gui.py' in arg for arg in cmdline):
+                    proc_info = proc.info
+                    proc_name = proc_info.get('name', '').lower()
+                    cmdline = proc_info.get('cmdline', [])
+                    
+                    # 더 포괄적인 Python 프로세스 검색
+                    if any(name in proc_name for name in ['python', 'py.exe']):
+                        # 디버깅 정보 수집
+                        cmdline_str = ' '.join(cmdline) if cmdline else ''
+                        found_processes.append({
+                            'pid': proc_info['pid'],
+                            'name': proc_name,
+                            'cmdline': cmdline_str
+                        })
+                        
+                        # main_gui.py 찾기 (더 유연한 검색)
+                        if cmdline and any('main_gui.py' in str(arg) or 
+                                         arg.endswith('main_gui.py') for arg in cmdline):
                             main_gui_running = True
-                            main_gui_pid = proc.info['pid']
+                            main_gui_pid = proc_info['pid']
+                            print(f"main_gui.py 프로세스 발견: PID {main_gui_pid}")
                             break
-                except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
-                    pass
+                            
+                except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess) as e:
+                    continue
+            
+            # 디버깅 정보 출력
+            print(f"발견된 Python 프로세스들: {len(found_processes)}개")
+            for proc in found_processes:
+                print(f"  PID: {proc['pid']}, Name: {proc['name']}, CMD: {proc['cmdline'][:100]}...")
             
             if main_gui_running and main_gui_pid:
+                print("main_gui.py 프로세스 발견됨 - 재시작 대화상자 표시")
                 # 사용자에게 재시작 확인
                 if messagebox.askyesno("GUI 재시작", "변경사항을 적용하려면 메인 GUI를 재시작해야 합니다. 재시작하시겠습니까?"):
-                    # 프로세스 종료
                     try:
                         process = psutil.Process(main_gui_pid)
                         process.terminate()
                         
-                        # 프로세스 종료 대기
                         print(f"main_gui.py 프로세스(PID: {main_gui_pid}) 종료 중...")
                         process.wait(timeout=5)
                         print("프로세스 종료 완료")
                         
-                        # 약간의 지연 후 다시 시작
                         time.sleep(1)
                         
                         # 메인 GUI 다시 시작
                         main_gui_path = self.get_main_gui_path()
                         if main_gui_path and main_gui_path.exists():
                             print(f"main_gui.py 재시작: {main_gui_path}")
-                            subprocess.Popen([sys.executable, str(main_gui_path)])
+                            # Windows에서 더 안정적인 실행 방식
+                            if os.name == 'nt':  # Windows
+                                subprocess.Popen([sys.executable, str(main_gui_path)], 
+                                               creationflags=subprocess.CREATE_NEW_CONSOLE)
+                            else:
+                                subprocess.Popen([sys.executable, str(main_gui_path)])
                         else:
                             messagebox.showwarning("경고", "main_gui.py 경로를 찾을 수 없어 자동 재시작할 수 없습니다.")
                             
@@ -614,12 +750,18 @@ class KeywordManager:
                     except Exception as e:
                         print(f"프로세스 재시작 중 오류: {e}")
                         messagebox.showwarning("경고", f"GUI 재시작 중 오류 발생: {e}")
-            
+            else:
+                print("main_gui.py 프로세스를 찾을 수 없음")
+                # 수동 재시작 안내
+                messagebox.showinfo("알림", "main_gui.py 프로세스를 찾을 수 없습니다.\n변경사항 적용을 위해 수동으로 메인 GUI를 재시작해주세요.")
+                
         except ImportError:
+            print("psutil 모듈 없음")
             messagebox.showinfo("알림", "psutil 모듈이 필요합니다. 'pip install psutil'로 설치하세요.")
         except Exception as e:
             print(f"GUI 재시작 확인 중 오류: {e}")
-
+            messagebox.showerror("오류", f"GUI 재시작 확인 중 오류: {e}")
+    
     def get_main_gui_path(self):
         """main_gui.py 파일 경로를 찾습니다."""
         try:
@@ -642,187 +784,7 @@ class KeywordManager:
         except Exception as e:
             print(f"main_gui.py 경로 찾기 오류: {e}")
             return None
-    
-    def generate_keywords_code(self):
-        """키워드 코드를 생성합니다."""
-        keywords_code = "{\n"
-        for category, words in self.keywords.items():
-            words_repr = ", ".join([f"'{word}'" for word in words])
-            keywords_code += f"    '{category}': [{words_repr}],\n"
-        keywords_code += "}"
-        return keywords_code
-    
-    def update_function_in_file(self, file_path, function_name, keyword_var_name, keywords_code):
-        """특정 함수 내의 키워드 변수 정의를 업데이트합니다."""
-        try:
-            print(f"\n{file_path.name}의 {function_name} 함수에서 {keyword_var_name} 업데이트 시작")
-            
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # 함수 정의 찾기
-            function_pattern = r"def\s+" + function_name + r"\s*\([^)]*\):"
-            function_match = re.search(function_pattern, content)
-            
-            if not function_match:
-                print(f"{file_path.name}에서 {function_name} 함수를 찾을 수 없습니다.")
-                return False
-            
-            function_start = function_match.start()
-            print(f"함수 시작 위치: {function_start}")
-            
-            # 함수 내용 찾기 (들여쓰기 레벨로 함수 끝 감지)
-            lines = content[function_start:].splitlines()
-            function_end = function_start
-            function_body = ""
-            
-            # 함수 첫 줄 들여쓰기 레벨 찾기
-            first_line_indent = 0
-            for i, line in enumerate(lines):
-                if i > 0 and line.strip():  # 첫번째 실제 코드 라인
-                    first_line_indent = len(line) - len(line.lstrip())
-                    break
-            
-            print(f"함수 들여쓰기 레벨: {first_line_indent}")
-            
-            # 함수 본문 추출
-            in_function = False
-            for i, line in enumerate(lines):
-                function_end += len(line) + 1  # +1 for newline
-                
-                # 함수 시작 확인
-                if i == 0:
-                    function_body += line + "\n"
-                    in_function = True
-                    continue
-                
-                # 빈 줄 처리
-                if not line.strip():
-                    function_body += line + "\n"
-                    continue
-                
-                # 현재 줄의 들여쓰기 확인
-                curr_indent = len(line) - len(line.lstrip())
-                
-                # 함수가 끝났는지 확인 (들여쓰기가 줄어들었을 때)
-                if in_function and curr_indent < first_line_indent:
-                    function_end -= len(line) + 1  # 함수 끝 조정
-                    break
-                
-                function_body += line + "\n"
-            
-            print(f"함수 본문 길이: {len(function_body)}")
-            
-            # 함수 내에서 키워드 변수 찾기
-            keyword_pattern = r"(\s+)" + keyword_var_name + r"\s*=\s*\{[^{}]*(?:\{[^{}]*\}[^{}]*)*\}"
-            keyword_match = re.search(keyword_pattern, function_body)
-            
-            if keyword_match:
-                print(f"키워드 변수 {keyword_var_name} 찾음: 위치 {keyword_match.start()}-{keyword_match.end()}")
-                # 들여쓰기 추출
-                indentation = keyword_match.group(1)
-                
-                # 키워드 코드에 들여쓰기 적용
-                indented_code = keywords_code.replace("\n", "\n" + indentation)
-                
-                # 변수 이름 추가
-                indented_code = indentation + keyword_var_name + " = " + indented_code
-                
-                # 키워드 정의 교체
-                new_function_body = function_body.replace(keyword_match.group(0), indented_code)
-                
-                # 원본 파일 내용 업데이트
-                new_content = content[:function_start] + new_function_body + content[function_end:]
-                
-                with open(file_path, 'w', encoding='utf-8') as f:
-                    f.write(new_content)
-                
-                print(f"{file_path.name}의 {keyword_var_name} 업데이트 완료")
-                return True
-            else:
-                print(f"키워드 변수 {keyword_var_name}를 찾을 수 없어 새로 추가합니다")
-                # 키워드 변수 정의를 찾지 못한 경우, 함수 시작 부분에 추가
-                lines = function_body.splitlines()
-                
-                # 함수 선언 다음 줄에 키워드 추가
-                indentation = " " * (first_line_indent + 4)  # 추가 들여쓰기
-                indented_code = keywords_code.replace("\n", "\n" + indentation)
-                indented_code = indentation + keyword_var_name + " = " + indented_code
-                
-                new_lines = [lines[0], "", indented_code] + lines[1:]
-                new_function_body = "\n".join(new_lines)
-                
-                # 원본 파일 내용 업데이트
-                new_content = content[:function_start] + new_function_body + content[function_end:]
-                
-                with open(file_path, 'w', encoding='utf-8') as f:
-                    f.write(new_content)
-                
-                print(f"{file_path.name}에 새 {keyword_var_name} 변수 추가 완료")
-                return True
-                
-        except Exception as e:
-            import traceback
-            error_details = traceback.format_exc()
-            print(f"{file_path.name} 파일 업데이트 중 오류: {e}\n{error_details}")
-            return False
-    
-    def update_subject_patterns_in_file(self, file_path, function_name, pattern_var_name, keywords_dict):
-        """subject_suspicious_patterns 변수를 새로 생성하여 덮어씁니다."""
-        try:
-            print(f"\n{file_path.name}의 {function_name} 함수에서 {pattern_var_name} 업데이트 시작")
-            
-            with open(file_path, 'r', encoding='utf-8') as f:
-                content = f.read()
-            
-            # 기존 패턴 변수 찾기
-            pattern_regex = r"(\s+)" + pattern_var_name + r"\s*=\s*\[(.*?)\]"
-            pattern_match = re.search(pattern_regex, content, re.DOTALL)
-            
-            if not pattern_match:
-                print(f"{pattern_var_name} 변수를 찾을 수 없습니다.")
-                return False
-            
-            # 들여쓰기 추출
-            indentation = pattern_match.group(1)
-            
-            # 새로운 패턴 배열 코드 생성
-            subject_patterns_code = pattern_var_name + " = [\n"
-            
-            # 카테고리별 키워드를 패턴으로 변환
-            for category, keywords in keywords_dict.items():
-                if keywords:
-                    # 카테고리별 주석 추가
-                    subject_patterns_code += f"{indentation}    # {category} 카테고리 키워드\n"
-                    
-                    # 각 키워드를 정규식 OR 연산자(|)로 연결한 패턴 생성
-                    pattern = '|'.join([re.escape(kw) for kw in keywords])
-                    subject_patterns_code += f"{indentation}    r'{pattern}',\n"
-            
-            # 기본 의심 패턴 추가
-            subject_patterns_code += f"{indentation}    # 기본 의심 패턴\n"
-            subject_patterns_code += f"{indentation}    r'(주문|결제).*확인',\n"
-            subject_patterns_code += f"{indentation}    r'(지금|즉시).*확인',\n"
-            subject_patterns_code += f"{indentation}    r'링크.*클릭',\n"
-            subject_patterns_code += f"{indentation}    r'비밀번호|인증|코드'\n"
-            subject_patterns_code += f"{indentation}]"
-            
-            # 패턴 변수 업데이트
-            new_content = content[:pattern_match.start()] + indentation + subject_patterns_code + content[pattern_match.end():]
-            
-            # 원본 파일 내용 업데이트
-            with open(file_path, 'w', encoding='utf-8') as f:
-                f.write(new_content)
-            
-            print(f"{pattern_var_name} 변수 업데이트 완료")
-            return True
-        
-        except Exception as e:
-            print(f"{file_path.name} 파일 업데이트 중 오류: {e}")
-            import traceback
-            traceback.print_exc()
-            return False
-    
+
 if __name__ == "__main__":
     root = tk.Tk()
     app = KeywordManager(root)

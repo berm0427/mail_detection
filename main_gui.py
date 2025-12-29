@@ -5,11 +5,31 @@ import traceback
 from pathlib import Path
 import threading
 import re
+import multiprocessing
+
+if getattr(sys, 'frozen', False):
+    # Windows에서 Java 자동 찾기
+    import subprocess
+    try:
+        result = subprocess.run(['where', 'java'], capture_output=True, text=True)
+        if result.returncode == 0:
+            java_path = os.path.dirname(result.stdout.strip())
+            java_home = os.path.dirname(java_path)
+            os.environ['JAVA_HOME'] = java_home
+    except:
+        # Java를 찾지 못하면 기본 경로 시도
+        os.environ['JAVA_HOME'] = r'C:\Program Files\Java\jdk-17'
+
+if __name__ == '__main__':
+    multiprocessing.freeze_support()
+    
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout, 
                             QLabel, QLineEdit, QPushButton, QFileDialog, QTabWidget, 
                             QTextEdit, QProgressBar, QMessageBox, QFrame, QGroupBox, 
                             QStatusBar, QSplitter)
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject
+
+
 
 # 이모티콘 설정
 EMOJI = {
@@ -86,8 +106,15 @@ class AnalysisThread(QThread):
                 attachments_dir=attachments_dir
             )
             
-            # 이메일 분석 실행
-            result = analyzer.analyze_email(email_path)
+            # 이메일 분석 실행   
+            try:
+                # 기존 실행 코드
+                result = analyzer.analyze_email(email_path)
+            except Exception as e:
+                import traceback
+                logger.error(f"프로그램 종료 오류: {e}")
+                logger.error(traceback.format_exc())
+                input("에러 확인을 위해 Enter를 누르세요...")
             
             # 로깅 핸들러 복원
             logger.handlers = original_handlers
@@ -219,11 +246,6 @@ class AnalysisThread(QThread):
         # 키워드 정보가 있으면 표시
         if subject_keywords_count > 0:
             summary += f"\n[제목 위험 키워드: {subject_keywords_count}개 발견]\n"
-            if found_keywords:
-                keywords_str = ', '.join(f'"{k}"' for k in found_keywords)
-                summary += f" - 위험 키워드: {keywords_str}\n"
-            else:
-                summary += f" - 위험 키워드가 발견되었으나 상세 내용을 추출할 수 없습니다.\n"
         
         # 도메인 평판 정보 추가
         if result.get('header') and result['header'].get('sender_domain'):
@@ -740,6 +762,7 @@ class EmailAnalyzerGUI(QMainWindow):
 
 
 def main():
+    
     app = QApplication(sys.argv)
     
     # 애플리케이션 폰트 설정
