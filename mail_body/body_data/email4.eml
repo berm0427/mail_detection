@@ -1,135 +1,239 @@
-Delivered-To: berm2222@gmail.com
-Received: by 2002:a05:622a:4e9b:b0:475:1ce0:7092 with SMTP id dj27csp116174qtb;
-        Mon, 14 Apr 2025 12:34:51 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGRodBOj2kFDLM0pv9/3nzNA2/NLfJXZHQWlckjbLM/e6+HpsBXc3gfrEbaGjZ0rspB5nzN
-X-Received: by 2002:a05:6a20:c704:b0:1f5:9d5d:bcdd with SMTP id adf61e73a8af0-2017978c6a8mr19607846637.1.1744659291622;
-        Mon, 14 Apr 2025 12:34:51 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1744659291; cv=none;
-        d=google.com; s=arc-20240605;
-        b=WNg8M5hDMzK22J/zeWYHaravZGHHeKCBidIPdiV6cvvdbp2fJOO32SI64HYNjfDiwy
-         QL9AQMH24IsTvXquU7Ns6TXMYLfAtGTTRCb0Fe3dYBehkHcxUMU0K8r9tB9VfhgGhuM3
-         87D3pKN3sz7UkNd34O/NWtkYHRz8VTlJtuGuxcoDHcxlTNdZlp+BXvprFCsolfOmiYzS
-         hDwYQVxv36lhZPMXyXI3BkHy1XPS7sszHdpHez5eRI1sDVxoDGz62Jqw9dMxJ2yw9LS5
-         R4OvVH8hpWSNeOFH7y4bIVneWPCGkdnfPgZw8SQ8yUj0cyISBQ7W2uaJqyllhE3SZkKy
-         OEEQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=mime-version:message-id:subject:to:from:date:domainkey-signature
-         :dkim-signature;
-        bh=wEAJvNqR5oJhffjpPUYSzTym/GvhzIthzLg2KWubqDE=;
-        fh=WpvuC373ZTMCLZIYagF1v9HrwPtcuIVgj45RAivh5S0=;
-        b=BTQF2PI/If1C6s06r/Pn5N4At/UAnhdV3WcrnzK+FiTKx9915+iJiuurTUMacXhLwX
-         QN3z6TwT30IqhvCZceEj5OmM2s+A50pJRBuMbh0ggfDyP8BFV03u/kH7evReDrElEEML
-         lL19dRIr/zxqONUuUBlLjlhZpZ/R2CCWj9/suWH0VxGLvWfpQ9I2x0Gx1StEgL/sKGpc
-         aKRJoZjHO2YrY7sxrDxJ+EeQMf4eHdDq8omV1yMA1fa6GEhVSaACXqtvYxzC+4FOFEL1
-         sKaFvkdW4V+JThy57McED0625sAD3J8Qn2auCxZo9l/A4nUjlQEoKZNY33kugbWeggAM
-         Ge4g==;
-        dara=google.com
-ARC-Authentication-Results: i=1; mx.google.com;
-       dkim=pass header.i=@vxmtqhseslyrn.kulomanilania.pp.ua header.s=smtp header.b=o2D6x0GG;
-       spf=pass (google.com: domain of return@gyhgftyt.kulomanilania.pp.ua designates 51.83.71.173 as permitted sender) smtp.mailfrom=return@gyhgftyt.kulomanilania.pp.ua
-Return-Path: <return@gyhgftyt.kulomanilania.pp.ua>
-Received: from 46-183-185-244.hinet-ip.hinet.net (vps-d16a52c3.vps.ovh.net. [51.83.71.173])
-        by mx.google.com with ESMTPS id 41be03b00d2f7-b02a36fe3eesi13696982a12.591.2025.04.14.12.34.50
-        for <berm2222@gmail.com>
-        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
-        Mon, 14 Apr 2025 12:34:51 -0700 (PDT)
-Received-SPF: pass (google.com: domain of return@gyhgftyt.kulomanilania.pp.ua designates 51.83.71.173 as permitted sender) client-ip=51.83.71.173;
-Authentication-Results: mx.google.com;
-       dkim=pass header.i=@vxmtqhseslyrn.kulomanilania.pp.ua header.s=smtp header.b=o2D6x0GG;
-       spf=pass (google.com: domain of return@gyhgftyt.kulomanilania.pp.ua designates 51.83.71.173 as permitted sender) smtp.mailfrom=return@gyhgftyt.kulomanilania.pp.ua
-DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=smtp; d=vxmtqhseslyrn.kulomanilania.pp.ua;
- h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type; i=mcur6@vxmtqhseslyrn.kulomanilania.pp.ua;
- bh=I7Xpi+/6XrL2WoT4XXNnRPEyAlM=;
- b=o2D6x0GGXphNg0fskzKh3dvs3xCyPhaXHRZgWjh+UaYnXp0iPQjvp7vii578/JgbutjcQeuR4gRJ
-   hVBt3ryCL3mTZEoddPvcnl9xUSrnZZ8qNQGuY1jzuUpbooXjox/zT1sOcNackFZ4a0DG5+zJoYLC
-   veHt8y9tBqm0xDb6lac=
-DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=smtp; d=vxmtqhseslyrn.kulomanilania.pp.ua;
- b=aE3LM0XTtbiTEe8T15GLHb/bIarB15xG+ehxJFxPjkTHUY7HOz/pG1Tn+RQDif65Ey16aF6BN3/2
-   S7zoJUtw2oMLRWOr/kwQ8V210wG7tLbe+3wMqIFWOJ/K3F+XMma0r08KYkiYsezUxeTPjoMoWQ2e
-   fe27Z1QUJPAcj5EYg9w=;
-Received: from uxsmktoghr.com (ip6-localhost ) by pdr8-services-05v (Postfix) with ESMTP id PYY28AGM for <berm2222@gmail.com>; Mon, 14 Apr 2025 19:34:47 +0000
-Date: Mon, 14 Apr 2025 19:34:47 +0000.13222-3768
-From: " '한국 우편' " <mcur6@vxmtqhseslyrn.kulomanilania.pp.ua>
-To: berm2222@gmail.com
-Subject: >> berm2222! - 당신은(1)패키지가 배달을 기다리고 있습니다 📦.당신의 코드를 사용하여 그것을 따르고 그것을 얻으십시오
-Message-ID: <2lqzbwfzws.5tg5pes90h.mvbdb92mpd.javamail.tomcat@pdr8-services-05v.prod.x9gmt23qjq.org>
-MIME-Version: 1.0
-Content-Type: multipart/report; boundary="vmta-51_83_71_173-N1"; report-type=delivery-status
+Received: from mail.notion.so (220.69.189.120)
+	by localhost with ESMTP imoxion SensMail SmtpServer 10.0
+	id <2fc2ac27791a45c9bdd263731d5a095e> for <berm0427@sch.ac.kr> from <bounce+2c3327.074921-berm0427=sch.ac.kr@mail.notion.so>;
+	Sat, 05 Apr 2025 01:08:29 +0900
+Received: from unknown (HELO outgoing0.mail.notion.so) (143.55.229.26)
+	by 220.69.189.119 with ESMTP; 5 Apr 2025 01:08:29 +0900
+X-Original-SENDERIP: 143.55.229.26
+X-Original-MAILFROM: bounce+2c3327.074921-berm0427=sch.ac.kr@mail.notion.so
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=mail.notion.so; q=dns/txt; s=pic; t=1743782908; x=1743790108;
+ h=Message-Id: To: To: From: From: Subject: Subject: Content-Type: Mime-Version: Date: Sender: Sender: List-Unsubscribe: List-Unsubscribe-Post;
+ bh=uN/m0X2EsujUpLop8ZNqlSWf69nCa2YuM2+pXu4faOw=;
+ b=C1XV8kN4fhNXU3jYjj4bw8T8Sdom3m1XOkozr/LgRElKpQz75GKlBe/pHMc8NO6Wivrvxgt6FOd6jx6lerqaUgqY/JloPijxUMH0AgUgSkqCFyTQ15MNWYN0Uaj2sA38NXGt40pv2xprb6cu2uZyr/5GqSOOofEeYEc4R5KCCEef1LvyXtBA6tsD5MEZSXoUYiM1HhFTXT5KJtvCcaDKp9ZHLTSD6jqRoX/LXZkk+RNFYOtCkNHAp+zbyaM9yilyjtYz7atHaZ+GM1wxYW0/a2tbbRFAqZfZhrYg3WeVhkOxMvwC8RQOAqyM0JhrXPK79QuOqdwKcE15FaCm410LYg==
+X-Mailgun-Sending-Ip: 143.55.229.26
+X-Mailgun-Sending-Ip-Pool-Name: 
+X-Mailgun-Sending-Ip-Pool: 
+X-Mailgun-Sid: WyI5NWJjMSIsImJlcm0wNDI3QHNjaC5hYy5rciIsIjA3NDkyMSJd
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <mailto:u+mq6tanzuhezdcjtfnvqws3c7ov2wszb5eu3uejjxiqtgqpjzmy4tanjzgyzwgzbsmi3tonzvgy2gkodfmm4tgnrzmjrtiytdmetgspjsgazdkmbuga2dcnrqhazdqlrvgjsgeyrqgjsdqm3dmu2giy3eeu2da3lbnfwc43tporuw63roonxsm3lforqwiylume6skn2ceuzde43qmfrwkx3jmqstemrfgnaskmrsha4danzvha4danlfgnrtiobvmnrgemlbgy4gky3fgm2wcyryge4ckmrseu3uijtshvrgk4tnga2denzfgqyhgy3ifzqwgltloithiplfnvqws3c7or4xazjfgnchgzlomrhg65djmzuwgylunfxw4jtuhvsw2yljnrpxg5lcor4xazjfgnchk43foiww2zlooruw63tfmqthk3ttovrhgy3snfrgkpjfgi2xk3ttovrhgy3snfrgkx3vojwckmrvez3d2mq@mail.notion.so>,
+ <https://mg.mail.notion.so/u/eJxMj8Fq7DAMRb_G3r2gyHasLLx4Zdb9hcGSNYzpJBniuNC_L2lL6VKcg-69JUH0M45Wl1wf195rSSa-mHix9zTfZgjz5KQgxxjD5JVUZjfNLJ4l25oQMIAHP05ASEPAwgxYyIn6IsV4OP8O63bUbR3aZhc9cslH_kpBbM8seq3FIBr33yASQQxEENSJpyDMY55IRV3ITCOdYrzYPbHuC3iMxkOT-5BleNvtkb53HB9PNe7SdC2v21FvVfJZ4Je3zj9Kb7r_W3Q9sRbb19a5yV5Zk8Hw57z2_WEw2PeEnwEAAP__6FZgsA>
+Received: by 9a4d835494d4 with HTTP id 67f003fc049e042f8786c15a; Fri, 04 Apr 2025
+ 16:08:28 GMT
+Sender: notify@mail.notion.so
+Date: Fri, 04 Apr 2025 16:08:28 +0000
+Mime-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="289b713c09532dab302f5b5685395f66c91eab94a669905029c263b4e40f"
+Subject: =?UTF-8?b?7J2A7IiYIOuwleuLmOydtCDshLHriqUg7LWc7KCB7ZmU7JeQ7IScIOuCmA==?=
+ =?UTF-8?b?66W8IOupmOyFmO2WiOyKteuLiOuLpC4=?=
+From: Notion Team <notify@mail.notion.so>
+To: berm0427@sch.ac.kr
+X-Mailgun-Tag: email_type=sendNotification
+X-Mailgun-Tag: email_subtype=user-mentioned
+X-Mailgun-Dkim: true
+X-Mailgun-Track-Clicks: true
+X-Mailgun-Track-Opens: true
+X-Mailgun-Variables: {"email_uuid": "{}", "metadata":
+ "{\"space_id\":\"880758805e3c485cbb1a68ece35ab818\"}", "unsubscribe":
+ "https://mg.mail.notion.so/u/eJxMjTuOrDAQAE9jh6hp27gJHMzT3AO5P2isN8AK8J5_NRttWFKpSgvkOOPobavtvfTetLj8z-WnfxXJsto6TyqZSDBImGYdkWVdV1aYfSsImCBCHCcgpCGhMgMqBbGooi7Cpzvsx92OfbgOv9ldtd7194J4fVWxpalDdOHhEIkgJyJIFiRSEuaxTmRiIVWmkT5ifvqzsJ0bRMwuwiWvocrw__R3cfjwfb86X3I2tuIw_cGln2-HyX8X_AkAAP__nQdKRQ"}
+Message-Id: <20250404160828.52dbb02d83ce4dcd@mail.notion.so>
 
---vmta-51_83_71_173-N1Content-Type: multipart/related;
-boundary="3768-13222-745fb2ea318e6432e8bff395a48fe60c" --3768-13222-745fb2ea318e6432e8bff395a48fe60c
---vmta-51_83_71_173-N1
-Content-Type: multipart/related; boundary="3768-13222-745fb2ea318e6432e8bff395a48fe60c"
+--289b713c09532dab302f5b5685395f66c91eab94a669905029c263b4e40f
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
---3768-13222-745fb2ea318e6432e8bff395a48fe60c
-Content-Type: multipart/alternative; boundary="berm2222"
-
---berm2222
-Content-Type: text/plain; charset="UTF-8"
+=EB=8B=B4=EB=8B=B9=EC=9E=90 (=EC=9D=80=EC=88=98 =EB=B0=95 =EB=B0=8F =EC=9C=
+=A0=EC=B0=BD=EB=B2=94)
+--289b713c09532dab302f5b5685395f66c91eab94a669905029c263b4e40f
+Content-Type: text/html; charset="utf-8"
 Content-Transfer-Encoding: quoted-printable
 
-Top Stories of the Day: Sep 0, 2019
 
-103882302891885308
------
+      <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.=
+w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+      <html
+       =20
+        dir=3D"ltr"
+        xmlns=3D"http://www.w3.org/1999/xhtml"
+        xmlns:v=3D"urn:schemas-microsoft-com:vml"
+        xmlns:o=3D"urn:schemas-microsoft-com:office:office">
+        <head>
+          <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=
+=3Dutf-8" />
+          <meta http-equiv=3D"X-UA-Compatible" content=3D"IE=3Dedge" />
+          <meta name=3D"viewport" content=3D"width=3Ddevice-width"/>
 
-If you believe this has been sent to you in error, please safely unsubscribe
---berm2222
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: 8bit+
+          <title> </title>
 
+          <style type=3D"text/css">
+            .notion-email,td{font-family:-apple-system,BlinkMacSystemFont,S=
+egoe UI,Roboto,Oxygen,Ubuntu,Cantarell,Fira Sans,Droid Sans,Helvetica Neue,=
+sans-serif;-webkit-font-smoothing:subpixel-antialiased}.notion-email{text-a=
+lign:left;line-height:1.5;max-width:600px;padding-top:32px;padding-left:64p=
+x;padding-right:64px}@media only screen and (max-device-width:480px){.notio=
+n-email{padding-top:0;padding-left:16px;padding-right:16px}}.notion-email-b=
+utton-hover{transition:background 140ms ease-in}.notion-email-button-hover:=
+hover{background:rgba(58,56,52,.08)}
 
+            #__bodyTable__ {
+              margin: 0;
+              padding: 0;
+              width: 100% !important;
+            }
+          </style>
 
-<!------------ START SOCIAL MEDIA ------------>
-<div class="gmail_quote"> 
+          <!--[if gte mso 9]>
+            <xml>
+              <o:OfficeDocumentSettings>
+                <o:AllowPNG/>
+                <o:PixelsPerInch>96</o:PixelsPerInch>
+              </o:OfficeDocumentSettings>
+            </xml>
+          <![endif]-->
+        </head>
+        <body bgcolor=3D"#FFFFFF" width=3D"100%" style=3D"-webkit-font-smoo=
+thing: antialiased; width:100% !important; background:#FFFFFF;-webkit-text-=
+size-adjust:none; margin:0; padding:0; min-width:100%; direction: ltr;">
+          <table bgcolor=3D"#FFFFFF" id=3D"__bodyTable__" width=3D"100%" st=
+yle=3D"-webkit-font-smoothing: antialiased; width:100% !important; backgrou=
+nd:#FFFFFF;-webkit-text-size-adjust:none; margin:0; padding:0; min-width:10=
+0%">
+            <tr>
+              <td align=3D"center">
+                <span style=3D"display: none !important; color: #FFFFFF; ma=
+rgin:0; padding:0; font-size:1px; line-height:1px;"> </span>
+                <div class=3D"notion-email"><table style=3D"padding-top:12p=
+x;padding-bottom:0;border-spacing:0;width:100%;border-collapse:separate"><t=
+r><td style=3D"vertical-align:top;width:34px;min-width:34px;padding-top:2px=
+"><div style=3D"border-radius:100%;overflow:hidden;width:28px;height:28px;m=
+ax-width:100%;max-height:100%;background:white;display:flex;align-items:cen=
+ter;justify-content:center;user-select:none;-webkit-user-select:none;color:=
+rgba(55, 53, 47, 1)"><img src=3D"https://www.notion.so/image/https%3A%2F%2F=
+s3-us-west-2.amazonaws.com%2Fpublic.notion-static.com%2Fc685d0cb-558f-4a85-=
+aa42-a5bea98c832a%2F%25EB%258B%25A4%25EC%259A%25B4%25EB%25A1%259C%25EB%2593=
+%259C.jpg?width=3D60&amp;userId=3D&amp;cache=3Dv2" style=3D"display:block;w=
+idth:100%;height:100%;object-fit:cover"/></div></td><td><div style=3D"font-=
+size:14px;line-height:1.4"><div><span><span><span style=3D"font-weight:600"=
+>=EC=9D=80=EC=88=98 =EB=B0=95</span>=EB=8B=98=EC=9D=B4</span> <a href=3D"ht=
+tps://mg.mail.notion.so/c/eJxMj8Gu2yAQRb8Gdo1gBsx4waKVlWV_wYJh0qAmjmVwovf3l=
+d-L2i7n3qujMyWa4EawWqINDgPBaEjLPdXbvO-1RBV-qDDpa2RwxiCiHYGGIdlUGE1yjgKF0aHT=
+NYIBb5xxdjAEdPJQcjZQCFlc4aKcObin5dHrYzm1h77Fa-9rU_hdwVnB-fV6_WsVnG1mBixcLCW=
+yYDOmC5Nnh5dcePQKz4vC6Ut33dtVwXAEiXt91v4x32U5aO9YSu3zmn7J3Gu_iYJhfTaFk9F36a=
+mknj7fBWhrYplrUQCfbkBkgicyXpAdec7ZpoGEBX3KZOkYhklvMct2Nw6Ccqbx9ZT49HvTPX4Z9=
+o9VFE5NlvLz0eulcjrs_vZtz-_J3mT79paXovel7bnxVrNEBf6_c963mwKvnxH-BAAA__9LiY78=
+" style=3D"display:inline;color:inherit;text-decoration:none;cursor:pointer=
+" class=3D"notion-email-button-hover"><span style=3D"font-weight:600;paddin=
+g:1px;text-decoration:underline">=EC=84=B1=EB=8A=A5 =EC=B5=9C=EC=A0=81=ED=
+=99=94</span></a>=ED=8E=98=EC=9D=B4=EC=A7=80=EC=97=90=EC=84=9C =EB=82=98=EB=
+=A5=BC =EB=A9=98=EC=85=98=ED=96=88=EC=8A=B5=EB=8B=88=EB=8B=A4.</span></div>=
+<table style=3D"font-size:12px;color:rgba(55, 53, 47, 0.5);white-space:nowr=
+ap;margin-top:4px;margin-bottom:8px;border-spacing:0"><tr><td>2025=EB=85=84=
+ 4=EC=9B=94 5=EC=9D=BC =EC=98=A4=EC=A0=84 1:08</td><td><div><span style=3D"=
+color:rgba(55, 53, 47, 0.5);margin-left:4px;margin-right:4px">=C2=B7</span>=
+<a href=3D"https://mg.mail.notion.so/c/eJxMkM1q6zAQRp9G2l0zGutnvNDiXkKW9xWC=
+NJoS0dgOltzQty9OS9vlcD4OhykRgp3QaIkm2DEQTkBa5lRvl32vJarwT4WTvsZgpuBMlmTJk7G=
+QnQ1CkJnQkPGTrhEBHViwxgMhDQ5LzoCFRhZbuCgLh3dY1l7XZWirvsVr7_emxr8KzwrPj8fjhy=
+o8m8yMY-FiKBFYnxwJe2cT-SmX4vUsPZXU0zMTsd0Ty6UWhfh0IhEERwRORrbkOGeTPAnL6FImQ=
+8cwnPQWs2wzWAzKQuPrkHh43XSPn4_o73dR46nJUv6vvb5UTkfjN297_prsTbY_sywHlqL3pe25=
+8VazRIXu13nZt5tCp98ifgQAAP__3812Vg" style=3D"display:inline-block;color:inh=
+erit;text-decoration:none;cursor:pointer;max-width:120px;vertical-align:top=
+;white-space:nowrap;overflow:hidden;text-overflow:ellipsis" class=3D"notion=
+-email-button-hover">=EC=B9=B8=EB=B0=98 =EB=B3=B4=EB=93=9C</a></div></td></=
+tr></table></div></td></tr><tr><td></td><td style=3D"max-width:400px"><div>=
+<a href=3D"https://mg.mail.notion.so/c/eJxMkMuu2yAQhp8GdrVguE0WLFpZWfYVLGDG=
+CmriWAYnOm9f-RyrPcv_Ivj-oaiCvYCWHHWwJiBcFEp-pHqf9r1SFOGXCKO8RbaAyc-gy0xGewi=
+zNloH65NSNqCXNYICp6yy2isEHBxQzgoITWFLhYRVx7vD8uz1uQztKe_x1vvahPkp4Crg-n6__6=
+cCrjqXAoYKaUyoQWeT5oKuWDNnKhcnzHWpJMyYAVldPGnnvPUmJU6KvDYuzWxcYgF-EWb82rXu7=
+XYaqfT6qv1jevByfHvap5qYahfg11cTZlTywT1R6unzKABtTYWnSgLgcwEgquAQlWNTLLqSs04e=
+uRwIGTUexTDKLWbeHspCEFa1chtSGf5ssscvvP6xsjBj44V-P3uda0kHzL-87fms7I23Hycrk9y=
+XtudWtpo5CnDf5LRvdwFOviL8DQAA__9nG5mD" style=3D"display:block;color:inherit=
+;text-decoration:none;cursor:pointer;margin-bottom:12px" class=3D"notion-em=
+ail-button-hover"><div style=3D"overflow:hidden;font-size:14px;padding-top:=
+6px"><div><div style=3D"color:rgba(55, 53, 47, 0.5);font-size:12px;line-hei=
+ght:1;margin-bottom:2px"><table style=3D"border-spacing:0"><tr><td style=3D=
+"padding-right:6px;opacity:0.2"><img width=3D"12" height=3D"12" style=3D"fi=
+ll:rgba(55, 53, 47, 0.5)" src=3D"https://www.notion.so/images/icons/person.=
+f9ff98c8.png"/></td><td>=EB=8B=B4=EB=8B=B9=EC=9E=90</td></tr></table></div>=
+<table style=3D"border-spacing:0;min-height:28px"><tr><td style=3D"vertical=
+-align:middle"><table style=3D"border-spacing:0"><tr><td style=3D"vertical-=
+align:top"><div style=3D"display:flex;align-items:center;margin-right:8px">=
+<div style=3D"border-radius:100%;overflow:hidden;width:18px;height:18px;max=
+-width:100%;max-height:100%;background:white;display:flex;align-items:cente=
+r;justify-content:center;user-select:none;-webkit-user-select:none;color:rg=
+ba(55, 53, 47, 1)"><img src=3D"https://www.notion.so/image/https%3A%2F%2Fs3=
+-us-west-2.amazonaws.com%2Fpublic.notion-static.com%2Fc685d0cb-558f-4a85-aa=
+42-a5bea98c832a%2F%25EB%258B%25A4%25EC%259A%25B4%25EB%25A1%259C%25EB%2593%2=
+59C.jpg?width=3D40&amp;userId=3D&amp;cache=3Dv2" style=3D"display:block;wid=
+th:100%;height:100%;object-fit:cover"/></div><div style=3D"margin-left:4px;=
+font-size:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">=
+=EC=9D=80=EC=88=98 =EB=B0=95</div></div></td><td style=3D"vertical-align:to=
+p;width:100%"><div style=3D"display:flex;align-items:center;margin-right:0"=
+><div><div style=3D"box-sizing:content-box;border:1px solid currentColor;bo=
+rder-radius:100%;width:16px;height:16px;line-height:16px;overflow:hidden;te=
+xt-align:center;font-size:14px;background:white;user-select:none;-webkit-us=
+er-select:none;color:rgba(55, 53, 47, 1)"><div>B</div></div></div><div styl=
+e=3D"margin-left:4px;font-size:12px;white-space:nowrap;overflow:hidden;text=
+-overflow:ellipsis">=EC=9C=A0=EC=B0=BD=EB=B2=94</div></div></td></tr></tabl=
+e></td></tr></table></div></div></a><div style=3D"margin-top:30px"><table s=
+tyle=3D"width:100%;border-collapse:collapse"><tbody><tr><td style=3D"text-a=
+lign:center;vertical-align:top"><a style=3D"background-color:#2383E2;border=
+-radius:4px;color:#fff;text-decoration:none;padding:12px 60px;text-align:ce=
+nter;border:1px solid #308bbf;display:inline-block;width:280px" href=3D"htt=
+ps://mg.mail.notion.so/c/eJxMUE2P2yAQ_TVwqwUDGHzg0MrKsX_BgpnxBjWxLYMT7b-vvI=
+m2Pc57j_cBReXtAFpy1N4aH2BQQfI9ldt0HIWi8L-EH-U1DsB2cH4ws-XMQMoBkbHJzsgDkpMlg=
+gKnrLK6VwFC54ByVkDBIFtCEladvt2ytrIuXV3lLV5b26owPwVcBFyez-c_VsBFZ0QwhKRDChp0=
+NmnG4NCaORMOTpjLUkiYMUNgNfSknettb1LipKjXxqWZjUssoF-EGV-7tqNe30DCVh6lfU53Xs7=
+YN_y-mKbXi491auu0pY_TaHtUYUYl79wSpZa-vgigbgl5KiQAvvZACMq7EJRjgzY4zFmnPjCehX=
+LQ4RT6Ue4x835XFrywquK1S9j92WWLr-j2ubEwY-WFfq-tzAXTWe2br0d-S47K-4_v5vJY6pEr7=
+iVzFOD-O6djvwlw8hHhbwAAAP__5OegVg"><b class=3D"contextual-invite-email-cta"=
+>=ED=8E=98=EC=9D=B4=EC=A7=80=EB=A1=9C =EC=9D=B4=EB=8F=99</b></a></td></tr><=
+/tbody></table></div><div style=3D"text-align:center;vertical-align:top;mar=
+gin-top:12px"><a href=3D"https://mg.mail.notion.so/c/eJxUkE_P2ywQxD8N3F4LFj=
+CbA4e3snKsemjPFiybBDVxLAOJnm9fOU_UP8fdGc3-ZnNQ3h5ASw7aW-MRDgol32K5zr2XHIT_I=
+vwkLyHCGL1SBzbJKG_TSQNomxBpZOfQyBJAgVNWWT0qBBwc5JQUZDTENlMWVu25w3Jv5b4M9S6v=
+4dLaWoX5X8BRwPH5fP5RBRx1IgKTKWuMqEEnE0-Ejqw5pUwHJ8zxvvLyLZ75x5pj4_o9JmGmtnU=
+WMC7CTJ9V1l4v70WkVh6lfcw3XvZL__j6K2Ve45nnHeQ0V26tLOcqYFwfVZhJyRu3mGOLr98A1D=
+USzyULgFcRQFTeISrHhiw6SknHEZnYuJhQ4270k9xC4u2mLHhhVaXLEGn4uckWPlHax8rCTJWX_=
+HUnKRR33N967elt6ZW3_95tOMu-1J4qbSVxEOD-Gue-XQU4-QjwKwAA___f86Ci" style=3D"c=
+olor:#A5A5A5">=EC=9D=B4 =ED=8E=98=EC=9D=B4=EC=A7=80=EC=97=90 =EB=8C=80=ED=
+=95=9C =EC=95=8C=EB=A6=BC =EC=84=A4=EC=A0=95 =EC=97=85=EB=8D=B0=EC=9D=B4=ED=
+=8A=B8</a></div></div></td></tr></table><div style=3D"font-size:12px;margin=
+-top:26px;margin-bottom:42px;color:#888;text-align:left"><div style=3D"disp=
+lay:flex;margin-bottom:16px"><img height=3D"40" width=3D"40" class=3D"notio=
+n-email-logo" src=3D"https://www.notion.so/images/logo-for-slack-integratio=
+n.png" style=3D"display:block;margin-bottom:8px"/><div style=3D"padding-lef=
+t:16px"><div style=3D"font-style:normal;font-weight:590;font-size:14px;line=
+-height:18px;letter-spacing:-0.154px;color:black">Notion</div><div style=3D=
+"font-style:normal;font-weight:400;font-size:12px;line-height:15px;color:#A=
+CABA9;padding-top:3px">=EB=AC=B8=EC=84=9C, =ED=94=84=EB=A1=9C=EC=A0=9D=ED=
+=8A=B8, =EC=9C=84=ED=82=A4=EB=A5=BC =EC=9C=84=ED=95=9C<br/>=EC=BB=A4=EB=84=
+=A5=ED=8B=B0=EB=93=9C =EC=9B=8C=ED=81=AC=EC=8A=A4=ED=8E=98=EC=9D=B4=EC=8A=
+=A4 <a href=3D"https://mg.mail.notion.so/c/eJxMj8vO2yAQhZ8GdrVgADNesGhlZdlX=
+sLiMZdT4IgOJ_revnETtv-ScT5xvkhNWDyA5OWm1sgiDQE6rz_eptZwcs7-YHfniBjMkACAbffB=
+ehhREL2OaUZpZo-95diDACC207AUCdgZSCAISqkg6xcS0uP7ttr3mfevKzu9uqfUoTP1kcGNwez=
+6f_9srUreNqfGtc7SyMOivwMeaH7l-TSttF_2J39y875VOBv3xKEyNgq9UffLVv24BKIePNOXEA=
+F7DgCisQRSGVNRoYgjS90iRlPEBJV6gHfnpAp2r0GCZFiUunY_dn5NX956tXwcxNRba0u-95jlH=
+f6n960sLH6QVOn98zCnxtpUWSjxzIMfAfHtO7bwzMPzh4G8AAAD__-xhhgw" style=3D"color=
+:inherit">Notion.so</a></div></div></div><div><div style=3D"margin-top:12px=
+"><a href=3D"https://mg.mail.notion.so/c/eJyEkEuO2zAQRE_T3EWgmqRIL7hIIGiZKw=
+j8tMZMrA_4sTG3D-QxkslqlmRVF-pVtFzLC_aMbK-l0AYv3DBaXbrNraVoQf8APbKr9dxcBqn0I=
+vlAC-pBerngYi6L6_veRZYsclRcctkP3KDpFEbvOUYjAskYIkh-5nbbXtO-dWVnN3ut9SggvgNO=
+gNPj8finAk7lcIEAJ2O4VsZwRSJIo4L3vRsMBRLKedMbEFN1-Y0qiPG8X1JwZ0oBHDYQ4wfP0cr=
+19eFCTfdU3-eVttP4n2_Z90p5dvFXK3UuVGva3s6o415AjJytVF101T3HQXy2nFMExCcJflkX8d=
+w0W0955RI1SF7CtXOh-51ZtR816vtBIMZCW_z5iemvXpp_WVqh_O1FQpG1rTRfQk6eLKD69Jxbv=
+gEqdrf4JwAA__8nUKCI" style=3D"color:#C4C4C4">=EC=9D=B4=EB=A9=94=EC=9D=BC =
+=EC=84=A4=EC=A0=95 =EC=97=85=EB=8D=B0=EC=9D=B4=ED=8A=B8</a></div></div></di=
+v></div>
+              </td>
+            </tr>
+          </table>
+        <img width=3D"1" height=3D"1" alt=3D"" src=3D"https://mg.mail.notio=
+n.so/o/eJxMj8Fu7CAMRb8Gdi8yBoKzYPGqWfcXIgyOBnWSjEKo1L-v0lZVl9Y58r23RAhuQqMl=
+muBsIJyAtKypPubea4kqvKhw0_fox7KYtCzBjjDxMtkQ_GSRLYMNbJyuEQE9OHBmBEIaPBZmwEI=
+2iyu5KAfX32Hbz7pvQ9v1Kmcq6UxfKYjtmbLMtShEZf8rRCIIngi82OzIZ2aTRpIs1icmQ5cYbv=
+qILMcKDoNy0PJ9SHl4O_QZv3ecH09R9tZkK6_7WZea01Xgl7fOP0pvcvxbZbuwFN231rnlo7JEh=
+f7POffjodDr94ifAQAA__8EBmMV"></body>
+      </html>
+   =20
+--289b713c09532dab302f5b5685395f66c91eab94a669905029c263b4e40f--
 
-<!doctype html>
-<html>
-<body>
-    <center>
-        <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4VGNoV127617gJKc747zzaunasxex13222KCGSYEKDIGSXNIU3768UVJE16237W16" style="color:black; text-decoration:none;">
-        <div style="width:600px;background:#e6e9ef;font-family:arial;background:#424949;">
-        <div>
-            <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4XvriN127617zQpa747dzirryjvfy13222BDFCNMHQPQMLGWI3768NLQV16237e16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
-            <div style="background:#CC0000;padding-bottom:6px">
-                
-                <span style="color:white;font-size:12px;"><span style="font-size:20px;color:#F1F2F2;">❒ <u>배송<span> 상태<span> 확인</u></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
-                </div>
-                <div style="background:#F1F2F2;">
-                    <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4KjIQS127617beEo747chfdagmdmq13222GVEAXRVEHSKVAJZ3768ORPW16237x16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
-                    <br><span style="font-size:17px;color:#424949">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;◉ 등록 / 로그인 </span><br>
-                <b><p style="text-align:left;margin:0px;font-size:50px;color:#424949;"><span style="font-size:50px;color:#424949;">&nbsp;&nbsp;❒</span>대한민국 우체국</p></b><br><br>
-                </div>
-                
-        </div>
-        <div style="width:600px;">
-            <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4aJEpH127617hhns747amdcridnhv13222KRBOANUGVXEENLG3768FWKU16237F16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
-                    <span style="background:white;padding:10px;border-radius:4px;color:#b2babb;font-size:15px;padding-left:30px;">091115881 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background:#424949;color:white;padding:10px;border-radius:4px">계속하기 ➢</span></span><br>
-                </div>
-                 <div style="background:#CC0000">
-                     <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4VZaRz127617HnbD747bjbpahevwn13222TLPUAPLDTLDBNNM3768TZAC16237c16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
-                  <br><br><span style="color:#F1F2F2; font-family:Yu Gothic UI Semibold; font-size:25px;"><span style="color:#F1F2F2 ; font-size:35px;"><u>berm2222</u></span><br>고<span>객<span>님<span>의<span> 배송<span> (1<span>건<span>)<br>이<span> 보<span>류<span> 중<span>입<span>니다.</span>
-                  <hr style="width:400px;color:#F1F2F2#F1F2F2;">
-                  <b><span style="font-size:20px;color:#F1F2F2;"><center><b>배<span>송<span> 정<span>보<span>를<span> 확<span>인<span>하<span>세<span>요</center></b>
-                    <div style="background:#CC0000;padding:10px;border-radius:4px;color:black;font-size:15px;width:350px;border-radius:8px;font-size:15px;text-align:left;margin:10px;  ">
-                      <p style="background:#424949;padding:10px;border-radius:5px;color:white">■ 배송을 예약하고, 향후 이러한 상황을 방지하기 위해 푸시 알림을 등록하세요!</p>
-                      </div>
-                      <br>
-                  </div>
-                  <br>
-                  <div style="background:#F1F2F2;padding:20px"><br><br><br>
-                  <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4AluyK127617JknN747hqnvkhsdjp13222WPQFACKTZRSGGUV3768IRBX16237v16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
-                  <b><span style="padding:15px;background:#CC0000;color:#F1F2F2;border-radius:5px;">배<span>송<span> 일<span>정<span> 확<span>인</span></span></b><br><br><br>
-                  </div>
-              </div><br>
-              <span style="color:#424949; font-family:Bahnschrift; font-size:12px">
-                  
-  <p style="color:#424949;font-size:12px;">앞으로 이러한 이메일을 받기 원하지 않으시면 <a style="color:#424949;" href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#5CHnyx127617PoBu747fhawiriydu13222UAWBGEFBNFLYRID3768EVQY16237l16">여기를 클릭하여 구독 해제</a>하세요.</p>
-
- 
-</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
- <p><img src="[FOM_Open]" /></p>
-</body>
-</span></span></span></span></span></span>
-<span>
-</html>

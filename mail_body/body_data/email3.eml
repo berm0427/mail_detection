@@ -1,71 +1,135 @@
 Delivered-To: berm2222@gmail.com
-Received: by 2002:ac8:4dda:0:b0:475:1ce0:7092 with SMTP id g26csp6240752qtw;
-        Mon, 7 Apr 2025 01:48:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEqILygVrgnwPBGTYaK3S3cE824tD9KpHmvtACSW9IdUe7vCtbNPL728T/vkYBpIi9Lq4dY
-X-Received: by 2002:a05:6902:2411:b0:e63:dc61:372f with SMTP id 3f1490d57ef6-e6e316fb437mr13104553276.19.1744015738724;
-        Mon, 07 Apr 2025 01:48:58 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1744015738; cv=none;
+Received: by 2002:a05:622a:4e9b:b0:475:1ce0:7092 with SMTP id dj27csp116174qtb;
+        Mon, 14 Apr 2025 12:34:51 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGRodBOj2kFDLM0pv9/3nzNA2/NLfJXZHQWlckjbLM/e6+HpsBXc3gfrEbaGjZ0rspB5nzN
+X-Received: by 2002:a05:6a20:c704:b0:1f5:9d5d:bcdd with SMTP id adf61e73a8af0-2017978c6a8mr19607846637.1.1744659291622;
+        Mon, 14 Apr 2025 12:34:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1744659291; cv=none;
         d=google.com; s=arc-20240605;
-        b=UMYYJpd9U3+2XZQnMmXvLbMXK7nbwpqakIHwQ9dFoZttpMImvMEnXwaQGWvd7ERDdH
-         BujXTnecmY9Le8Qr0pQj1zoy13o8ACXhwtb5dcgNlusivqEp4Svks6PsBK0xxw42LFcG
-         tqVAGnkhQuMGz9NJkuMpwt89lvNmcVehTS/jK/yj5MisnYhwnpmDRFppGjXCrlEDhvlX
-         kQg4Wi8Gfk/KATO9xuvGjsqffEMguzqqYK7mZsCdoHgIPUaJ5czisqaCBnvSTJSnuovl
-         5dTkBHqIygZDumx/ngpf2gKIevDgTdgorSKxBzTmRqeiXQlCl7Pnss/0X1O+gg27s+Gq
-         l9xA==
+        b=WNg8M5hDMzK22J/zeWYHaravZGHHeKCBidIPdiV6cvvdbp2fJOO32SI64HYNjfDiwy
+         QL9AQMH24IsTvXquU7Ns6TXMYLfAtGTTRCb0Fe3dYBehkHcxUMU0K8r9tB9VfhgGhuM3
+         87D3pKN3sz7UkNd34O/NWtkYHRz8VTlJtuGuxcoDHcxlTNdZlp+BXvprFCsolfOmiYzS
+         hDwYQVxv36lhZPMXyXI3BkHy1XPS7sszHdpHez5eRI1sDVxoDGz62Jqw9dMxJ2yw9LS5
+         R4OvVH8hpWSNeOFH7y4bIVneWPCGkdnfPgZw8SQ8yUj0cyISBQ7W2uaJqyllhE3SZkKy
+         OEEQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=dkim-signature:content-transfer-encoding:mime-version:subject
-         :message-id:to:from:date;
-        bh=9ZtJyYEA/zcQHm/lgzLb78KAF8bTO2ujEe3TAYeWCEY=;
+        h=mime-version:message-id:subject:to:from:date:domainkey-signature
+         :dkim-signature;
+        bh=wEAJvNqR5oJhffjpPUYSzTym/GvhzIthzLg2KWubqDE=;
         fh=WpvuC373ZTMCLZIYagF1v9HrwPtcuIVgj45RAivh5S0=;
-        b=WPJ/RR+WfPCmQcCwfqU7T5azQxK1jPn8uYvhQUmuqVt4LMru2e1x+RzW/6h+ay2gdN
-         25Ca9KooYRD6pMLYo2PTfzgL73kY7fSOoJszIsWQcbiZIjWjc9CSlCDNAclTv8AJ9KFw
-         ZRhhEBzuhlIyDUDerA1lcHqgw8OuMGru8dFvUCvQ6afj4aIWZyAhfOs7haqOerPhz+eu
-         erIFvSTVYiz0rlnXpzkHsQ0zKuMgM74UwVM+hRFx29e3gRbRiWxWCbXZbrtKfYJ+rhoY
-         CWBkzGhWYc7UUbi9bh8zY6a4hMSCp7tSX1Z2/xKzn3EtmKqnGGjBxXnHmQalo9XpUZbY
-         YOcw==;
+        b=BTQF2PI/If1C6s06r/Pn5N4At/UAnhdV3WcrnzK+FiTKx9915+iJiuurTUMacXhLwX
+         QN3z6TwT30IqhvCZceEj5OmM2s+A50pJRBuMbh0ggfDyP8BFV03u/kH7evReDrElEEML
+         lL19dRIr/zxqONUuUBlLjlhZpZ/R2CCWj9/suWH0VxGLvWfpQ9I2x0Gx1StEgL/sKGpc
+         aKRJoZjHO2YrY7sxrDxJ+EeQMf4eHdDq8omV1yMA1fa6GEhVSaACXqtvYxzC+4FOFEL1
+         sKaFvkdW4V+JThy57McED0625sAD3J8Qn2auCxZo9l/A4nUjlQEoKZNY33kugbWeggAM
+         Ge4g==;
         dara=google.com
 ARC-Authentication-Results: i=1; mx.google.com;
-       dkim=pass header.i=@kakao.com header.s=1444202050.kakao header.b=l8onVlPv;
-       spf=pass (google.com: domain of berm0427@kakao.com designates 220.64.109.47 as permitted sender) smtp.mailfrom=berm0427@kakao.com;
-       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=kakao.com
-Return-Path: <berm0427@kakao.com>
-Received: from kmail-prod-ay-skadi05.mail.kakao.com (kmail-prod-ay-skadi05.mail.kakao.com. [220.64.109.47])
-        by mx.google.com with ESMTPS id 3f1490d57ef6-e6e0cae461bsi11888931276.442.2025.04.07.01.48.57
+       dkim=pass header.i=@vxmtqhseslyrn.kulomanilania.pp.ua header.s=smtp header.b=o2D6x0GG;
+       spf=pass (google.com: domain of return@gyhgftyt.kulomanilania.pp.ua designates 51.83.71.173 as permitted sender) smtp.mailfrom=return@gyhgftyt.kulomanilania.pp.ua
+Return-Path: <return@gyhgftyt.kulomanilania.pp.ua>
+Received: from 46-183-185-244.hinet-ip.hinet.net (vps-d16a52c3.vps.ovh.net. [51.83.71.173])
+        by mx.google.com with ESMTPS id 41be03b00d2f7-b02a36fe3eesi13696982a12.591.2025.04.14.12.34.50
         for <berm2222@gmail.com>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 07 Apr 2025 01:48:58 -0700 (PDT)
-Received-SPF: pass (google.com: domain of berm0427@kakao.com designates 220.64.109.47 as permitted sender) client-ip=220.64.109.47;
+        (version=TLS1 cipher=ECDHE-ECDSA-AES128-SHA bits=128/128);
+        Mon, 14 Apr 2025 12:34:51 -0700 (PDT)
+Received-SPF: pass (google.com: domain of return@gyhgftyt.kulomanilania.pp.ua designates 51.83.71.173 as permitted sender) client-ip=51.83.71.173;
 Authentication-Results: mx.google.com;
-       dkim=pass header.i=@kakao.com header.s=1444202050.kakao header.b=l8onVlPv;
-       spf=pass (google.com: domain of berm0427@kakao.com designates 220.64.109.47 as permitted sender) smtp.mailfrom=berm0427@kakao.com;
-       dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=kakao.com
-Received: from 220.64.108.19 ([125.240.4.157]) by skadi-sender of skadi-sender-normal-prod-deployment-59748456d7-m96td (10.240.13.14) with HTTP id 20250407174855.NtwH-7DvQ1iUg-Cci2MdFg@berm0427.kakao.com for <berm2222@gmail.com>; Mon, 07 Apr 2025 17:48:58 +0900 (KST)
-Date: Mon, 7 Apr 2025 17:48:55 +0900 (KST)
-From: "CHANGBEOM YU." <berm0427@kakao.com>
+       dkim=pass header.i=@vxmtqhseslyrn.kulomanilania.pp.ua header.s=smtp header.b=o2D6x0GG;
+       spf=pass (google.com: domain of return@gyhgftyt.kulomanilania.pp.ua designates 51.83.71.173 as permitted sender) smtp.mailfrom=return@gyhgftyt.kulomanilania.pp.ua
+DKIM-Signature: v=1; a=rsa-sha1; c=relaxed/relaxed; s=smtp; d=vxmtqhseslyrn.kulomanilania.pp.ua;
+ h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type; i=mcur6@vxmtqhseslyrn.kulomanilania.pp.ua;
+ bh=I7Xpi+/6XrL2WoT4XXNnRPEyAlM=;
+ b=o2D6x0GGXphNg0fskzKh3dvs3xCyPhaXHRZgWjh+UaYnXp0iPQjvp7vii578/JgbutjcQeuR4gRJ
+   hVBt3ryCL3mTZEoddPvcnl9xUSrnZZ8qNQGuY1jzuUpbooXjox/zT1sOcNackFZ4a0DG5+zJoYLC
+   veHt8y9tBqm0xDb6lac=
+DomainKey-Signature: a=rsa-sha1; c=nofws; q=dns; s=smtp; d=vxmtqhseslyrn.kulomanilania.pp.ua;
+ b=aE3LM0XTtbiTEe8T15GLHb/bIarB15xG+ehxJFxPjkTHUY7HOz/pG1Tn+RQDif65Ey16aF6BN3/2
+   S7zoJUtw2oMLRWOr/kwQ8V210wG7tLbe+3wMqIFWOJ/K3F+XMma0r08KYkiYsezUxeTPjoMoWQ2e
+   fe27Z1QUJPAcj5EYg9w=;
+Received: from uxsmktoghr.com (ip6-localhost ) by pdr8-services-05v (Postfix) with ESMTP id PYY28AGM for <berm2222@gmail.com>; Mon, 14 Apr 2025 19:34:47 +0000
+Date: Mon, 14 Apr 2025 19:34:47 +0000.13222-3768
+From: " '한국 우편' " <mcur6@vxmtqhseslyrn.kulomanilania.pp.ua>
 To: berm2222@gmail.com
-Message-ID: <20250407174855.NtwH-7DvQ1iUg-Cci2MdFg@berm0427.kakao.com>
-Subject: =?UTF-8?B?7ISc7Jq464Ko67aA6rK97LCw7IScIOyeheuLiOuLpA==?=
+Subject: >> berm2222! - 당신은(1)패키지가 배달을 기다리고 있습니다 📦.당신의 코드를 사용하여 그것을 따르고 그것을 얻으십시오
+Message-ID: <2lqzbwfzws.5tg5pes90h.mvbdb92mpd.javamail.tomcat@pdr8-services-05v.prod.x9gmt23qjq.org>
 MIME-Version: 1.0
-Content-Type: text/html; charset=utf-8
-Content-Transfer-Encoding: base64
-X-Kakaomail-MID: 20250407174855.NtwH-7DvQ1iUg-Cci2MdFg@berm0427.kakao.com
-X-Mailer: mint
-X-Originating-IP: [125.240.4.157]
-X-HM-UT: fkpmxC6y5UXP+YTIgolUiP9ah1EfVvJbVYSfKXTjVEg=
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple; t=1744015735;
-	s=1444202050.kakao; d=kakao.com;
-	h=Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Message-ID:To:From:Date;
-	bh=9ZtJyYEA/zcQHm/lgzLb78KAF8bTO2ujEe3TAYeWCEY=;
-	b=l8onVlPvu+qycDhk+KuGpi4J2LVKzYk7LdyeJM+Dz+ajQMgA+7bP3EBt8hlba7CM
-	/qEoSVsD6t40SCCR3nM3lAh5AVf6t0AjICymWn1YIH7KdVfhmk18EMBqL17hGQC77uy
-	rQ5xkKmpRguezr0MtXLAOoq0zdCWs0nGt6przri8=
+Content-Type: multipart/report; boundary="vmta-51_83_71_173-N1"; report-type=delivery-status
 
-PGh0bWw+CjxoZWFkPgogICAgPHN0eWxlPgogICAgICAgIHB7bWFyZ2luLXRvcDowO21hcmdpbi1i
-b3R0b206MH0KICAgIDwvc3R5bGU+CjwvaGVhZD4KPGJvZHk+CiAgICA8ZGl2IHN0eWxlPSJjb2xv
-cjojMTExO2ZvbnQtZmFtaWx5OkFwcGxlIFNEIEdvdGhpYyBOZW8sTWFsZ3VuIEdvdGhpYywn66eR
-7J2AIOqzoOuUlScsc2Fucy1zZXJpZjtmb250LXNpemU6MTBwdDtsaW5lLWhlaWdodDoxLjU7Ij48
-cD7qsr3ssLDsnoXri4jri6Qg7Iug67aE7KadIOygnOyLnO2VtOyjvOyEuOyalDwvcD48L2Rpdj4K
-PC9ib2R5Pgo8L2h0bWw+CjxpbWcgc3JjPSJodHRwczovL2NvbmZpcm0ubWFpbC5rYWthby5jb20v
-djEvdXNlcnMvYmVybTA0MjclNDBrYWthbyUyRWNvbS9jbWFpbHMvMjAyNTA0MDcxNzQ4NTUlMkVO
-dHdILTdEdlExaVVnLUNjaTJNZEZnJTQwYmVybTA0MjclMkVrYWthbyUyRWNvbS9yZWNpcGllbnRz
-L2Jlcm0yMjIyJTQwZ21haWwlMkVjb20iPg==
+--vmta-51_83_71_173-N1Content-Type: multipart/related;
+boundary="3768-13222-745fb2ea318e6432e8bff395a48fe60c" --3768-13222-745fb2ea318e6432e8bff395a48fe60c
+--vmta-51_83_71_173-N1
+Content-Type: multipart/related; boundary="3768-13222-745fb2ea318e6432e8bff395a48fe60c"
+
+--3768-13222-745fb2ea318e6432e8bff395a48fe60c
+Content-Type: multipart/alternative; boundary="berm2222"
+
+--berm2222
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Top Stories of the Day: Sep 0, 2019
+
+103882302891885308
+-----
+
+If you believe this has been sent to you in error, please safely unsubscribe
+--berm2222
+Content-Type: text/html; charset="UTF-8"
+Content-Transfer-Encoding: 8bit+
+
+
+
+<!------------ START SOCIAL MEDIA ------------>
+<div class="gmail_quote"> 
+
+<!doctype html>
+<html>
+<body>
+    <center>
+        <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4VGNoV127617gJKc747zzaunasxex13222KCGSYEKDIGSXNIU3768UVJE16237W16" style="color:black; text-decoration:none;">
+        <div style="width:600px;background:#e6e9ef;font-family:arial;background:#424949;">
+        <div>
+            <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4XvriN127617zQpa747dzirryjvfy13222BDFCNMHQPQMLGWI3768NLQV16237e16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
+            <div style="background:#CC0000;padding-bottom:6px">
+                
+                <span style="color:white;font-size:12px;"><span style="font-size:20px;color:#F1F2F2;">❒ <u>배송<span> 상태<span> 확인</u></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
+                </div>
+                <div style="background:#F1F2F2;">
+                    <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4KjIQS127617beEo747chfdagmdmq13222GVEAXRVEHSKVAJZ3768ORPW16237x16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
+                    <br><span style="font-size:17px;color:#424949">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;◉ 등록 / 로그인 </span><br>
+                <b><p style="text-align:left;margin:0px;font-size:50px;color:#424949;"><span style="font-size:50px;color:#424949;">&nbsp;&nbsp;❒</span>대한민국 우체국</p></b><br><br>
+                </div>
+                
+        </div>
+        <div style="width:600px;">
+            <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4aJEpH127617hhns747amdcridnhv13222KRBOANUGVXEENLG3768FWKU16237F16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
+                    <span style="background:white;padding:10px;border-radius:4px;color:#b2babb;font-size:15px;padding-left:30px;">091115881 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="background:#424949;color:white;padding:10px;border-radius:4px">계속하기 ➢</span></span><br>
+                </div>
+                 <div style="background:#CC0000">
+                     <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4VZaRz127617HnbD747bjbpahevwn13222TLPUAPLDTLDBNNM3768TZAC16237c16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
+                  <br><br><span style="color:#F1F2F2; font-family:Yu Gothic UI Semibold; font-size:25px;"><span style="color:#F1F2F2 ; font-size:35px;"><u>berm2222</u></span><br>고<span>객<span>님<span>의<span> 배송<span> (1<span>건<span>)<br>이<span> 보<span>류<span> 중<span>입<span>니다.</span>
+                  <hr style="width:400px;color:#F1F2F2#F1F2F2;">
+                  <b><span style="font-size:20px;color:#F1F2F2;"><center><b>배<span>송<span> 정<span>보<span>를<span> 확<span>인<span>하<span>세<span>요</center></b>
+                    <div style="background:#CC0000;padding:10px;border-radius:4px;color:black;font-size:15px;width:350px;border-radius:8px;font-size:15px;text-align:left;margin:10px;  ">
+                      <p style="background:#424949;padding:10px;border-radius:5px;color:white">■ 배송을 예약하고, 향후 이러한 상황을 방지하기 위해 푸시 알림을 등록하세요!</p>
+                      </div>
+                      <br>
+                  </div>
+                  <br>
+                  <div style="background:#F1F2F2;padding:20px"><br><br><br>
+                  <a href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#4AluyK127617JknN747hqnvkhsdjp13222WPQFACKTZRSGGUV3768IRBX16237v16"style=" font-family: 'Google Sans',Roboto,RobotoDraft,Helvetica,Arial,sans-serif; font-size: 15px; color: #181717; text-decoration:none;">
+                  <b><span style="padding:15px;background:#CC0000;color:#F1F2F2;border-radius:5px;">배<span>송<span> 일<span>정<span> 확<span>인</span></span></b><br><br><br>
+                  </div>
+              </div><br>
+              <span style="color:#424949; font-family:Bahnschrift; font-size:12px">
+                  
+  <p style="color:#424949;font-size:12px;">앞으로 이러한 이메일을 받기 원하지 않으시면 <a style="color:#424949;" href="https://storage.googleapis.com/3awedmnjdid/013od2r8.html#5CHnyx127617PoBu747fhawiriydu13222UAWBGEFBNFLYRID3768EVQY16237l16">여기를 클릭하여 구독 해제</a>하세요.</p>
+
+ 
+</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>
+ <p><img src="[FOM_Open]" /></p>
+</body>
+</span></span></span></span></span></span>
+<span>
+</html>

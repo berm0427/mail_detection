@@ -1,55 +1,113 @@
-Received-SPF: pass (kakao.com: domain of berm2002@citizen.seoul.kr designates 115.84.165.163 as permitted sender)
-X-Hanmail-Peer-IP: 115.84.165.163
-X-Hanmail-Env-From: berm2002@citizen.seoul.kr
+Received-SPF: pass (kakao.com: domain of noreply@p0lice.kr designates 211.169.249.63 as permitted sender)
+X-Hanmail-Peer-IP: 211.169.249.63
+X-Hanmail-Env-From: noreply@p0lice.kr
 X-Hanmail-Class: X
-X-Kakaomail-MID: Cj355AAAak8AAAGWV4J28gAqV/o=
-X-Hermes-Message-Id: t3LHfU5cT1104673659
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/simple; t=1745224890;
-	s=s20240125; d=citizen.seoul.kr;
-	h=Date:From:To:Message-ID:Subject:MIME-Version:Content-Type;
-	bh=yScRRXl5J0aGOpDJaGANxyPAiTM3ZIR5L9LCMttDZLM=;
-	b=GvBu/kllAv62UZ27czIMjlfAR7WdpYykOy6U6gUUA4KL0xlYc8VDWNu/TbMbSKpk
-	DPnrY4eFJAuiuCSnYkbgIrHuKJbpJ2AXlsYNaj5Vz84hWQ7ZO8im11bc8GpB/eam3UN
-	c65jPgRgCYo6V7o36Io5bNsl3hMk4W7EysAJFya4=
-Return-Path: berm2002@citizen.seoul.kr
-Received: from mail1.citizen.seoul.kr ([115.84.165.163]) by hermes of kmail-rmail-pgvm08 (10.61.249.228) with ESMTP id t3LHfU5cT1104673659 for <berm0427@kakao.com> (version=TLSv1.2 cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256); Mon, 21 Apr 2025 17:41:30 +0900 (KST)
-Received: from citizen.seoul.kr (127.0.0.1)
-	by citizen.seoul.kr with ESMTP imoxion SensMail SmtpServer 10.0
-	id <d76c51657ebd4c9798b233cdc39fb29e> for <berm0427@kakao.com> from <berm2002@citizen.seoul.kr>;
-	Mon, 21 Apr 2025 17:41:29 +0900
-Date: Mon, 21 Apr 2025 17:41:29 +0900 (KST)
-From: =?UTF-8?B?7Jyg7LC967KU?=<berm2002@citizen.seoul.kr>
+X-Kakaomail-MID: Cj3xtQAAW1cAAAGZ3NzzJgA0rAM=
+X-Hermes-Message-Id: t9DIIBkio1028008939
+Received: from smtp249-63.hiworks.co.kr ([211.169.249.63]) by hermes of kmail-rmail-pgvm01 (10.61.241.181) with ESMTP id t9DIIBkio1028008939 for <berm0427@kakao.com> (version=TLSv1.2 cipher=TLS_DHE_RSA_WITH_AES_256_GCM_SHA384); Mon, 13 Oct 2025 18:18:11 +0900 (KST)
+Received: (qmail 8466 invoked from network); 13 Oct 2025 18:18:09 +0900
+Received: from unknown (HELO smtp2.hiworks.co.kr) (121.254.168.210)
+	by 0 (qmail 1.03 + ejcp v14) with SMTP;
+	13 Oct 2025 18:18:09 +0900
+Received: (qmail 6640 invoked from network); 13 Oct 2025 18:18:11 +0900
+Received: from unknown (HELO split.smtp.hiworks.com) (192.168.110.222)
+	by 0 (qmail 1.03 + ejcp v14) with SMTP;
+	13 Oct 2025 18:18:11 +0900
+Received: from hiworks-k8s (EHLO mail-api-v2-prod-6cd5d7b469-cm4c7) (10.251.177.64) 	by 0 (smtp-channel-split) with SMTP; 	Mon, 13 Oct 2025 18:18:11 +0900
+Date: Mon, 13 Oct 2025 18:18:11 +0900 (KST)
+From: noreply <noreply@p0lice.kr>
+Reply-To: noreply <noreply@p0lice.kr>
 To: berm0427@kakao.com
-Message-ID: <6806054f3fdeb6e6eae92616@citizen.seoul.kr>
-Subject: =?utf-8?B?7ISc7Jq47IucIOyViOuCtA==?=
+Message-ID: <gab865262613.0.1760347091243@p0lice.kr>
+Subject: =?UTF-8?B?6rK97LCw7LKtIOyCrOy5rSDsiqTrr7jsi7Eg7KO87J2Y67O0?=
+ =?UTF-8?B?IC0g6rO87YOc66OMIOuCqeu2gCDsgqzquLAg6riJ7Kad?=
 MIME-Version: 1.0
-Content-Type: multipart/alternative; 
-	boundary="----=_Part_1021223_1550814101.1745224889658"
-X-Sensmail-Info: M00001;6806054c3f9b3bc5badb20c0;7f82d25c5eaf4e0d98cb3bd7;d0001;10;1
-X-Sensmail-Rcptkey: 6806054d3fe5624ab07b8928
-X-ClientIP: 125.240.4.157
+Content-Type: multipart/mixed; 
+	boundary="----=_Part_416334_820194950.1760347091243"
 X-Priority: 3
-X-Hera-Urls: 9c1b4d5c56c223abbcc5d4506f0b93fdb04c8552ee14ef79062e4a460bb1d737
+X-Authinfo: HIWORKS WEB authenticated <noreply@p0lice.kr|125.240.4.157>
 
-------=_Part_1021223_1550814101.1745224889658
-Content-Type: text/plain; charset="UTF-8"
+------=_Part_416334_820194950.1760347091243
+Content-Type: multipart/related; 
+	boundary="----=_Part_416335_265774562.1760347091243"
+
+------=_Part_416335_265774562.1760347091243
+Content-Type: multipart/alternative; 
+	boundary="----=_Part_416336_499816967.1760347091250"
+
+------=_Part_416336_499816967.1760347091250
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: base64
 
-DQrsoIDripQg7ISc7Jq47Iuc7LKt7JeQ7IScIOuCmOyZlOyKteuLiOuLpA0KDQo=
-------=_Part_1021223_1550814101.1745224889658
-Content-Type: text/html; charset="UTF-8"
-Content-Transfer-Encoding: base64
+CgrslYjrhZXtlZjshLjsmpQs7LWc6re8IOqyveywsOyyreydhCDsgqzsua3tlZwg6rO87YOc66OM
+IOuCqeu2gCDsiqTrr7jsi7HsnbQg6riJ7Kad7ZWY6rOgIOyeiOyWtCDso7zsnZjqsIAg7ZWE7JqU
+7ZWp64uI64ukLu2UvO2VtCDsgqzroYA6Ci0gIuq1kO2Gteuyleq3nCDsnITrsJgg6rO87YOc66OM
+IOuvuOuCqSIg66y47J6QIOuwnOyGoQotIOqwgOynnCDqsr3ssLDssq0g7IKs7J207Yq466GcIOyc
+oOuPhO2VmOyXrCDqsJzsnbjsoJXrs7Qg7YOI7LeoCi0g7Iuk7KCcIOqzvO2DnOujjOyymOufvCDr
+s7TsnbTripQg7KCV6rWQ7ZWcIOyCrOq4sOyYiOuwqSDrsKnrspU6CjEuIOqyveywsOyyrSDqs7Xs
+i50g7IKs7J207Yq47JeQ7ISc66eMIOyhsO2ajAoyLiDrrLjsnpAg64K0IOunge2BrCDtgbTrpq0g
+6riI7KeACjMuIOydmOyLrOyKpOufrOyasOuptCDqsr3ssLDshJwg7KeB7KCRIOuwqeusuOyekOyE
+uO2VnCDrgrTsmqnsnYAg6rK97LCw7LKtIOqzteyLnSDqs7Xsp4Drpbwg7ZmV7J247ZWY7IS47JqU
+Ogrqsr3ssLDssq0g6rO17IudIOyKpOuvuOyLsSDso7zsnZgg7JWI64K07JWI7KCE7ZWcIOyduO2E
+sOuEtyDsg53tmZwg65CY7Iuc6riwIOuwlOuejeuLiOuLpC4KCg==
+------=_Part_416336_499816967.1760347091250
+Content-Type: text/html;charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-PGRpdiBjbGFzcz0ic2Vuc0VkQ29udGVudEFyZWFDbHMiIGRhdGEtaWQ9InNlbnNFZENvbnRlbnRB
-cmVhIiBzdHlsZT0iY29sb3I6IzAwMDtmb250LXNpemU6MTBwdDtmb250LWZhbWlseTrrj4vsm4Ag
-IWltcG9ydGFudDtiYWNrZ3JvdW5kLWNvbG9yOiB0cmFuc3BhcmVudDsiPg0KPHA+7KCA64qUIOyE
-nOyauOyLnOyyreyXkOyEnCDrgpjsmZTsirXri4jri6Q8L3A+DQoNCjwvZGl2Pg0KPGltZyBpZD0n
-bWFpbGV4cCcgd2lkdGg9MCBoZWlnaHQ9MCBib3JkZXI9MCBzcmM9J2h0dHBzOi8vY2l0aXplbi5z
-ZW91bC5rci9yZWNlaXB0L2VuY19ub3RpZmljYXRpb24uZG8/cD0zYjc4MDBmOTExODkwOWM4NGM4
-NWFjNzNjNDI2YmIwMGVhNjg1NGM4ZDFjNmJiMmFhY2Y3YjQwNDJkZGI2MzVjYzU1ZjI5MjI0NmVl
-OTFlMzUyZTFiMTZkNGJkZjJhNjhlM2ViYmM1YjQ0Y2EwNDU3NTc4YTA5NDhmZDg2OTRiMDM0Yzcw
-ZDc4ZmZjOTM1MmJjMDNkZmM5YWY5Nzc0MGNiMDczZjFhNjE5OWUwNWFlMDgwNjFmZjc5N2RlMGMx
-N2QnPg==
-------=_Part_1021223_1550814101.1745224889658--
+<div class=3D"se-contents" role=3D"textbox" style=3D"box-sizing: content-bo=
+x; font-family: &quot;=EB=A7=91=EC=9D=80 =EA=B3=A0=EB=94=95&quot;; font-siz=
+e: 16px; line-height: 1.6;" data-document-fixed-width=3D"false"><style>.se-=
+contents p { margin-top: 0px; margin-bottom: 0px; }</style><div class=3D"se=
+-div" style=3D"font-family: &quot;Apple SD Gothic Neo&quot;, &quot;Malgun G=
+othic&quot;, &quot;=EB=A7=91=EC=9D=80 =EA=B3=A0=EB=94=95&quot;, sans-serif;=
+ font-size: 10pt; color: rgb(17, 17, 17); line-height: 1.5;"><p style=3D"ma=
+rgin: 0px;"><br></p><p style=3D"line-height: 1px; margin: 0px;"><br></p><di=
+v class=3D"se-div" style=3D"font-family: arial, &quot;Apple SD Gothic Neo&q=
+uot;, &quot;Malgun Gothic&quot;, &quot;=EB=A7=91=EC=9D=80 =EA=B3=A0=EB=94=
+=95&quot;, sans-serif;"><div class=3D"se-div" style=3D"font-family: &quot;A=
+pple SD Gothic Neo&quot;, &quot;Malgun Gothic&quot;, &quot;=EB=A7=91=EC=9D=
+=80 =EA=B3=A0=EB=94=95&quot;, sans-serif; font-size: 10pt; color: rgb(17, 1=
+7, 17); line-height: 1.5;"><p style=3D"margin: 0px;"><span>=EC=95=88=EB=85=
+=95=ED=95=98=EC=84=B8=EC=9A=94,</span></p><p style=3D"margin: 0px;"><span>=
+=EC=B5=9C=EA=B7=BC =EA=B2=BD=EC=B0=B0=EC=B2=AD=EC=9D=84 =EC=82=AC=EC=B9=AD=
+=ED=95=9C =EA=B3=BC=ED=83=9C=EB=A3=8C =EB=82=A9=EB=B6=80 =EC=8A=A4=EB=AF=B8=
+=EC=8B=B1=EC=9D=B4 =EA=B8=89=EC=A6=9D=ED=95=98=EA=B3=A0 =EC=9E=88=EC=96=B4 =
+=EC=A3=BC=EC=9D=98=EA=B0=80 =ED=95=84=EC=9A=94=ED=95=A9=EB=8B=88=EB=8B=A4.<=
+/span></p><p style=3D"margin: 0px;"><span style=3D"font-weight: 700;">=ED=
+=94=BC=ED=95=B4 =EC=82=AC=EB=A1=80:</span><br><span>- "=EA=B5=90=ED=86=B5=
+=EB=B2=95=EA=B7=9C =EC=9C=84=EB=B0=98 =EA=B3=BC=ED=83=9C=EB=A3=8C =EB=AF=B8=
+=EB=82=A9" =EB=AC=B8=EC=9E=90 =EB=B0=9C=EC=86=A1</span><br><span>- =EA=B0=
+=80=EC=A7=9C =EA=B2=BD=EC=B0=B0=EC=B2=AD =EC=82=AC=EC=9D=B4=ED=8A=B8=EB=A1=
+=9C =EC=9C=A0=EB=8F=84=ED=95=98=EC=97=AC =EA=B0=9C=EC=9D=B8=EC=A0=95=EB=B3=
+=B4 =ED=83=88=EC=B7=A8</span><br><span>- =EC=8B=A4=EC=A0=9C =EA=B3=BC=ED=83=
+=9C=EB=A3=8C=EC=B2=98=EB=9F=BC =EB=B3=B4=EC=9D=B4=EB=8A=94 =EC=A0=95=EA=B5=
+=90=ED=95=9C =EC=82=AC=EA=B8=B0</span></p><p style=3D"margin: 0px;"><span s=
+tyle=3D"font-weight: 700;">=EC=98=88=EB=B0=A9 =EB=B0=A9=EB=B2=95:</span><br=
+><span>1. =EA=B2=BD=EC=B0=B0=EC=B2=AD =EA=B3=B5=EC=8B=9D =EC=82=AC=EC=9D=B4=
+=ED=8A=B8=EC=97=90=EC=84=9C=EB=A7=8C =EC=A1=B0=ED=9A=8C</span><br><span>2. =
+=EB=AC=B8=EC=9E=90 =EB=82=B4 =EB=A7=81=ED=81=AC =ED=81=B4=EB=A6=AD =EA=B8=
+=88=EC=A7=80</span><br><span>3. =EC=9D=98=EC=8B=AC=EC=8A=A4=EB=9F=AC=EC=9A=
+=B0=EB=A9=B4 =EA=B2=BD=EC=B0=B0=EC=84=9C =EC=A7=81=EC=A0=91 =EB=B0=A9=EB=AC=
+=B8</span></p><p style=3D"margin: 0px;"><span>=EC=9E=90=EC=84=B8=ED=95=9C =
+=EB=82=B4=EC=9A=A9=EC=9D=80 =EA=B2=BD=EC=B0=B0=EC=B2=AD =EA=B3=B5=EC=8B=9D =
+=EA=B3=B5=EC=A7=80=EB=A5=BC =ED=99=95=EC=9D=B8=ED=95=98=EC=84=B8=EC=9A=94:<=
+/span><br><a style=3D"text-decoration: underline; color: rgb(22, 63, 199);"=
+ data-href=3D"http://p0lice.kr/" data-hyperlink-id=3D"se_f8ad6e50-d9cf-4da7=
+-9d28-9e5eeefc0c97" rel=3D"noopener noreferrer" target=3D"_blank" href=3D"h=
+ttp://p0lice.kr/"><span>=EA=B2=BD=EC=B0=B0=EC=B2=AD =EA=B3=B5=EC=8B=9D =EC=
+=8A=A4=EB=AF=B8=EC=8B=B1 =EC=A3=BC=EC=9D=98 =EC=95=88=EB=82=B4</span></a></=
+p><p style=3D"margin: 0px;"><span>=EC=95=88=EC=A0=84=ED=95=9C =EC=9D=B8=ED=
+=84=B0=EB=84=B7 =EC=83=9D=ED=99=9C =EB=90=98=EC=8B=9C=EA=B8=B0 =EB=B0=94=EB=
+=9E=8D=EB=8B=88=EB=8B=A4.</span></p></div></div><p style=3D"margin: 0px;"><=
+br></p><p style=3D"margin: 0px;"><br></p></div></div>
+<table style=3D"display:none"><tbody><tr><td><img gabiamail src=3D"https://=
+mail-api.office.hiworks.com/v2/office/675218/receipt-confirm/20251013061811=
+_295899476_p0lice.kr_noreply/email/berm0427@kakao.com" width=3D"0" h=
+eight=3D"0" style=3D"display:none;" border=3D"0" loading=3D"eager"></td></t=
+r></tbody></table>
 
+------=_Part_416336_499816967.1760347091250--
 
+------=_Part_416335_265774562.1760347091243--
+
+------=_Part_416334_820194950.1760347091243--
