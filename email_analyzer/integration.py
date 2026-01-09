@@ -233,18 +233,19 @@ class PhishingKnowledgeBase:
     
     def retrieve_similar_threats(self, email_text, top_k=3):
         """지식 베이스에서 유사한 피싱 사례를 검색 (RAG)"""
-        if not self.knowledge_base or self.knowledge_base.case_embeddings is None:
+        if self.case_embeddings is None:
             logger.warning("벡터 DB가 비어 있어 RAG 검색을 수행할 수 없습니다.")
             return []
 
         try:
             # 1. 입력 텍스트 임베딩 생성
-            query_embedding = self.knowledge_base.embedding_model.encode([email_text])
+            query_embedding = self.embedding_model.encode([email_text])
             
-            # 2. 코사인 유사도 계산 및 1차원 배열로 변환
+            # 2. 코사인 유사도 계산
+            # 수정: .flatten() 추가하여 2D -> 1D 변환
             similarities = cosine_similarity(
                 query_embedding, 
-                self.knowledge_base.case_embeddings
+                self.case_embeddings
             ).flatten()
             
             # 3. 유사도가 높은 상위 k개 인덱스 추출
@@ -252,13 +253,13 @@ class PhishingKnowledgeBase:
             
             results = []
             for idx in top_indices:
-                # CRITICAL FIX: numpy.int64를 Python int로 변환
+                # numpy.int64를 Python int로 변환
                 idx = int(idx)
                 
                 results.append({
-                    'text': self.knowledge_base.case_texts[idx],
-                    'label': self.knowledge_base.case_labels[idx],
-                    'score': float(similarities[idx])  # numpy.float64도 Python float로 변환
+                    'text': self.case_texts[idx],
+                    'label': self.case_labels[idx],
+                    'score': float(similarities[idx])
                 })
             
             logger.info(f"RAG 검색 완료: {len(results)}개의 유사 사례 발견")
@@ -266,10 +267,10 @@ class PhishingKnowledgeBase:
 
         except Exception as e:
             logger.error(f"RAG 검색 중 오류 발생: {e}")
-            logger.error(f"상세 정보: query_embedding shape: {query_embedding.shape}, "
-                        f"case_embeddings shape: {self.knowledge_base.case_embeddings.shape}")
+            import traceback
+            logger.error(traceback.format_exc())
             return []
-    
+        
     def download_and_learn_korean_dataset(self):
         """한국 보이스피싱 데이터셋 다운로드 및 학습"""
         import requests
@@ -734,41 +735,15 @@ class IntegratedAnalyzer:
         if not self.knowledge_base or self.knowledge_base.case_embeddings is None:
             logger.warning("벡터 DB가 비어 있어 RAG 검색을 수행할 수 없습니다.")
             return []
-
+        
         try:
-            # 1. 입력 텍스트 임베딩 생성
-            query_embedding = self.knowledge_base.embedding_model.encode([email_text])
-            
-            # 2. 코사인 유사도 계산
-            # 수정: .flatten() 추가하여 2D -> 1D 변환
-            similarities = cosine_similarity(
-                query_embedding, 
-                self.knowledge_base.case_embeddings
-            ).flatten()
-            
-            # 3. 유사도가 높은 상위 k개 인덱스 추출
-            top_indices = np.argsort(similarities)[-top_k:][::-1]
-            
-            results = []
-            for idx in top_indices:
-                # numpy.int64를 Python int로 변환
-                idx = int(idx)
-                
-                results.append({
-                    'text': self.knowledge_base.case_texts[idx],
-                    'label': self.knowledge_base.case_labels[idx],
-                    'score': float(similarities[idx])
-                })
-            
-            logger.info(f"RAG 검색 완료: {len(results)}개의 유사 사례 발견")
-            return results
+            return self.knowledge_base.retrieve_similar_threats(email_text, top_k)
 
         except Exception as e:
             logger.error(f"RAG 검색 중 오류 발생: {e}")
             import traceback
             logger.error(traceback.format_exc())
             return []
-
     
     def initialize_knowledge_base(self) -> PhishingKnowledgeBase:
         kb = PhishingKnowledgeBase()
