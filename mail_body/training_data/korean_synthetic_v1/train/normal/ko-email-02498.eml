@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?7ZqM7J2Y7J6Q66OMIOqzteycoCDslYzrprw=?=
+From: =?utf-8?b?66qo7JWE65Oc65287J2067iMIOq4sO2aje2MgA==?=
+ <service@moa-drive.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@moa-drive.example
+Return-Path: <service@moa-drive.example>
+Date: Wed, 30 Apr 2025 17:51:00 +0900
+Message-ID: <ko-email-02498@dataset.example>
+Received:
+ from mx.moa-drive.example by mx.dataset.example with ESMTP id ko-email-02498
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============5198316164231833745=="
+
+--===============5198316164231833745==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrquYDrr7zspIAg7Jew6rWs7JuQ
+64uY6ruYIOusuOyEnCDqs7XsnKAg6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrtlITr
+oZzsoJ3tirgg6rO17JygIO2PtOuNlOyXkCDsg4gg66y47ISc6rCAIOuTseuhneuQmOyXiOyKteuL
+iOuLpC4KCuyalOyyre2VmOyLoCDrgrTsmqnsnYAgQ0xPLTAwMjQ5OCDrsojtmLjroZwg7KCV7IOB
+IOygkeyImOuQmOyXiOyKteuLiOuLpC4KCuuzuCDrqZTsnbzsnYAg7LKY66asIOqysOqzvOulvCDs
+lYjrgrTtlZjquLAg7JyE7ZW0IOuwnOyGoeuQmOyXiOyKteuLiOuLpC4KCuqzteyLnSDtmZXsnbgg
+7KO87IaMOiBodHRwczovL21vYS1kcml2ZS5leGFtcGxlL2FjY291bnQvaGlzdG9yeS9jbG8tMDAy
+NDk4CgrsoovsnYAg7ZWY66OoIOuztOuCtOyEuOyalC4KCuuqqOyVhOuTnOudvOydtOu4jCDquLDt
+mo3tjIAgfCDsnbQg642w7J207YSw64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA7IOB
+IOydtOuplOydvOyeheuLiOuLpC4K
+
+--===============5198316164231833745==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxi
+cj7quYDrr7zspIAg7Jew6rWs7JuQ64uY6ruYIOusuOyEnCDqs7XsnKAg6rSA66CoIOyViOuCtOul
+vCDrk5zrpr3ri4jri6QuPGJyPjxicj7tlITroZzsoJ3tirgg6rO17JygIO2PtOuNlOyXkCDsg4gg
+66y47ISc6rCAIOuTseuhneuQmOyXiOyKteuLiOuLpC48YnI+PGJyPuyalOyyre2VmOyLoCDrgrTs
+mqnsnYAgQ0xPLTAwMjQ5OCDrsojtmLjroZwg7KCV7IOBIOygkeyImOuQmOyXiOyKteuLiOuLpC48
+YnI+PGJyPuuzuCDrqZTsnbzsnYAg7LKY66asIOqysOqzvOulvCDslYjrgrTtlZjquLAg7JyE7ZW0
+IOuwnOyGoeuQmOyXiOyKteuLiOuLpC48YnI+PGJyPuqzteyLnSDtmZXsnbgg7KO87IaMOiA8YSBo
+cmVmPSJodHRwczovL21vYS1kcml2ZS5leGFtcGxlL2FjY291bnQvaGlzdG9yeS9jbG8tMDAyNDk4
+Ij7rgrTsmqkg7ZmV7J24PC9hPjxicj48YnI+7KKL7J2AIO2VmOujqCDrs7TrgrTshLjsmpQuPGJy
+Pjxicj7rqqjslYTrk5zrnbzsnbTruIwg6riw7ZqN7YyAIHwg7J20IOuNsOydtO2EsOuKlCDsl7Dq
+tazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuPC9wPjwvYm9k
+eT48L2h0bWw+Cg==
+
+--===============5198316164231833745==--

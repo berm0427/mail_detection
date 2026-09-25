@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?66+464KpIOyEuOq4iCDsponsi5wg64Kp67aAIO2GteuztA==?=
+From: =?utf-8?b?6rCA7Jio66+87JuQ7IS87YSwIOyViOuCtOyEvO2EsA==?=
+ <notice@notice-gaon-public-example.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: notice@notice-gaon-public-example.example
+Return-Path: <notice@notice-gaon-public-example.example>
+Date: Thu, 21 Aug 2025 12:56:00 +0900
+Message-ID: <ko-email-05252@dataset.example>
+Received: from mx.notice-gaon-public-example.example by mx.dataset.example
+ with ESMTP id ko-email-05252
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============0623450565534624684=="
+
+--===============0623450565534624684==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULgoK7Jyg7LGE7JuQIOyjvOyehOuLmOq7mCDshLjquIjCt+qzteqzteyV
+iOuCtCDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC4KCuyytOuCqSDsspjrtoTsnYQg7ZS8
+7ZWY66Ck66m0IOyYpOuKmCDslYjsl5Ag7JWE656YIO2OmOydtOyngOyXkOyEnCDrgqnrtoDtlbTs
+lbwg7ZWp64uI64ukLgoK7ZmV7J24IOuMgOyDgSDquIjslaHsnYAgMTI2LDUwMOybkOydtOupsCDs
+oJHsiJjrsojtmLjripQgVEFYLTAwNTI1MuyeheuLiOuLpC4KCuuzuOyduOydtCDslYTri4jrnbzr
+qbQg7KaJ7IucIO2ZleyduCDsoIjssKjrpbwg7KeE7ZaJ7ZW0IOyjvOyEuOyalC4KCu2ZleyduCDs
+o7zshow6IGh0dHBzOi8vdmVyaWZ5LXRheF9ub3RpY2UuZXhhbXBsZS9yZXZpZXcvdGF4LTAwNTI1
+MgoK7ZmV7J24IOu2gO2DgeuTnOumveuLiOuLpC4KCuqwgOyYqOuvvOybkOyEvO2EsCDslYjrgrTs
+hLzthLAgfCDsnbQg642w7J207YSw64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA7IOB
+IOydtOuplOydvOyeheuLiOuLpC4K
+
+--===============0623450565534624684==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULjxicj48YnI+7Jyg7LGE7JuQIOyjvOyehOuL
+mOq7mCDshLjquIjCt+qzteqzteyViOuCtCDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC48
+YnI+PGJyPuyytOuCqSDsspjrtoTsnYQg7ZS87ZWY66Ck66m0IOyYpOuKmCDslYjsl5Ag7JWE656Y
+IO2OmOydtOyngOyXkOyEnCDrgqnrtoDtlbTslbwg7ZWp64uI64ukLjxicj48YnI+7ZmV7J24IOuM
+gOyDgSDquIjslaHsnYAgMTI2LDUwMOybkOydtOupsCDsoJHsiJjrsojtmLjripQgVEFYLTAwNTI1
+MuyeheuLiOuLpC48YnI+PGJyPuuzuOyduOydtCDslYTri4jrnbzrqbQg7KaJ7IucIO2ZleyduCDs
+oIjssKjrpbwg7KeE7ZaJ7ZW0IOyjvOyEuOyalC48YnI+PGJyPu2ZleyduCDso7zshow6IDxhIGhy
+ZWY9Imh0dHBzOi8vdmVyaWZ5LXRheF9ub3RpY2UuZXhhbXBsZS9yZXZpZXcvdGF4LTAwNTI1MiI+
+64K07JqpIO2ZleyduDwvYT48YnI+PGJyPu2ZleyduCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxi
+cj7qsIDsmKjrr7zsm5DshLzthLAg7JWI64K07IS87YSwIHwg7J20IOuNsOydtO2EsOuKlCDsl7Dq
+tazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuPC9wPjwvYm9k
+eT48L2h0bWw+Cg==
+
+--===============0623450565534624684==--

@@ -1,0 +1,48 @@
+ARC-Seal: i=1; a=rsa-sha256; d=naver.com; s=arc-20180730; t=1729143640;
+	cv=none; b=hsyY/L0s44vixAINMpaQ2wwefdCj3qyijuux3UDhC+5JtP403ELHY9MYu03i
+	 mLAfyqsyPrjfzCmz36u9AkIKiZX4tzpuTkhBu5ti+TAVSwK6Yjl5LdncQqGOtHAl6AnTtg
+	 Cpv2nvSSCuWAfxWfWoUIaWa96K8RtVXJD1jv++PjDdYMOGRQKOBQQ7Wtf18DTCzVIBCQ2Z
+	 dQA2VTFa0mKa5lOlDi3E6ETwvf+RU+LLMRiN8C5jTFBIHC/WG9yT+2rbh74daVPzqwY3RA
+	 XoU98c9Sv2ngU7fEStglelYQ/7N0eeCi1su4FxRFlLFkvwDqNPihoDZ5IkrZmxRjW/hy5P
+	 ZQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; d=naver.com; s=arc-20180730;
+	t=1729143640; c=relaxed/relaxed;
+	bh=YArKQrUpClJYbK0Y+z6twM5/iNHry/6uSru2YZ5njFI=;
+	h=message-id:from:to:subject:date; b=p+EiP8M6i9n41HDkkpV8QRyZt8girCpPVH
+	 waFP+F0RWwHmmUVotON5B2C8CKDkJFWKc/iFg/5cq4arKq2EEMaDGC7aSsYHPFAwizL/Im
+	 zUo0KW6KwGYzEfbzY9Km1eiQNoBjzj/xtyOHz7TapFXrfAv28aw3LQxfHL816SvDnLlkPp
+	 txpOSN97MRQgb48Xq6+Oe2dUgfpJzqH+dkfvG0axvztliWcGnHfFywcs02u2BSCqTaHnhb
+	 uPPf0lxFNfmXPChoawqeJrByqMrp0VGVWxNhIgBtL6rCauUntmbpfsYXlUZGP6uklAqeSS
+	 Zm07IjHJObPyfwsfAgyOdH3JkbwA==
+ARC-Authentication-Results: i=1; mx.naver.com; 
+  spf=pass (mx.naver.com: domain of admin@shinhan.com designates 8.8.8.8 as permitted sender) smtp.mailfrom=admin@shinhan.com;
+  dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=shinhan.com
+Return-Path: <admin@shinhan.com>
+Received-SPF: pass (mx.naver.com: domain of admin@shinhan.com designates 8.8.8.8 as permitted sender)
+  client-ip=8.8.8.8; x-iptype=default;
+Authentication-Results: mx.naver.com;
+  spf=pass (mx.naver.com: domain of admin@shinhan.com designates 8.8.8.8 as permitted sender) smtp.mailfrom=admin@shinhan.com;
+  dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=shinhan.com
+X-Naver-ESV: wmFn+6J4p63CbHmdKBwdbXFYKAEdKAtmjJ+Y
+X-Session-IP: 8.8.8.8
+Received: from shinhan.com (mail.shinhan.com [8.8.8.8])
+  by crcvmail106.nm.naver.com with ESMTP id 8XsCJzPjTx29w44XdasLdg
+  for <captain8609@naver.com>
+  (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384);
+  Thu, 17 Oct 2024 05:40:40 -0000
+X-Verify: 0000000114
+Message-ID: <1729143525799.1753701@smunbw2p>
+From: "=?euc-kr?B?vcXH0cC6x+A=?=" <admin@shinhan.com>
+To: "=?euc-kr?B?yLLH9sjx?=" <captain8609@naver.com>
+Subject: =?euc-kr?B?waSx4sD7ILz2vcW1v8DHIMiuwM6+yLO7?=
+Date: Thu, 17 Oct 2024 14:38:45 +0900
+MIME-Version: 1.0
+Precedence: bulk
+X-MNWISE-CAMPAIGN_NO: 000000000002934
+X-MNWISE-RESULT_SEQ: 1729143523312077
+X-MNWISE-USER_ID: des641fVXWN+kcc2UgOWIaGdVHA==
+X-MNWISE-LIST_SEQ: 0000000114
+X-MNWISE-RECORD_SEQ: 0
+X-MNWISE-CLIENT_TYPE: ec
+Content-Type: text/html; charset=euc-kr
+Content-Transfer-Encoding: base64

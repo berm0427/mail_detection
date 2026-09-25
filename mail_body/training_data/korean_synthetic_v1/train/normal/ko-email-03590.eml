@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?7Jew66eQ7KCV7IKwIOydvOyglSDqs7Xsp4A=?=
+From: =?utf-8?b?7ZG466W47J247IKs7ISc67mE7IqkIOyatOyYge2MgA==?=
+ <service@pureun-hr.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@pureun-hr.example
+Return-Path: <service@pureun-hr.example>
+Date: Wed, 31 Dec 2025 17:33:00 +0900
+Message-ID: <ko-email-03590@dataset.example>
+Received:
+ from mx.pureun-hr.example by mx.dataset.example with ESMTP id ko-email-03590
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============8060165711308705630=="
+
+--===============8060165711308705630==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrstZzsnKDsp4Qg64u064u57J6Q
+64uY6ruYIOyduOyCrMK36riJ7JesIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK7IKs
+64K0IOyduOyCrOyLnOyKpO2FnOyXkOyEnCDsnbTrsogg64usIOq4ieyXrOuqheyEuOyEnOulvCDt
+mZXsnbjtlaAg7IiYIOyeiOyKteuLiOuLpC4KCuyymOumrCDquIjslaHsnYAgNDgsMDAw7JuQ7J20
+66mwIOusuOyEnOuyiO2YuOuKlCBIUl8tMDAzNTkw7J6F64uI64ukLgoK7J287KCV7JeQIOunnuy2
+lOyWtCDtmZXsnbjtlbQg7KO87Iuc6riwIOuwlOuejeuLiOuLpC4KCuqzteyLnSDtmZXsnbgg7KO8
+7IaMOiBodHRwczovL3B1cmV1bi1oci5leGFtcGxlL2FjY291bnQvaGlzdG9yeS9ocl8tMDAzNTkw
+CgrsoovsnYAg7ZWY66OoIOuztOuCtOyEuOyalC4KCu2RuOuluOyduOyCrOyEnOu5hOyKpCDsmrTs
+mIHtjIAgfCDsnbQg642w7J207YSw64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA7IOB
+IOydtOuplOydvOyeheuLiOuLpC4K
+
+--===============8060165711308705630==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxi
+cj7stZzsnKDsp4Qg64u064u57J6Q64uY6ruYIOyduOyCrMK36riJ7JesIOq0gOugqCDslYjrgrTr
+pbwg65Oc66a964uI64ukLjxicj48YnI+7IKs64K0IOyduOyCrOyLnOyKpO2FnOyXkOyEnCDsnbTr
+sogg64usIOq4ieyXrOuqheyEuOyEnOulvCDtmZXsnbjtlaAg7IiYIOyeiOyKteuLiOuLpC48YnI+
+PGJyPuyymOumrCDquIjslaHsnYAgNDgsMDAw7JuQ7J2066mwIOusuOyEnOuyiO2YuOuKlCBIUl8t
+MDAzNTkw7J6F64uI64ukLjxicj48YnI+7J287KCV7JeQIOunnuy2lOyWtCDtmZXsnbjtlbQg7KO8
+7Iuc6riwIOuwlOuejeuLiOuLpC48YnI+PGJyPuqzteyLnSDtmZXsnbgg7KO87IaMOiA8YSBocmVm
+PSJodHRwczovL3B1cmV1bi1oci5leGFtcGxlL2FjY291bnQvaGlzdG9yeS9ocl8tMDAzNTkwIj7r
+grTsmqkg7ZmV7J24PC9hPjxicj48YnI+7KKL7J2AIO2VmOujqCDrs7TrgrTshLjsmpQuPGJyPjxi
+cj7tkbjrpbjsnbjsgqzshJzruYTsiqQg7Jq07JiB7YyAIHwg7J20IOuNsOydtO2EsOuKlCDsl7Dq
+tazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuPC9wPjwvYm9k
+eT48L2h0bWw+Cg==
+
+--===============8060165711308705630==--

@@ -1,0 +1,51 @@
+Subject: =?utf-8?b?6riJ7JesIOqzhOyijCDsnqzrk7HroZ0g7JqU7LKt?=
+From: =?utf-8?b?7ZG466W47J247IKs7ISc67mE7IqkIOyViOuCtOyEvO2EsA==?=
+ <notice@pureun-hr.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: support@reply-hr_payroll.example
+Return-Path: <notice@pureun-hr.example>
+Date: Wed, 13 May 2026 15:33:00 +0900
+Message-ID: <ko-email-03764@dataset.example>
+Received:
+ from mx.pureun-hr.example by mx.dataset.example with ESMTP id ko-email-03764
+Authentication-Results: mx.dataset.example; spf=pass; dkim=pass; dmarc=pass
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============4574582925156425960=="
+
+--===============4574582925156425960==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrsnKDssYTsm5Ag6rO87J6l64uY
+6ruYIOyduOyCrMK36riJ7JesIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK7ZmY6riJ
+IOuMgOyDgSDtmZXsnbjsnYQg7JyE7ZW0IOyjvOuvvOygleuztOyZgCDquIjsnLXsoJXrs7Trpbwg
+65Ox66Gd7ZW0IOyjvOyEuOyalC4KCu2ZleyduCDrjIDsg4Eg6riI7JWh7J2AIDEsMjQwLDAwMOyb
+kOydtOupsCDsoJHsiJjrsojtmLjripQgSFJfLTAwMzc2NOyeheuLiOuLpC4KCuyymOumrCDquLDt
+lZzsnYAg7Jik7ZuEIDTsi5zsnoXri4jri6QuCgrtmZXsnbgg7KO87IaMOiBodHRwczovL3B1cmV1
+bi1oci5leGFtcGxlL3Jldmlldy9ocl8tMDAzNzY0CgrrrLjsnZgg7IKs7ZWt7J2AIO2ajOyLoO2V
+tCDso7zshLjsmpQuCgrtkbjrpbjsnbjsgqzshJzruYTsiqQg7JWI64K07IS87YSwIHwg7J20IOuN
+sOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXr
+i4jri6QuCg==
+
+--===============4574582925156425960==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxi
+cj7snKDssYTsm5Ag6rO87J6l64uY6ruYIOyduOyCrMK36riJ7JesIOq0gOugqCDslYjrgrTrpbwg
+65Oc66a964uI64ukLjxicj48YnI+7ZmY6riJIOuMgOyDgSDtmZXsnbjsnYQg7JyE7ZW0IOyjvOuv
+vOygleuztOyZgCDquIjsnLXsoJXrs7Trpbwg65Ox66Gd7ZW0IOyjvOyEuOyalC48YnI+PGJyPu2Z
+leyduCDrjIDsg4Eg6riI7JWh7J2AIDEsMjQwLDAwMOybkOydtOupsCDsoJHsiJjrsojtmLjripQg
+SFJfLTAwMzc2NOyeheuLiOuLpC48YnI+PGJyPuyymOumrCDquLDtlZzsnYAg7Jik7ZuEIDTsi5zs
+noXri4jri6QuPGJyPjxicj7tmZXsnbgg7KO87IaMOiA8YSBocmVmPSJodHRwczovL3B1cmV1bi1o
+ci5leGFtcGxlL3Jldmlldy9ocl8tMDAzNzY0Ij7rgrTsmqkg7ZmV7J24PC9hPjxicj48YnI+66y4
+7J2YIOyCrO2VreydgCDtmozsi6DtlbQg7KO87IS47JqULjxicj48YnI+7ZG466W47J247IKs7ISc
+67mE7IqkIOyViOuCtOyEvO2EsCB8IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2V
+qeyEseuQnCDqsIDsg4Eg7J2066mU7J287J6F64uI64ukLjwvcD48L2JvZHk+PC9odG1sPgo=
+
+--===============4574582925156425960==--

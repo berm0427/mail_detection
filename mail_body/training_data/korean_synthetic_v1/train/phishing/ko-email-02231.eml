@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?7Ya16rSAIOu5hOyaqSDqsrDsoJwg7ZWE7JqU?=
+From: =?utf-8?b?67CU66W467Cw7IahIOyViOuCtOyEvO2EsA==?=
+ <notice@secure-parcel_delivery.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: support@reply-parcel_delivery.example
+Return-Path: <notice@secure-parcel_delivery.example>
+Date: Mon, 03 Mar 2025 12:01:00 +0900
+Message-ID: <ko-email-02231@dataset.example>
+Received: from mx.secure-parcel_delivery.example by mx.dataset.example with
+ ESMTP id ko-email-02231
+Authentication-Results: mx.dataset.example; spf=pass; dkim=pass; dmarc=pass
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============0801120087922690144=="
+
+--===============0801120087922690144==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULgoK6rCV7YOc7JykIOunpOuLiOyggOuLmOq7mCDrsLDshqEg6rSA66Co
+IOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrso7zshowg7KCV67O06rCAIOydvOy5mO2VmOyngCDs
+lYrslYQg7JWE656YIO2OmOydtOyngOyXkOyEnCDrsLDshqHsp4Drpbwg64uk7IucIOyeheugpe2V
+tOyVvCDtlanri4jri6QuCgrrs7TslYjsg4Eg67O4IOuplOydvOyXkCDsp4HsoJEg7ZqM7Iug7ZWY
+7KeAIOunkOqzoCDslYjrgrQg7Y6Y7J207KeA66W8IOydtOyaqe2VtCDso7zshLjsmpQuIOywuOyh
+sOuyiO2YuDogUEFSLTAwMjIzMQoK7LKY66asIOq4sO2VnOydgCDsmKTtm4QgNOyLnOyeheuLiOuL
+pC4KCu2ZleyduCDso7zshow6IGh0dHBzOi8vdmVyaWZ5LXBhcmNlbF9kZWxpdmVyeS5leGFtcGxl
+L3Jldmlldy9wYXItMDAyMjMxCgrrrLjsnZgg7IKs7ZWt7J2AIO2ajOyLoO2VtCDso7zshLjsmpQu
+CgrrsJTrpbjrsLDshqEg7JWI64K07IS87YSwIHwg7J20IOuNsOydtO2EsOuKlCDsl7Dqtazsmqns
+nLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuCg==
+
+--===============0801120087922690144==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULjxicj48YnI+6rCV7YOc7JykIOunpOuLiOyg
+gOuLmOq7mCDrsLDshqEg6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuPGJyPjxicj7so7zs
+howg7KCV67O06rCAIOydvOy5mO2VmOyngCDslYrslYQg7JWE656YIO2OmOydtOyngOyXkOyEnCDr
+sLDshqHsp4Drpbwg64uk7IucIOyeheugpe2VtOyVvCDtlanri4jri6QuPGJyPjxicj7rs7TslYjs
+g4Eg67O4IOuplOydvOyXkCDsp4HsoJEg7ZqM7Iug7ZWY7KeAIOunkOqzoCDslYjrgrQg7Y6Y7J20
+7KeA66W8IOydtOyaqe2VtCDso7zshLjsmpQuIOywuOyhsOuyiO2YuDogUEFSLTAwMjIzMTxicj48
+YnI+7LKY66asIOq4sO2VnOydgCDsmKTtm4QgNOyLnOyeheuLiOuLpC48YnI+PGJyPu2ZleyduCDs
+o7zshow6IDxhIGhyZWY9Imh0dHBzOi8vdmVyaWZ5LXBhcmNlbF9kZWxpdmVyeS5leGFtcGxlL3Jl
+dmlldy9wYXItMDAyMjMxIj7rgrTsmqkg7ZmV7J24PC9hPjxicj48YnI+66y47J2YIOyCrO2Vreyd
+gCDtmozsi6DtlbQg7KO87IS47JqULjxicj48YnI+67CU66W467Cw7IahIOyViOuCtOyEvO2EsCB8
+IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU
+7J287J6F64uI64ukLjwvcD48L2JvZHk+PC9odG1sPgo=
+
+--===============0801120087922690144==--

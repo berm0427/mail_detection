@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?7Je0656MIOq2jO2VnCDsnqzsnbjspp0g7JqU7LKt?=
+From: =?utf-8?b?66qo7JWE65Oc65287J2067iMIOyViOuCtOyEvO2EsA==?=
+ <notice@secure-cloud_document.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: support@reply-cloud_document.example
+Return-Path: <notice@secure-cloud_document.example>
+Date: Tue, 25 Feb 2025 09:22:00 +0900
+Message-ID: <ko-email-03138@dataset.example>
+Received: from mx.secure-cloud_document.example by mx.dataset.example with
+ ESMTP id ko-email-03138
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============1062442472706566009=="
+
+--===============1062442472706566009==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuCgrtlZzsp4Drr7wg7IKs7JuQ64uY
+6ruYIOusuOyEnCDqs7XsnKAg6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrqs7XsnKAg
+6raM7ZWc7J20IOqzpyDrp4zro4zrkJjrr4DroZwg7Jm467aAIO2ZleyduCDtjpjsnbTsp4Dsl5Ds
+hJwg7J247Kad7ZW07JW8IO2VqeuLiOuLpC4KCuyalOyyreuyiO2YuCBDTE8tMDAzMTM47JeQIOuM
+gO2VnCDtmZXsnbjsnbQg7JWE7KeBIOyZhOujjOuQmOyngCDslYrslZjsirXri4jri6QuCgrsp4Ds
+l7DrkKAg6rK97JqwIOydtOyaqeydtCDsoJztlZzrkKAg7IiYIOyeiOyKteuLiOuLpC4KCu2Zleyd
+uCDso7zshow6IGh0dHBzOi8vYWNjb3VudC1jbG91ZF9kb2N1bWVudC5leGFtcGxlL3Jldmlldy9j
+bG8tMDAzMTM4CgrrrLjsnZgg7IKs7ZWt7J2AIO2ajOyLoO2VtCDso7zshLjsmpQuCgrrqqjslYTr
+k5zrnbzsnbTruIwg7JWI64K07IS87YSwIHwg7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzr
+oZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuCg==
+
+--===============1062442472706566009==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuPGJyPjxi
+cj7tlZzsp4Drr7wg7IKs7JuQ64uY6ruYIOusuOyEnCDqs7XsnKAg6rSA66CoIOyViOuCtOulvCDr
+k5zrpr3ri4jri6QuPGJyPjxicj7qs7XsnKAg6raM7ZWc7J20IOqzpyDrp4zro4zrkJjrr4DroZwg
+7Jm467aAIO2ZleyduCDtjpjsnbTsp4Dsl5DshJwg7J247Kad7ZW07JW8IO2VqeuLiOuLpC48YnI+
+PGJyPuyalOyyreuyiO2YuCBDTE8tMDAzMTM47JeQIOuMgO2VnCDtmZXsnbjsnbQg7JWE7KeBIOyZ
+hOujjOuQmOyngCDslYrslZjsirXri4jri6QuPGJyPjxicj7sp4Dsl7DrkKAg6rK97JqwIOydtOya
+qeydtCDsoJztlZzrkKAg7IiYIOyeiOyKteuLiOuLpC48YnI+PGJyPu2ZleyduCDso7zshow6IDxh
+IGhyZWY9Imh0dHBzOi8vYWNjb3VudC1jbG91ZF9kb2N1bWVudC5leGFtcGxlL3Jldmlldy9jbG8t
+MDAzMTM4Ij7rgrTsmqkg7ZmV7J24PC9hPjxicj48YnI+66y47J2YIOyCrO2VreydgCDtmozsi6Dt
+lbQg7KO87IS47JqULjxicj48YnI+66qo7JWE65Oc65287J2067iMIOyViOuCtOyEvO2EsCB8IOyd
+tCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU7J28
+7J6F64uI64ukLjwvcD48L2JvZHk+PC9odG1sPgo=
+
+--===============1062442472706566009==--

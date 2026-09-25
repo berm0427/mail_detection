@@ -1,0 +1,51 @@
+Subject: =?utf-8?b?67O07JWIIOyEpOyglSDrs4Dqsr0g7JmE66OMIOyViOuCtA==?=
+From:
+ =?utf-8?b?6rCA656M7JuM7YGsIOq4sO2aje2MgA==?= <service@garam-work.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@garam-work.example
+Return-Path: <service@garam-work.example>
+Date: Fri, 24 Jan 2025 14:21:00 +0900
+Message-ID: <ko-email-00183@dataset.example>
+Received:
+ from mx.garam-work.example by mx.dataset.example with ESMTP id ko-email-00183
+Authentication-Results: mx.dataset.example; spf=pass; dkim=pass; dmarc=pass
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============3313342466829273187=="
+
+--===============3313342466829273187==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULgoK7J207ISc7JewIOyCrOybkOuLmOq7mCDqs4TsoJUg67O07JWIIOq0
+gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK7JqU7LKt7ZWY7IugIOuztOyViCDshKTsoJUg
+67OA6rK97J20IOygleyDgeyggeycvOuhnCDsmYTro4zrkJjsl4jsirXri4jri6QuCgrsmpTssq3t
+lZjsi6Ag64K07Jqp7J2AIEFDQy0wMDAxODMg67KI7Zi466GcIOygleyDgSDsoJHsiJjrkJjsl4js
+irXri4jri6QuCgrrs4Trj4TsnZgg6rCc7J247KCV67O0IOyeheugpeydtOuCmCDshqHquIjsnYQg
+7JqU7LKt7ZWY7KeAIOyViuyKteuLiOuLpC4KCu2ZleyduOydtCDtlYTsmpTtlZwg6rK97JqwIOqz
+teyLnSDtmYjtjpjsnbTsp4Drpbwg7KeB7KCRIOuwqeusuO2VtCDso7zshLjsmpQuCgrrrLjsnZgg
+7IKs7ZWt7J2AIO2ajOyLoO2VtCDso7zshLjsmpQuCgrqsIDrnozsm4ztgawg6riw7ZqN7YyAIHwg
+7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTs
+nbzsnoXri4jri6QuCg==
+
+--===============3313342466829273187==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULjxicj48YnI+7J207ISc7JewIOyCrOybkOuL
+mOq7mCDqs4TsoJUg67O07JWIIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLjxicj48YnI+
+7JqU7LKt7ZWY7IugIOuztOyViCDshKTsoJUg67OA6rK97J20IOygleyDgeyggeycvOuhnCDsmYTr
+o4zrkJjsl4jsirXri4jri6QuPGJyPjxicj7smpTssq3tlZjsi6Ag64K07Jqp7J2AIEFDQy0wMDAx
+ODMg67KI7Zi466GcIOygleyDgSDsoJHsiJjrkJjsl4jsirXri4jri6QuPGJyPjxicj7rs4Trj4Ts
+nZgg6rCc7J247KCV67O0IOyeheugpeydtOuCmCDshqHquIjsnYQg7JqU7LKt7ZWY7KeAIOyViuyK
+teuLiOuLpC48YnI+PGJyPu2ZleyduOydtCDtlYTsmpTtlZwg6rK97JqwIOqzteyLnSDtmYjtjpjs
+nbTsp4Drpbwg7KeB7KCRIOuwqeusuO2VtCDso7zshLjsmpQuPGJyPjxicj7rrLjsnZgg7IKs7ZWt
+7J2AIO2ajOyLoO2VtCDso7zshLjsmpQuPGJyPjxicj7qsIDrnozsm4ztgawg6riw7ZqN7YyAIHwg
+7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTs
+nbzsnoXri4jri6QuPC9wPjwvYm9keT48L2h0bWw+Cg==
+
+--===============3313342466829273187==--

@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?67OA6rK9IOqzhOyijOuhnCDquLTquIkg7Iah6riIIOyalOyyrQ==?=
+From: =?utf-8?b?7IOI6ri47Jyg7Ya1IOyViOuCtOyEvO2EsA==?=
+ <notice@saegil-distribution.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: support@reply-invoice_payment.example
+Return-Path: <notice@saegil-distribution.example>
+Date: Wed, 08 Apr 2026 14:12:00 +0900
+Message-ID: <ko-email-01537@dataset.example>
+Received: from mx.saegil-distribution.example by mx.dataset.example with ESMTP
+ id ko-email-01537
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============0759812065978311721=="
+
+--===============0759812065978311721==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuCgrsnbTshJzsl7Ag64u064u57J6Q
+64uY6ruYIOyyreq1rMK37Iah6riIIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK66+4
+64KpIOyDge2DnOulvCDtlbTsoJztlZjroKTrqbQg7JWE656YIO2OmOydtOyngOyXkOyEnCDqsrDs
+oJwg7KCV67O066W8IOuLpOyLnCDsnoXroKXtlbTslbwg7ZWp64uI64ukLgoK7JqU7LKt67KI7Zi4
+IElOVi0wMDE1Mzfsl5Ag64yA7ZWcIO2ZleyduOydtCDslYTsp4Eg7JmE66OM65CY7KeAIOyViuyV
+mOyKteuLiOuLpC4KCuyngOyXsOuQoCDqsr3smrAg7J207Jqp7J20IOygnO2VnOuQoCDsiJgg7J6I
+7Iq164uI64ukLgoK7ZmV7J24IOyjvOyGjDogaHR0cHM6Ly92ZXJpZnktaW52b2ljZV9wYXltZW50
+LmV4YW1wbGUvcmV2aWV3L2ludi0wMDE1MzcKCu2ZleyduCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrs
+g4jquLjsnKDthrUg7JWI64K07IS87YSwIHwg7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzr
+oZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuCg==
+
+--===============0759812065978311721==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuPGJyPjxi
+cj7snbTshJzsl7Ag64u064u57J6Q64uY6ruYIOyyreq1rMK37Iah6riIIOq0gOugqCDslYjrgrTr
+pbwg65Oc66a964uI64ukLjxicj48YnI+66+464KpIOyDge2DnOulvCDtlbTsoJztlZjroKTrqbQg
+7JWE656YIO2OmOydtOyngOyXkOyEnCDqsrDsoJwg7KCV67O066W8IOuLpOyLnCDsnoXroKXtlbTs
+lbwg7ZWp64uI64ukLjxicj48YnI+7JqU7LKt67KI7Zi4IElOVi0wMDE1Mzfsl5Ag64yA7ZWcIO2Z
+leyduOydtCDslYTsp4Eg7JmE66OM65CY7KeAIOyViuyVmOyKteuLiOuLpC48YnI+PGJyPuyngOyX
+sOuQoCDqsr3smrAg7J207Jqp7J20IOygnO2VnOuQoCDsiJgg7J6I7Iq164uI64ukLjxicj48YnI+
+7ZmV7J24IOyjvOyGjDogPGEgaHJlZj0iaHR0cHM6Ly92ZXJpZnktaW52b2ljZV9wYXltZW50LmV4
+YW1wbGUvcmV2aWV3L2ludi0wMDE1MzciPuuCtOyaqSDtmZXsnbg8L2E+PGJyPjxicj7tmZXsnbgg
+67aA7YOB65Oc66a964uI64ukLjxicj48YnI+7IOI6ri47Jyg7Ya1IOyViOuCtOyEvO2EsCB8IOyd
+tCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU7J28
+7J6F64uI64ukLjwvcD48L2JvZHk+PC9odG1sPgo=
+
+--===============0759812065978311721==--

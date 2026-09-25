@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?7ZmY67aIIOyLoOyyrSDrp4jqsJAg7JWI64K0?=
+From: =?utf-8?b?65287Jio7ISc67mE7IqkIOyViOuCtOyEvO2EsA==?=
+ <notice@notice-raon-service-example.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: support@reply-subscription_renewal.example
+Return-Path: <bounce@mailer-subscription_renewal.example>
+Date: Wed, 07 Jan 2026 10:42:00 +0900
+Message-ID: <ko-email-06981@dataset.example>
+Received: from mx.notice-raon-service-example.example by mx.dataset.example
+ with ESMTP id ko-email-06981
+Authentication-Results: mx.dataset.example; spf=fail; dkim=none; dmarc=fail
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============3544980705011178532=="
+
+--===============3544980705011178532==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuCgrrsLHsp4DtmLgg66ek64uI7KCA
+64uY6ruYIOyEnOu5hOyKpCDqtazrj4Ug6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrs
+hJzruYTsiqQg7KSR64uo7J2EIOunieycvOugpOuptCDslYTrnpgg6rKw7KCcIO2OmOydtOyngOyX
+kOyEnCDsubTrk5wg7KCV67O066W8IOuLpOyLnCDsnoXroKXtlbQg7KO87IS47JqULgoK7JqU7LKt
+67KI7Zi4IFNVQi0wMDY5ODHsl5Ag64yA7ZWcIO2ZleyduOydtCDslYTsp4Eg7JmE66OM65CY7KeA
+IOyViuyVmOyKteuLiOuLpC4KCuuzuOyduOydtCDslYTri4jrnbzrqbQg7KaJ7IucIO2ZleyduCDs
+oIjssKjrpbwg7KeE7ZaJ7ZW0IOyjvOyEuOyalC4KCu2ZleyduCDso7zshow6IGh0dHBzOi8vdmVy
+aWZ5LXN1YnNjcmlwdGlvbl9yZW5ld2FsLmV4YW1wbGUvcmV2aWV3L3N1Yi0wMDY5ODEKCuqwkOyC
+rO2VqeuLiOuLpC4KCuudvOyYqOyEnOu5hOyKpCDslYjrgrTshLzthLAgfCDsnbQg642w7J207YSw
+64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA7IOBIOydtOuplOydvOyeheuLiOuLpC4K
+
+--===============3544980705011178532==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuPGJyPjxi
+cj7rsLHsp4DtmLgg66ek64uI7KCA64uY6ruYIOyEnOu5hOyKpCDqtazrj4Ug6rSA66CoIOyViOuC
+tOulvCDrk5zrpr3ri4jri6QuPGJyPjxicj7shJzruYTsiqQg7KSR64uo7J2EIOunieycvOugpOup
+tCDslYTrnpgg6rKw7KCcIO2OmOydtOyngOyXkOyEnCDsubTrk5wg7KCV67O066W8IOuLpOyLnCDs
+noXroKXtlbQg7KO87IS47JqULjxicj48YnI+7JqU7LKt67KI7Zi4IFNVQi0wMDY5ODHsl5Ag64yA
+7ZWcIO2ZleyduOydtCDslYTsp4Eg7JmE66OM65CY7KeAIOyViuyVmOyKteuLiOuLpC48YnI+PGJy
+PuuzuOyduOydtCDslYTri4jrnbzrqbQg7KaJ7IucIO2ZleyduCDsoIjssKjrpbwg7KeE7ZaJ7ZW0
+IOyjvOyEuOyalC48YnI+PGJyPu2ZleyduCDso7zshow6IDxhIGhyZWY9Imh0dHBzOi8vdmVyaWZ5
+LXN1YnNjcmlwdGlvbl9yZW5ld2FsLmV4YW1wbGUvcmV2aWV3L3N1Yi0wMDY5ODEiPuuCtOyaqSDt
+mZXsnbg8L2E+PGJyPjxicj7qsJDsgqztlanri4jri6QuPGJyPjxicj7rnbzsmKjshJzruYTsiqQg
+7JWI64K07IS87YSwIHwg7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65Cc
+IOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuPC9wPjwvYm9keT48L2h0bWw+Cg==
+
+--===============3544980705011178532==--

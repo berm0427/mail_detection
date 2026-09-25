@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?67KV7KCBIOyhsOy5mCDsoIQg7LWc7KKFIO2ZleyduA==?=
+From: =?utf-8?b?67CU66W467KV66y07KeA7JuQIOyViOuCtOyEvO2EsA==?=
+ <notice@secure-legal_notice.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: support@reply-legal_notice.example
+Return-Path: <notice@secure-legal_notice.example>
+Date: Sat, 10 May 2025 08:09:00 +0900
+Message-ID: <ko-email-09411@dataset.example>
+Received: from mx.secure-legal_notice.example by mx.dataset.example with ESMTP
+ id ko-email-09411
+Authentication-Results: mx.dataset.example; spf=pass; dkim=pass; dmarc=pass
+X-Dataset-Label: phishing
+X-Dataset-Split: test
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============5163177227189387297=="
+
+--===============5163177227189387297==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64K065Oc66a964uI64ukLgoK7KCV7ZiE7JqwIO2MgOyepeuLmOq7mCDrspXrrLTCt+qzhOyV
+vSDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC4KCuuyleyggSDrtojsnbTsnbXsnYQg7ZS8
+7ZWY66Ck66m0IOyVhOuemCDrrLjshJwg7Je0656MIO2OmOydtOyngOyXkOyEnCDrs7jsnbgg7J24
+7Kad7J2EIOyZhOujjO2VtOyVvCDtlanri4jri6QuCgrsmpTssq3rsojtmLggTEVHLTAwOTQxMeyX
+kCDrjIDtlZwg7ZmV7J247J20IOyVhOyngSDsmYTro4zrkJjsp4Ag7JWK7JWY7Iq164uI64ukLgoK
+67O47J247J20IOyVhOuLiOudvOuptCDsponsi5wg7ZmV7J24IOygiOywqOulvCDsp4TtlontlbQg
+7KO87IS47JqULgoK7ZmV7J24IOyjvOyGjDogaHR0cHM6Ly92ZXJpZnktbGVnYWxfbm90aWNlLmV4
+YW1wbGUvcmV2aWV3L2xlZy0wMDk0MTEKCu2ZleyduCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrrsJTr
+pbjrspXrrLTsp4Dsm5Ag7JWI64K07IS87YSwIHwg7J20IOuNsOydtO2EsOuKlCDsl7Dqtazsmqns
+nLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuCg==
+
+--===============5163177227189387297==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64K065Oc66a964uI64ukLjxicj48YnI+7KCV7ZiE7JqwIO2MgOye
+peuLmOq7mCDrspXrrLTCt+qzhOyVvSDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC48YnI+
+PGJyPuuyleyggSDrtojsnbTsnbXsnYQg7ZS87ZWY66Ck66m0IOyVhOuemCDrrLjshJwg7Je0656M
+IO2OmOydtOyngOyXkOyEnCDrs7jsnbgg7J247Kad7J2EIOyZhOujjO2VtOyVvCDtlanri4jri6Qu
+PGJyPjxicj7smpTssq3rsojtmLggTEVHLTAwOTQxMeyXkCDrjIDtlZwg7ZmV7J247J20IOyVhOyn
+gSDsmYTro4zrkJjsp4Ag7JWK7JWY7Iq164uI64ukLjxicj48YnI+67O47J247J20IOyVhOuLiOud
+vOuptCDsponsi5wg7ZmV7J24IOygiOywqOulvCDsp4TtlontlbQg7KO87IS47JqULjxicj48YnI+
+7ZmV7J24IOyjvOyGjDogPGEgaHJlZj0iaHR0cHM6Ly92ZXJpZnktbGVnYWxfbm90aWNlLmV4YW1w
+bGUvcmV2aWV3L2xlZy0wMDk0MTEiPuuCtOyaqSDtmZXsnbg8L2E+PGJyPjxicj7tmZXsnbgg67aA
+7YOB65Oc66a964uI64ukLjxicj48YnI+67CU66W467KV66y07KeA7JuQIOyViOuCtOyEvO2EsCB8
+IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU
+7J287J6F64uI64ukLjwvcD48L2JvZHk+PC9odG1sPgo=
+
+--===============5163177227189387297==--

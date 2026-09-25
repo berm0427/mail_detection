@@ -1,0 +1,51 @@
+Subject: =?utf-8?b?6rWs64+FIOunjOujjCDsmIjsoJUg7JWM66a8?=
+From: =?utf-8?b?65287Jio7ISc67mE7IqkIOyYgeyXheyngOybkO2MgA==?=
+ <service@raon-service.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@raon-service.example
+Return-Path: <service@raon-service.example>
+Date: Tue, 09 Jun 2026 08:57:00 +0900
+Message-ID: <ko-email-06601@dataset.example>
+Received: from mx.raon-service.example by mx.dataset.example with ESMTP id
+ ko-email-06601
+Authentication-Results: mx.dataset.example; spf=pass; dkim=pass; dmarc=pass
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============7068072025017617198=="
+
+--===============7068072025017617198==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64K065Oc66a964uI64ukLgoK7ISc7IiY67mIIOyXsOq1rOybkOuLmOq7mCDshJzruYTsiqQg
+6rWs64+FIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK7JqU7LKt7ZWY7IugIOyalOq4
+iOygnCDrs4Dqsr3snbQg64uk7J2MIOqysOygnOydvOu2gO2EsCDsoIHsmqnrkKnri4jri6QuCgrr
+i7Tri7kg67aA7ISc64qUIOyYgeyXheyngOybkO2MgOydtOqzoCDssLjsobDrsojtmLjripQgU1VC
+LTAwNjYwMeyeheuLiOuLpC4KCuuzuCDrqZTsnbzsnYAg7LKY66asIOqysOqzvOulvCDslYjrgrTt
+lZjquLAg7JyE7ZW0IOuwnOyGoeuQmOyXiOyKteuLiOuLpC4KCu2ZleyduOydtCDtlYTsmpTtlZwg
+6rK97JqwIOqzteyLnSDtmYjtjpjsnbTsp4Drpbwg7KeB7KCRIOuwqeusuO2VtCDso7zshLjsmpQu
+CgrqsJDsgqztlanri4jri6QuCgrrnbzsmKjshJzruYTsiqQg7JiB7JeF7KeA7JuQ7YyAIHwg7J20
+IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzs
+noXri4jri6QuCg==
+
+--===============7068072025017617198==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64K065Oc66a964uI64ukLjxicj48YnI+7ISc7IiY67mIIOyXsOq1
+rOybkOuLmOq7mCDshJzruYTsiqQg6rWs64+FIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64uk
+Ljxicj48YnI+7JqU7LKt7ZWY7IugIOyalOq4iOygnCDrs4Dqsr3snbQg64uk7J2MIOqysOygnOyd
+vOu2gO2EsCDsoIHsmqnrkKnri4jri6QuPGJyPjxicj7ri7Tri7kg67aA7ISc64qUIOyYgeyXheyn
+gOybkO2MgOydtOqzoCDssLjsobDrsojtmLjripQgU1VCLTAwNjYwMeyeheuLiOuLpC48YnI+PGJy
+PuuzuCDrqZTsnbzsnYAg7LKY66asIOqysOqzvOulvCDslYjrgrTtlZjquLAg7JyE7ZW0IOuwnOyG
+oeuQmOyXiOyKteuLiOuLpC48YnI+PGJyPu2ZleyduOydtCDtlYTsmpTtlZwg6rK97JqwIOqzteyL
+nSDtmYjtjpjsnbTsp4Drpbwg7KeB7KCRIOuwqeusuO2VtCDso7zshLjsmpQuPGJyPjxicj7qsJDs
+gqztlanri4jri6QuPGJyPjxicj7rnbzsmKjshJzruYTsiqQg7JiB7JeF7KeA7JuQ7YyAIHwg7J20
+IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzs
+noXri4jri6QuPC9wPjwvYm9keT48L2h0bWw+Cg==
+
+--===============7068072025017617198==--

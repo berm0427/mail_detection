@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?67mE7KCV7IOBIOuhnOq3uOyduCDtmZXsnbgg7ZWE7JqU?=
+From: =?utf-8?b?6rCA656M7JuM7YGsIOyViOuCtOyEvO2EsA==?=
+ <notice@secure-account_security.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: notice@secure-account_security.example
+Return-Path: <notice@secure-account_security.example>
+Date: Mon, 12 May 2025 17:35:00 +0900
+Message-ID: <ko-email-00668@dataset.example>
+Received: from mx.secure-account_security.example by mx.dataset.example with
+ ESMTP id ko-email-00668
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============8419682995764374730=="
+
+--===============8419682995764374730==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULgoK7KCV7ZiE7JqwIOyCrOybkOuLmOq7mCDqs4TsoJUg67O07JWIIOq0
+gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK6rOE7KCVIOyCrOyaqeydhCDqs4Tsho3tlZjr
+oKTrqbQg7JWE656YIOuztOyViCDtmZXsnbgg7Y6Y7J207KeA7JeQ7IScIOymieyLnCDsnbjspp3t
+lbTslbwg7ZWp64uI64ukLgoK67O07JWI7IOBIOuzuCDrqZTsnbzsl5Ag7KeB7KCRIO2ajOyLoO2V
+mOyngCDrp5Dqs6Ag7JWI64K0IO2OmOydtOyngOulvCDsnbTsmqntlbQg7KO87IS47JqULiDssLjs
+obDrsojtmLg6IEFDQy0wMDA2NjgKCuyymOumrCDquLDtlZzsnYAg7Jik7ZuEIDLsi5zsnoXri4jr
+i6QuCgrtmZXsnbgg7KO87IaMOiBodHRwczovL2FjY291bnQtYWNjb3VudF9zZWN1cml0eS5leGFt
+cGxlL3Jldmlldy9hY2MtMDAwNjY4CgrtmZXsnbgg67aA7YOB65Oc66a964uI64ukLgoK6rCA656M
+7JuM7YGsIOyViOuCtOyEvO2EsCB8IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2V
+qeyEseuQnCDqsIDsg4Eg7J2066mU7J287J6F64uI64ukLgo=
+
+--===============8419682995764374730==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULjxicj48YnI+7KCV7ZiE7JqwIOyCrOybkOuL
+mOq7mCDqs4TsoJUg67O07JWIIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLjxicj48YnI+
+6rOE7KCVIOyCrOyaqeydhCDqs4Tsho3tlZjroKTrqbQg7JWE656YIOuztOyViCDtmZXsnbgg7Y6Y
+7J207KeA7JeQ7IScIOymieyLnCDsnbjspp3tlbTslbwg7ZWp64uI64ukLjxicj48YnI+67O07JWI
+7IOBIOuzuCDrqZTsnbzsl5Ag7KeB7KCRIO2ajOyLoO2VmOyngCDrp5Dqs6Ag7JWI64K0IO2OmOyd
+tOyngOulvCDsnbTsmqntlbQg7KO87IS47JqULiDssLjsobDrsojtmLg6IEFDQy0wMDA2Njg8YnI+
+PGJyPuyymOumrCDquLDtlZzsnYAg7Jik7ZuEIDLsi5zsnoXri4jri6QuPGJyPjxicj7tmZXsnbgg
+7KO87IaMOiA8YSBocmVmPSJodHRwczovL2FjY291bnQtYWNjb3VudF9zZWN1cml0eS5leGFtcGxl
+L3Jldmlldy9hY2MtMDAwNjY4Ij7rgrTsmqkg7ZmV7J24PC9hPjxicj48YnI+7ZmV7J24IOu2gO2D
+geuTnOumveuLiOuLpC48YnI+PGJyPuqwgOuejOybjO2BrCDslYjrgrTshLzthLAgfCDsnbQg642w
+7J207YSw64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA7IOBIOydtOuplOydvOyeheuL
+iOuLpC48L3A+PC9ib2R5PjwvaHRtbD4K
+
+--===============8419682995764374730==--

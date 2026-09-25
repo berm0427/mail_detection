@@ -1,0 +1,65 @@
+Subject: =?utf-8?b?7ZmU7IOB7ZqM7J2YIOywuOqwgCDslYjrgrQ=?=
+From: =?utf-8?b?66qo65GQ7ZqM7J2YIOuztOyViO2MgA==?= <service@modu-meet.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@modu-meet.example
+Return-Path: <service@modu-meet.example>
+Date: Tue, 04 Feb 2025 10:10:00 +0900
+Message-ID: <ko-email-07299@dataset.example>
+Received:
+ from mx.modu-meet.example by mx.dataset.example with ESMTP id ko-email-07299
+Authentication-Results: mx.dataset.example; spf=pass; dkim=pass; dmarc=pass
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============3812526565827190339=="
+
+--===============3812526565827190339==
+Content-Type: multipart/alternative;
+ boundary="===============7787586794356030622=="
+
+--===============7787586794356030622==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuCgrsoJXtmITsmrAg7Jew6rWs7JuQ
+64uY6ruYIO2ajOydmCDstIjrjIAg6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrtlITr
+oZzsoJ3tirgg7KCV6riw7ZqM7J2YIOydvOygleydtCDrk7HroZ3rkJjsl4jsirXri4jri6QuCgrs
+spjrpqwg6riI7JWh7J2AIDIsODYwLDAwMOybkOydtOupsCDrrLjshJzrsojtmLjripQgTUVFLTAw
+NzI5OeyeheuLiOuLpC4KCuuzhOuPhOydmCDqsJzsnbjsoJXrs7Qg7J6F66Cl7J2064KYIOyGoeq4
+iOydhCDsmpTssq3tlZjsp4Ag7JWK7Iq164uI64ukLgoK6rO17IudIO2ZleyduCDso7zshow6IGh0
+dHBzOi8vbW9kdS1tZWV0LmV4YW1wbGUvYWNjb3VudC9oaXN0b3J5L21lZS0wMDcyOTkKCu2Zleyd
+uCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrrqqjrkZDtmozsnZgg67O07JWI7YyAIHwg7J20IOuNsOyd
+tO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jr
+i6QuCg==
+
+--===============7787586794356030622==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuPGJyPjxi
+cj7soJXtmITsmrAg7Jew6rWs7JuQ64uY6ruYIO2ajOydmCDstIjrjIAg6rSA66CoIOyViOuCtOul
+vCDrk5zrpr3ri4jri6QuPGJyPjxicj7tlITroZzsoJ3tirgg7KCV6riw7ZqM7J2YIOydvOygleyd
+tCDrk7HroZ3rkJjsl4jsirXri4jri6QuPGJyPjxicj7sspjrpqwg6riI7JWh7J2AIDIsODYwLDAw
+MOybkOydtOupsCDrrLjshJzrsojtmLjripQgTUVFLTAwNzI5OeyeheuLiOuLpC48YnI+PGJyPuuz
+hOuPhOydmCDqsJzsnbjsoJXrs7Qg7J6F66Cl7J2064KYIOyGoeq4iOydhCDsmpTssq3tlZjsp4Ag
+7JWK7Iq164uI64ukLjxicj48YnI+6rO17IudIO2ZleyduCDso7zshow6IDxhIGhyZWY9Imh0dHBz
+Oi8vbW9kdS1tZWV0LmV4YW1wbGUvYWNjb3VudC9oaXN0b3J5L21lZS0wMDcyOTkiPuuCtOyaqSDt
+mZXsnbg8L2E+PGJyPjxicj7tmZXsnbgg67aA7YOB65Oc66a964uI64ukLjxicj48YnI+66qo65GQ
+7ZqM7J2YIOuztOyViO2MgCB8IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyE
+seuQnCDqsIDsg4Eg7J2066mU7J287J6F64uI64ukLjwvcD48L2JvZHk+PC9odG1sPgo=
+
+--===============7787586794356030622==--
+
+--===============3812526565827190339==
+Content-Type: text/calendar
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*=utf-8''%ED%9A%8C%EC%9D%98%EC%9D%BC%EC%A0%95.ics
+MIME-Version: 1.0
+
+U1lOVEhFVElDIFBMQUNFSE9MREVSCk9yaWdpbmFsIHN5bnRoZXRpYyBmaWxlbmFtZTog7ZqM7J2Y
+7J287KCVLmljcwpObyBleGVjdXRhYmxlIG9yIGFjdGl2ZSBjb250ZW50IGlzIGluY2x1ZGVkLgo=
+
+--===============3812526565827190339==--

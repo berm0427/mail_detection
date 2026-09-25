@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?6riJ7Jes66qF7IS47IScIOuwnOq4iSDslYjrgrQ=?=
+From: =?utf-8?b?7ZG466W47J247IKs7ISc67mE7IqkIOyatOyYge2MgA==?=
+ <service@pureun-hr.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@pureun-hr.example
+Return-Path: <service@pureun-hr.example>
+Date: Fri, 19 Jun 2026 16:56:00 +0900
+Message-ID: <ko-email-03358@dataset.example>
+Received:
+ from mx.pureun-hr.example by mx.dataset.example with ESMTP id ko-email-03358
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============8371114650426054976=="
+
+--===============8371114650426054976==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrsnoTrj4TsnKQg7KO87J6E64uY
+6ruYIOyduOyCrMK36riJ7JesIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK7Jew66eQ
+7KCV7IKwIOyEnOulmCDsoJzstpwg7J287KCV6rO8IOuLtOuLuSDssL3qtazrpbwg7JWI64K065Oc
+66a964uI64ukLgoK64u064u5IOu2gOyEnOuKlCDsmrTsmIHtjIDsnbTqs6Ag7LC47KGw67KI7Zi4
+64qUIEhSXy0wMDMzNTjsnoXri4jri6QuCgrrs7gg66mU7J287J2AIOyymOumrCDqsrDqs7zrpbwg
+7JWI64K07ZWY6riwIOychO2VtCDrsJzshqHrkJjsl4jsirXri4jri6QuCgrqs7Xsi50g7ZmV7J24
+IOyjvOyGjDogaHR0cHM6Ly9wdXJldW4taHIuZXhhbXBsZS9hY2NvdW50L2hpc3RvcnkvaHJfLTAw
+MzM1OAoK6rCQ7IKs7ZWp64uI64ukLgoK7ZG466W47J247IKs7ISc67mE7IqkIOyatOyYge2MgCB8
+IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU
+7J287J6F64uI64ukLgo=
+
+--===============8371114650426054976==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxi
+cj7snoTrj4TsnKQg7KO87J6E64uY6ruYIOyduOyCrMK36riJ7JesIOq0gOugqCDslYjrgrTrpbwg
+65Oc66a964uI64ukLjxicj48YnI+7Jew66eQ7KCV7IKwIOyEnOulmCDsoJzstpwg7J287KCV6rO8
+IOuLtOuLuSDssL3qtazrpbwg7JWI64K065Oc66a964uI64ukLjxicj48YnI+64u064u5IOu2gOyE
+nOuKlCDsmrTsmIHtjIDsnbTqs6Ag7LC47KGw67KI7Zi464qUIEhSXy0wMDMzNTjsnoXri4jri6Qu
+PGJyPjxicj7rs7gg66mU7J287J2AIOyymOumrCDqsrDqs7zrpbwg7JWI64K07ZWY6riwIOychO2V
+tCDrsJzshqHrkJjsl4jsirXri4jri6QuPGJyPjxicj7qs7Xsi50g7ZmV7J24IOyjvOyGjDogPGEg
+aHJlZj0iaHR0cHM6Ly9wdXJldW4taHIuZXhhbXBsZS9hY2NvdW50L2hpc3RvcnkvaHJfLTAwMzM1
+OCI+64K07JqpIO2ZleyduDwvYT48YnI+PGJyPuqwkOyCrO2VqeuLiOuLpC48YnI+PGJyPu2RuOul
+uOyduOyCrOyEnOu5hOyKpCDsmrTsmIHtjIAgfCDsnbQg642w7J207YSw64qUIOyXsOq1rOyaqeyc
+vOuhnCDtlanshLHrkJwg6rCA7IOBIOydtOuplOydvOyeheuLiOuLpC48L3A+PC9ib2R5PjwvaHRt
+bD4K
+
+--===============8371114650426054976==--

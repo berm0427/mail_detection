@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?7Lm065OcIOydtOyaqSDsoJztlZwg7ZW07KCcIOyalOyyrQ==?=
+From:
+ =?utf-8?b?7IOI67SE7Lm065OcIOyViOuCtOyEvO2EsA==?= <notice@saebom-card.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: notice@saebom-card.example
+Return-Path: <notice@saebom-card.example>
+Date: Sat, 05 Apr 2025 12:35:00 +0900
+Message-ID: <ko-email-04486@dataset.example>
+Received: from mx.saebom-card.example by mx.dataset.example with ESMTP id
+ ko-email-04486
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============6193810225357070845=="
+
+--===============6193810225357070845==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrsnKTshJzspIAg7Jew6rWs7JuQ
+64uY6ruYIOy5tOuTnCDqsrDsoJwg6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrrs7js
+nbjsnbQg7Iq57J247ZWY7KeAIOyViuydgCDqsrDsoJzrnbzrqbQg7JWE656YIOunge2BrOyXkOyE
+nCDsponsi5wg7Leo7IaM66W8IOyLoOyyre2VtCDso7zshLjsmpQuCgrsmpTssq3rsojtmLggQ0FS
+LTAwNDQ4NuyXkCDrjIDtlZwg7ZmV7J247J20IOyVhOyngSDsmYTro4zrkJjsp4Ag7JWK7JWY7Iq1
+64uI64ukLgoK7KeA7Jew65CgIOqyveyasCDsnbTsmqnsnbQg7KCc7ZWc65CgIOyImCDsnojsirXr
+i4jri6QuCgrtmZXsnbgg7KO87IaMOiBodHRwczovL3NhZWJvbS1jYXJkLmV4YW1wbGUvcmV2aWV3
+L2Nhci0wMDQ0ODYKCuusuOydmCDsgqztla3snYAg7ZqM7Iug7ZW0IOyjvOyEuOyalC4KCuyDiOu0
+hOy5tOuTnCDslYjrgrTshLzthLAgfCDsnbQg642w7J207YSw64qUIOyXsOq1rOyaqeycvOuhnCDt
+lanshLHrkJwg6rCA7IOBIOydtOuplOydvOyeheuLiOuLpC4K
+
+--===============6193810225357070845==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxi
+cj7snKTshJzspIAg7Jew6rWs7JuQ64uY6ruYIOy5tOuTnCDqsrDsoJwg6rSA66CoIOyViOuCtOul
+vCDrk5zrpr3ri4jri6QuPGJyPjxicj7rs7jsnbjsnbQg7Iq57J247ZWY7KeAIOyViuydgCDqsrDs
+oJzrnbzrqbQg7JWE656YIOunge2BrOyXkOyEnCDsponsi5wg7Leo7IaM66W8IOyLoOyyre2VtCDs
+o7zshLjsmpQuPGJyPjxicj7smpTssq3rsojtmLggQ0FSLTAwNDQ4NuyXkCDrjIDtlZwg7ZmV7J24
+7J20IOyVhOyngSDsmYTro4zrkJjsp4Ag7JWK7JWY7Iq164uI64ukLjxicj48YnI+7KeA7Jew65Cg
+IOqyveyasCDsnbTsmqnsnbQg7KCc7ZWc65CgIOyImCDsnojsirXri4jri6QuPGJyPjxicj7tmZXs
+nbgg7KO87IaMOiA8YSBocmVmPSJodHRwczovL3NhZWJvbS1jYXJkLmV4YW1wbGUvcmV2aWV3L2Nh
+ci0wMDQ0ODYiPuuCtOyaqSDtmZXsnbg8L2E+PGJyPjxicj7rrLjsnZgg7IKs7ZWt7J2AIO2ajOyL
+oO2VtCDso7zshLjsmpQuPGJyPjxicj7sg4jrtITsubTrk5wg7JWI64K07IS87YSwIHwg7J20IOuN
+sOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXr
+i4jri6QuPC9wPjwvYm9keT48L2h0bWw+Cg==
+
+--===============6193810225357070845==--

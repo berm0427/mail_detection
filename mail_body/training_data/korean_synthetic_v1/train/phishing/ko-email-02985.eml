@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?66eM66OMIOyghCDrrLjshJwg7ZmV7J24IO2VhOyalA==?=
+From: =?utf-8?b?66qo7JWE65Oc65287J2067iMIOyViOuCtOyEvO2EsA==?=
+ <notice@moa-drive.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: support@reply-cloud_document.example
+Return-Path: <bounce@mailer-cloud_document.example>
+Date: Sun, 08 Mar 2026 16:20:00 +0900
+Message-ID: <ko-email-02985@dataset.example>
+Received:
+ from mx.moa-drive.example by mx.dataset.example with ESMTP id ko-email-02985
+Authentication-Results: mx.dataset.example; spf=fail; dkim=none; dmarc=fail
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============6749818843740954941=="
+
+--===============6749818843740954941==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuCgrsnbTshJzsl7Ag64yA66as64uY
+6ruYIOusuOyEnCDqs7XsnKAg6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrrs7TslYgg
+66y47ISc66W8IOyXtOugpOuptCDslYTrnpgg66eB7YGs7JeQ7IScIO2ajOyCrCDqs4TsoJXsnLzr
+oZwg64uk7IucIOuhnOq3uOyduO2VtCDso7zshLjsmpQuCgrtmZXsnbgg64yA7IOBIOq4iOyVoeyd
+gCA3ODAsMDAw7JuQ7J2066mwIOygkeyImOuyiO2YuOuKlCBDTE8tMDAyOTg17J6F64uI64ukLgoK
+67O47J247J20IOyVhOuLiOudvOuptCDsponsi5wg7ZmV7J24IOygiOywqOulvCDsp4TtlontlbQg
+7KO87IS47JqULgoK7ZmV7J24IOyjvOyGjDogaHR0cHM6Ly9hY2NvdW50LWNsb3VkX2RvY3VtZW50
+LmV4YW1wbGUvcmV2aWV3L2Nsby0wMDI5ODUKCuusuOydmCDsgqztla3snYAg7ZqM7Iug7ZW0IOyj
+vOyEuOyalC4KCuuqqOyVhOuTnOudvOydtOu4jCDslYjrgrTshLzthLAgfCDsnbQg642w7J207YSw
+64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA7IOBIOydtOuplOydvOyeheuLiOuLpC4K
+
+--===============6749818843740954941==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuPGJyPjxi
+cj7snbTshJzsl7Ag64yA66as64uY6ruYIOusuOyEnCDqs7XsnKAg6rSA66CoIOyViOuCtOulvCDr
+k5zrpr3ri4jri6QuPGJyPjxicj7rs7TslYgg66y47ISc66W8IOyXtOugpOuptCDslYTrnpgg66eB
+7YGs7JeQ7IScIO2ajOyCrCDqs4TsoJXsnLzroZwg64uk7IucIOuhnOq3uOyduO2VtCDso7zshLjs
+mpQuPGJyPjxicj7tmZXsnbgg64yA7IOBIOq4iOyVoeydgCA3ODAsMDAw7JuQ7J2066mwIOygkeyI
+mOuyiO2YuOuKlCBDTE8tMDAyOTg17J6F64uI64ukLjxicj48YnI+67O47J247J20IOyVhOuLiOud
+vOuptCDsponsi5wg7ZmV7J24IOygiOywqOulvCDsp4TtlontlbQg7KO87IS47JqULjxicj48YnI+
+7ZmV7J24IOyjvOyGjDogPGEgaHJlZj0iaHR0cHM6Ly9hY2NvdW50LWNsb3VkX2RvY3VtZW50LmV4
+YW1wbGUvcmV2aWV3L2Nsby0wMDI5ODUiPuuCtOyaqSDtmZXsnbg8L2E+PGJyPjxicj7rrLjsnZgg
+7IKs7ZWt7J2AIO2ajOyLoO2VtCDso7zshLjsmpQuPGJyPjxicj7rqqjslYTrk5zrnbzsnbTruIwg
+7JWI64K07IS87YSwIHwg7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65Cc
+IOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuPC9wPjwvYm9keT48L2h0bWw+Cg==
+
+--===============6749818843740954941==--

@@ -1,0 +1,52 @@
+Subject: =?utf-8?b?6ri06riJIOyDge2SiOq2jCDqtazrp6Qg7JqU7LKt?=
+From: =?utf-8?b?7ZW065Og6rK97JiB7KeA7JuQIOyViOuCtOyEvO2EsA==?=
+ <notice@notice-haedeun-office-example.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: notice@notice-haedeun-office-example.example
+Return-Path: <notice@notice-haedeun-office-example.example>
+Date: Mon, 04 Aug 2025 17:06:00 +0900
+Message-ID: <ko-email-08625@dataset.example>
+Received: from mx.notice-haedeun-office-example.example by mx.dataset.example
+ with ESMTP id ko-email-08625
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: phishing
+X-Dataset-Split: validation
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============8387120263996152929=="
+
+--===============8387120263996152929==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrshJzsiJjruYgg64u064u57J6Q
+64uY6ruYIOyehOyngeybkCDsmpTssq0g6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrq
+sbDrnpjqsIAg64W47Lac65CY66m0IOyViCDrkJjrr4DroZwg6riw7KG0IOqysOyerCDsoIjssKgg
+7JeG7J20IOymieyLnCDshqHquIjtlbQg7KO87IS47JqULgoK7ZmV7J24IOuMgOyDgSDquIjslaHs
+nYAgMTI2LDUwMOybkOydtOupsCDsoJHsiJjrsojtmLjripQgRVhFLTAwODYyNeyeheuLiOuLpC4K
+CuyymOumrCDquLDtlZzsnYAg7Jik7KCEIDEx7Iuc7J6F64uI64ukLgoK7ZmV7J24IOyjvOyGjDog
+aHR0cHM6Ly9hY2NvdW50LWV4ZWN1dGl2ZV9yZXF1ZXN0LmV4YW1wbGUvcmV2aWV3L2V4ZS0wMDg2
+MjUKCuqwkOyCrO2VqeuLiOuLpC4KCu2VtOuToOqyveyYgeyngOybkCDslYjrgrTshLzthLAgfCDs
+nbQg642w7J207YSw64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA7IOBIOydtOuplOyd
+vOyeheuLiOuLpC4K
+
+--===============8387120263996152929==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxi
+cj7shJzsiJjruYgg64u064u57J6Q64uY6ruYIOyehOyngeybkCDsmpTssq0g6rSA66CoIOyViOuC
+tOulvCDrk5zrpr3ri4jri6QuPGJyPjxicj7qsbDrnpjqsIAg64W47Lac65CY66m0IOyViCDrkJjr
+r4DroZwg6riw7KG0IOqysOyerCDsoIjssKgg7JeG7J20IOymieyLnCDshqHquIjtlbQg7KO87IS4
+7JqULjxicj48YnI+7ZmV7J24IOuMgOyDgSDquIjslaHsnYAgMTI2LDUwMOybkOydtOupsCDsoJHs
+iJjrsojtmLjripQgRVhFLTAwODYyNeyeheuLiOuLpC48YnI+PGJyPuyymOumrCDquLDtlZzsnYAg
+7Jik7KCEIDEx7Iuc7J6F64uI64ukLjxicj48YnI+7ZmV7J24IOyjvOyGjDogPGEgaHJlZj0iaHR0
+cHM6Ly9hY2NvdW50LWV4ZWN1dGl2ZV9yZXF1ZXN0LmV4YW1wbGUvcmV2aWV3L2V4ZS0wMDg2MjUi
+PuuCtOyaqSDtmZXsnbg8L2E+PGJyPjxicj7qsJDsgqztlanri4jri6QuPGJyPjxicj7tlbTrk6Dq
+sr3smIHsp4Dsm5Ag7JWI64K07IS87YSwIHwg7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzr
+oZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuPC9wPjwvYm9keT48L2h0bWw+
+Cg==
+
+--===============8387120263996152929==--

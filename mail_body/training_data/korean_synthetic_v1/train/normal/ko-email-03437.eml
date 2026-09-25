@@ -1,0 +1,66 @@
+Subject: =?utf-8?b?7Jew66eQ7KCV7IKwIOydvOyglSDqs7Xsp4A=?=
+From: =?utf-8?b?7ZG466W47J247IKs7ISc67mE7IqkIOuztOyViO2MgA==?=
+ <service@pureun-hr.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@pureun-hr.example
+Return-Path: <service@pureun-hr.example>
+Date: Sun, 22 Mar 2026 13:13:00 +0900
+Message-ID: <ko-email-03437@dataset.example>
+Received:
+ from mx.pureun-hr.example by mx.dataset.example with ESMTP id ko-email-03437
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1038440483725980202=="
+
+--===============1038440483725980202==
+Content-Type: multipart/alternative;
+ boundary="===============8869263565316195023=="
+
+--===============8869263565316195023==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64K065Oc66a964uI64ukLgoK7J6E64+E7JykIOyXsOq1rOybkOuLmOq7mCDsnbjsgqzCt+q4
+ieyXrCDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC4KCuyXsOunkOygleyCsCDshJzrpZgg
+7KCc7LacIOydvOygleqzvCDri7Tri7kg7LC96rWs66W8IOyViOuCtOuTnOumveuLiOuLpC4KCuuL
+tOuLuSDrtoDshJzripQg67O07JWI7YyA7J206rOgIOywuOyhsOuyiO2YuOuKlCBIUl8tMDAzNDM3
+7J6F64uI64ukLgoK7J287KCV7JeQIOunnuy2lOyWtCDtmZXsnbjtlbQg7KO87Iuc6riwIOuwlOue
+jeuLiOuLpC4KCu2ZleyduOydtCDtlYTsmpTtlZwg6rK97JqwIOqzteyLnSDtmYjtjpjsnbTsp4Dr
+pbwg7KeB7KCRIOuwqeusuO2VtCDso7zshLjsmpQuCgrqsJDsgqztlanri4jri6QuCgrtkbjrpbjs
+nbjsgqzshJzruYTsiqQg67O07JWI7YyAIHwg7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzr
+oZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuCg==
+
+--===============8869263565316195023==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64K065Oc66a964uI64ukLjxicj48YnI+7J6E64+E7JykIOyXsOq1
+rOybkOuLmOq7mCDsnbjsgqzCt+q4ieyXrCDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC48
+YnI+PGJyPuyXsOunkOygleyCsCDshJzrpZgg7KCc7LacIOydvOygleqzvCDri7Tri7kg7LC96rWs
+66W8IOyViOuCtOuTnOumveuLiOuLpC48YnI+PGJyPuuLtOuLuSDrtoDshJzripQg67O07JWI7YyA
+7J206rOgIOywuOyhsOuyiO2YuOuKlCBIUl8tMDAzNDM37J6F64uI64ukLjxicj48YnI+7J287KCV
+7JeQIOunnuy2lOyWtCDtmZXsnbjtlbQg7KO87Iuc6riwIOuwlOuejeuLiOuLpC48YnI+PGJyPu2Z
+leyduOydtCDtlYTsmpTtlZwg6rK97JqwIOqzteyLnSDtmYjtjpjsnbTsp4Drpbwg7KeB7KCRIOuw
+qeusuO2VtCDso7zshLjsmpQuPGJyPjxicj7qsJDsgqztlanri4jri6QuPGJyPjxicj7tkbjrpbjs
+nbjsgqzshJzruYTsiqQg67O07JWI7YyAIHwg7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzr
+oZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuPC9wPjwvYm9keT48L2h0bWw+
+Cg==
+
+--===============8869263565316195023==--
+
+--===============1038440483725980202==
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*=utf-8''%EC%97%B0%EB%A7%90%EC%A0%95%EC%82%B0%EC%95%88%EB%82%B4.pdf
+MIME-Version: 1.0
+
+U1lOVEhFVElDIFBMQUNFSE9MREVSCk9yaWdpbmFsIHN5bnRoZXRpYyBmaWxlbmFtZTog7Jew66eQ
+7KCV7IKw7JWI64K0LnBkZgpObyBleGVjdXRhYmxlIG9yIGFjdGl2ZSBjb250ZW50IGlzIGluY2x1
+ZGVkLgo=
+
+--===============1038440483725980202==--

@@ -1,0 +1,51 @@
+Subject: =?utf-8?b?6rO17JygIO2PtOuNlCDsl4XrjbDsnbTtirg=?=
+From: =?utf-8?b?66qo7JWE65Oc65287J2067iMIOq4sO2aje2MgA==?=
+ <service@moa-drive.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@moa-drive.example
+Return-Path: <service@moa-drive.example>
+Date: Wed, 29 Oct 2025 10:09:00 +0900
+Message-ID: <ko-email-02794@dataset.example>
+Received:
+ from mx.moa-drive.example by mx.dataset.example with ESMTP id ko-email-02794
+Authentication-Results: mx.dataset.example; spf=pass; dkim=pass; dmarc=pass
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============6898416013970545693=="
+
+--===============6898416013970545693==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrquYDrr7zspIAg66ek64uI7KCA
+64uY6ruYIOusuOyEnCDqs7XsnKAg6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrtlITr
+oZzsoJ3tirgg6rO17JygIO2PtOuNlOyXkCDsg4gg66y47ISc6rCAIOuTseuhneuQmOyXiOyKteuL
+iOuLpC4KCuyymOumrCDquIjslaHsnYAgMzE1LDAwMOybkOydtOupsCDrrLjshJzrsojtmLjripQg
+Q0xPLTAwMjc5NOyeheuLiOuLpC4KCuuzhOuPhOydmCDqsJzsnbjsoJXrs7Qg7J6F66Cl7J2064KY
+IOyGoeq4iOydhCDsmpTssq3tlZjsp4Ag7JWK7Iq164uI64ukLgoK7ZmV7J247J20IO2VhOyalO2V
+nCDqsr3smrAg6rO17IudIO2ZiO2OmOydtOyngOulvCDsp4HsoJEg67Cp66y47ZW0IOyjvOyEuOya
+lC4KCu2ZleyduCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrrqqjslYTrk5zrnbzsnbTruIwg6riw7ZqN
+7YyAIHwg7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDs
+nbTrqZTsnbzsnoXri4jri6QuCg==
+
+--===============6898416013970545693==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxi
+cj7quYDrr7zspIAg66ek64uI7KCA64uY6ruYIOusuOyEnCDqs7XsnKAg6rSA66CoIOyViOuCtOul
+vCDrk5zrpr3ri4jri6QuPGJyPjxicj7tlITroZzsoJ3tirgg6rO17JygIO2PtOuNlOyXkCDsg4gg
+66y47ISc6rCAIOuTseuhneuQmOyXiOyKteuLiOuLpC48YnI+PGJyPuyymOumrCDquIjslaHsnYAg
+MzE1LDAwMOybkOydtOupsCDrrLjshJzrsojtmLjripQgQ0xPLTAwMjc5NOyeheuLiOuLpC48YnI+
+PGJyPuuzhOuPhOydmCDqsJzsnbjsoJXrs7Qg7J6F66Cl7J2064KYIOyGoeq4iOydhCDsmpTssq3t
+lZjsp4Ag7JWK7Iq164uI64ukLjxicj48YnI+7ZmV7J247J20IO2VhOyalO2VnCDqsr3smrAg6rO1
+7IudIO2ZiO2OmOydtOyngOulvCDsp4HsoJEg67Cp66y47ZW0IOyjvOyEuOyalC48YnI+PGJyPu2Z
+leyduCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxicj7rqqjslYTrk5zrnbzsnbTruIwg6riw7ZqN
+7YyAIHwg7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDs
+nbTrqZTsnbzsnoXri4jri6QuPC9wPjwvYm9keT48L2h0bWw+Cg==
+
+--===============6898416013970545693==--

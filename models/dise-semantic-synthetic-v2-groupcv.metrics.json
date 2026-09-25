@@ -1,0 +1,712 @@
+{
+  "rows": 10000,
+  "groups": 15,
+  "folds": 5,
+  "external_data_used": false,
+  "trials": [
+    {
+      "regularization_c": 0.0003,
+      "aggregate": {
+        "auc": 0.9153253349906393,
+        "accuracy": 0.820529810881234,
+        "fpr": 0.21360066458128596,
+        "recall": 0.8546602863437538,
+        "min_fold_auc": 0.8807535967164624,
+        "max_fold_fpr": 0.4105480868665977
+      },
+      "folds": [
+        {
+          "auc": 0.8891219954648525,
+          "accuracy": 0.800952380952381,
+          "fpr": 0.2561904761904762,
+          "recall": 0.8580952380952381,
+          "fold": 0,
+          "rows": 2100,
+          "groups": [
+            "invoice_payment",
+            "legal_notice",
+            "tax_notice"
+          ]
+        },
+        {
+          "auc": 0.9754639455782314,
+          "accuracy": 0.8928571428571429,
+          "fpr": 0.1819047619047619,
+          "recall": 0.9676190476190476,
+          "fold": 1,
+          "rows": 2100,
+          "groups": [
+            "benefits_enrollment",
+            "hr_payroll",
+            "subscription_renewal"
+          ]
+        },
+        {
+          "auc": 0.8807535967164624,
+          "accuracy": 0.7456049638055843,
+          "fpr": 0.4105480868665977,
+          "recall": 0.9017580144777663,
+          "fold": 2,
+          "rows": 1934,
+          "groups": [
+            "cloud_document",
+            "password_reset",
+            "procurement_quote"
+          ]
+        },
+        {
+          "auc": 0.9034765674711177,
+          "accuracy": 0.8154084798345398,
+          "fpr": 0.09824198552223372,
+          "recall": 0.7290589451913133,
+          "fold": 3,
+          "rows": 1934,
+          "groups": [
+            "card_transaction",
+            "executive_request",
+            "parcel_delivery"
+          ]
+        },
+        {
+          "auc": 0.9278105697225328,
+          "accuracy": 0.8478260869565217,
+          "fpr": 0.12111801242236025,
+          "recall": 0.8167701863354038,
+          "fold": 4,
+          "rows": 1932,
+          "groups": [
+            "account_security",
+            "meeting_invitation",
+            "travel_reservation"
+          ]
+        }
+      ]
+    },
+    {
+      "regularization_c": 0.001,
+      "aggregate": {
+        "auc": 0.9247866689030962,
+        "accuracy": 0.8335529791611803,
+        "fpr": 0.21488381175049942,
+        "recall": 0.88198977007286,
+        "min_fold_auc": 0.888356462585034,
+        "max_fold_fpr": 0.3981385729058945
+      },
+      "folds": [
+        {
+          "auc": 0.888356462585034,
+          "accuracy": 0.7833333333333333,
+          "fpr": 0.29523809523809524,
+          "recall": 0.861904761904762,
+          "fold": 0,
+          "rows": 2100,
+          "groups": [
+            "invoice_payment",
+            "legal_notice",
+            "tax_notice"
+          ]
+        },
+        {
+          "auc": 0.9856507936507937,
+          "accuracy": 0.9233333333333333,
+          "fpr": 0.14,
+          "recall": 0.9866666666666667,
+          "fold": 1,
+          "rows": 2100,
+          "groups": [
+            "benefits_enrollment",
+            "hr_payroll",
+            "subscription_renewal"
+          ]
+        },
+        {
+          "auc": 0.8928519103529182,
+          "accuracy": 0.7538779731127198,
+          "fpr": 0.3981385729058945,
+          "recall": 0.905894519131334,
+          "fold": 2,
+          "rows": 1934,
+          "groups": [
+            "cloud_document",
+            "password_reset",
+            "procurement_quote"
+          ]
+        },
+        {
+          "auc": 0.9022702651833141,
+          "accuracy": 0.8252326783867632,
+          "fpr": 0.15305067218200621,
+          "recall": 0.8035160289555325,
+          "fold": 3,
+          "rows": 1934,
+          "groups": [
+            "card_transaction",
+            "executive_request",
+            "parcel_delivery"
+          ]
+        },
+        {
+          "auc": 0.9548039127434212,
+          "accuracy": 0.8819875776397516,
+          "fpr": 0.08799171842650104,
+          "recall": 0.8519668737060041,
+          "fold": 4,
+          "rows": 1932,
+          "groups": [
+            "account_security",
+            "meeting_invitation",
+            "travel_reservation"
+          ]
+        }
+      ]
+    },
+    {
+      "regularization_c": 0.003,
+      "aggregate": {
+        "auc": 0.9229826324784047,
+        "accuracy": 0.828373745613528,
+        "fpr": 0.23734965668296004,
+        "recall": 0.8940971479100159,
+        "min_fold_auc": 0.8851136095066886,
+        "max_fold_fpr": 0.3960703205791106
+      },
+      "folds": [
+        {
+          "auc": 0.886768253968254,
+          "accuracy": 0.7719047619047619,
+          "fpr": 0.32,
+          "recall": 0.8638095238095238,
+          "fold": 0,
+          "rows": 2100,
+          "groups": [
+            "invoice_payment",
+            "legal_notice",
+            "tax_notice"
+          ]
+        },
+        {
+          "auc": 0.980964172335601,
+          "accuracy": 0.9114285714285715,
+          "fpr": 0.1676190476190476,
+          "recall": 0.9904761904761905,
+          "fold": 1,
+          "rows": 2100,
+          "groups": [
+            "benefits_enrollment",
+            "hr_payroll",
+            "subscription_renewal"
+          ]
+        },
+        {
+          "auc": 0.8851136095066886,
+          "accuracy": 0.7518097207859359,
+          "fpr": 0.3960703205791106,
+          "recall": 0.8996897621509824,
+          "fold": 2,
+          "rows": 1934,
+          "groups": [
+            "cloud_document",
+            "password_reset",
+            "procurement_quote"
+          ]
+        },
+        {
+          "auc": 0.8923375208135268,
+          "accuracy": 0.8029989658738366,
+          "fpr": 0.2450879007238883,
+          "recall": 0.8510858324715616,
+          "fold": 3,
+          "rows": 1934,
+          "groups": [
+            "card_transaction",
+            "executive_request",
+            "parcel_delivery"
+          ]
+        },
+        {
+          "auc": 0.969729605767953,
+          "accuracy": 0.9037267080745341,
+          "fpr": 0.057971014492753624,
+          "recall": 0.865424430641822,
+          "fold": 4,
+          "rows": 1932,
+          "groups": [
+            "account_security",
+            "meeting_invitation",
+            "travel_reservation"
+          ]
+        }
+      ]
+    },
+    {
+      "regularization_c": 0.01,
+      "aggregate": {
+        "auc": 0.9123111538152026,
+        "accuracy": 0.8153351189673298,
+        "fpr": 0.26790552839993065,
+        "recall": 0.89857576633459,
+        "min_fold_auc": 0.8596358207614463,
+        "max_fold_fpr": 0.41778697001034126
+      },
+      "folds": [
+        {
+          "auc": 0.8826793650793652,
+          "accuracy": 0.7628571428571429,
+          "fpr": 0.33904761904761904,
+          "recall": 0.8647619047619047,
+          "fold": 0,
+          "rows": 2100,
+          "groups": [
+            "invoice_payment",
+            "legal_notice",
+            "tax_notice"
+          ]
+        },
+        {
+          "auc": 0.9627646258503401,
+          "accuracy": 0.8790476190476191,
+          "fpr": 0.22380952380952382,
+          "recall": 0.981904761904762,
+          "fold": 1,
+          "rows": 2100,
+          "groups": [
+            "benefits_enrollment",
+            "hr_payroll",
+            "subscription_renewal"
+          ]
+        },
+        {
+          "auc": 0.8596358207614463,
+          "accuracy": 0.7300930713547052,
+          "fpr": 0.41778697001034126,
+          "recall": 0.8779731127197518,
+          "fold": 2,
+          "rows": 1934,
+          "groups": [
+            "cloud_document",
+            "password_reset",
+            "procurement_quote"
+          ]
+        },
+        {
+          "auc": 0.8770416505808538,
+          "accuracy": 0.781282316442606,
+          "fpr": 0.3185108583247156,
+          "recall": 0.8810754912099276,
+          "fold": 3,
+          "rows": 1934,
+          "groups": [
+            "card_transaction",
+            "executive_request",
+            "parcel_delivery"
+          ]
+        },
+        {
+          "auc": 0.9794343068040071,
+          "accuracy": 0.9233954451345756,
+          "fpr": 0.040372670807453416,
+          "recall": 0.8871635610766045,
+          "fold": 4,
+          "rows": 1932,
+          "groups": [
+            "account_security",
+            "meeting_invitation",
+            "travel_reservation"
+          ]
+        }
+      ]
+    },
+    {
+      "regularization_c": 0.03,
+      "aggregate": {
+        "auc": 0.895491951731492,
+        "accuracy": 0.8007747895885119,
+        "fpr": 0.2883592335904732,
+        "recall": 0.8899088127674972,
+        "min_fold_auc": 0.8250722658484915,
+        "max_fold_fpr": 0.4239917269906929
+      },
+      "folds": [
+        {
+          "auc": 0.876819954648526,
+          "accuracy": 0.7628571428571429,
+          "fpr": 0.3295238095238095,
+          "recall": 0.8552380952380952,
+          "fold": 0,
+          "rows": 2100,
+          "groups": [
+            "invoice_payment",
+            "legal_notice",
+            "tax_notice"
+          ]
+        },
+        {
+          "auc": 0.9291265306122447,
+          "accuracy": 0.8357142857142857,
+          "fpr": 0.28285714285714286,
+          "recall": 0.9542857142857143,
+          "fold": 1,
+          "rows": 2100,
+          "groups": [
+            "benefits_enrollment",
+            "hr_payroll",
+            "subscription_renewal"
+          ]
+        },
+        {
+          "auc": 0.8250722658484915,
+          "accuracy": 0.7161323681489141,
+          "fpr": 0.4239917269906929,
+          "recall": 0.8562564632885212,
+          "fold": 2,
+          "rows": 1934,
+          "groups": [
+            "cloud_document",
+            "password_reset",
+            "procurement_quote"
+          ]
+        },
+        {
+          "auc": 0.8647155511400519,
+          "accuracy": 0.7616339193381593,
+          "fpr": 0.3609100310237849,
+          "recall": 0.8841778697001034,
+          "fold": 3,
+          "rows": 1934,
+          "groups": [
+            "card_transaction",
+            "executive_request",
+            "parcel_delivery"
+          ]
+        },
+        {
+          "auc": 0.9817254564081462,
+          "accuracy": 0.927536231884058,
+          "fpr": 0.044513457556935816,
+          "recall": 0.8995859213250518,
+          "fold": 4,
+          "rows": 1932,
+          "groups": [
+            "account_security",
+            "meeting_invitation",
+            "travel_reservation"
+          ]
+        }
+      ]
+    },
+    {
+      "regularization_c": 0.1,
+      "aggregate": {
+        "auc": 0.8734736647128127,
+        "accuracy": 0.7853932998045223,
+        "fpr": 0.3037070618184777,
+        "recall": 0.8744936614275222,
+        "min_fold_auc": 0.7855295057475813,
+        "max_fold_fpr": 0.44260599793174765
+      },
+      "folds": [
+        {
+          "auc": 0.8693142857142857,
+          "accuracy": 0.7609523809523809,
+          "fpr": 0.3047619047619048,
+          "recall": 0.8266666666666667,
+          "fold": 0,
+          "rows": 2100,
+          "groups": [
+            "invoice_payment",
+            "legal_notice",
+            "tax_notice"
+          ]
+        },
+        {
+          "auc": 0.8847927437641724,
+          "accuracy": 0.7938095238095239,
+          "fpr": 0.3295238095238095,
+          "recall": 0.9171428571428571,
+          "fold": 1,
+          "rows": 2100,
+          "groups": [
+            "benefits_enrollment",
+            "hr_payroll",
+            "subscription_renewal"
+          ]
+        },
+        {
+          "auc": 0.7855295057475813,
+          "accuracy": 0.6923474663908997,
+          "fpr": 0.44260599793174765,
+          "recall": 0.827300930713547,
+          "fold": 2,
+          "rows": 1934,
+          "groups": [
+            "cloud_document",
+            "password_reset",
+            "procurement_quote"
+          ]
+        },
+        {
+          "auc": 0.8526204457543612,
+          "accuracy": 0.7580144777662875,
+          "fpr": 0.37228541882109617,
+          "recall": 0.8883143743536711,
+          "fold": 3,
+          "rows": 1934,
+          "groups": [
+            "card_transaction",
+            "executive_request",
+            "parcel_delivery"
+          ]
+        },
+        {
+          "auc": 0.9751113425836624,
+          "accuracy": 0.9218426501035196,
+          "fpr": 0.06935817805383022,
+          "recall": 0.9130434782608695,
+          "fold": 4,
+          "rows": 1932,
+          "groups": [
+            "account_security",
+            "meeting_invitation",
+            "travel_reservation"
+          ]
+        }
+      ]
+    },
+    {
+      "regularization_c": 0.3,
+      "aggregate": {
+        "auc": 0.8547100411091517,
+        "accuracy": 0.7696110101250159,
+        "fpr": 0.3155700604417839,
+        "recall": 0.8547920806918153,
+        "min_fold_auc": 0.7552200913495934,
+        "max_fold_fpr": 0.44570837642192346
+      },
+      "folds": [
+        {
+          "auc": 0.8616172335600907,
+          "accuracy": 0.7614285714285715,
+          "fpr": 0.2923809523809524,
+          "recall": 0.8152380952380952,
+          "fold": 0,
+          "rows": 2100,
+          "groups": [
+            "invoice_payment",
+            "legal_notice",
+            "tax_notice"
+          ]
+        },
+        {
+          "auc": 0.8515573696145126,
+          "accuracy": 0.7666666666666667,
+          "fpr": 0.3380952380952381,
+          "recall": 0.8714285714285714,
+          "fold": 1,
+          "rows": 2100,
+          "groups": [
+            "benefits_enrollment",
+            "hr_payroll",
+            "subscription_renewal"
+          ]
+        },
+        {
+          "auc": 0.7552200913495934,
+          "accuracy": 0.6737331954498449,
+          "fpr": 0.44570837642192346,
+          "recall": 0.7931747673216132,
+          "fold": 2,
+          "rows": 1934,
+          "groups": [
+            "cloud_document",
+            "password_reset",
+            "procurement_quote"
+          ]
+        },
+        {
+          "auc": 0.8428887517658745,
+          "accuracy": 0.7450879007238883,
+          "fpr": 0.390899689762151,
+          "recall": 0.8810754912099276,
+          "fold": 3,
+          "rows": 1934,
+          "groups": [
+            "card_transaction",
+            "executive_request",
+            "parcel_delivery"
+          ]
+        },
+        {
+          "auc": 0.962266759255687,
+          "accuracy": 0.9011387163561076,
+          "fpr": 0.11076604554865424,
+          "recall": 0.9130434782608695,
+          "fold": 4,
+          "rows": 1932,
+          "groups": [
+            "account_security",
+            "meeting_invitation",
+            "travel_reservation"
+          ]
+        }
+      ]
+    },
+    {
+      "regularization_c": 1.0,
+      "aggregate": {
+        "auc": 0.8381712208375568,
+        "accuracy": 0.7569039333192025,
+        "fpr": 0.32448695994741583,
+        "recall": 0.8382948265858208,
+        "min_fold_auc": 0.7334114720630871,
+        "max_fold_fpr": 0.44570837642192346
+      },
+      "folds": [
+        {
+          "auc": 0.8528997732426302,
+          "accuracy": 0.7528571428571429,
+          "fpr": 0.29714285714285715,
+          "recall": 0.8028571428571428,
+          "fold": 0,
+          "rows": 2100,
+          "groups": [
+            "invoice_payment",
+            "legal_notice",
+            "tax_notice"
+          ]
+        },
+        {
+          "auc": 0.8252843537414966,
+          "accuracy": 0.7561904761904762,
+          "fpr": 0.3323809523809524,
+          "recall": 0.8447619047619047,
+          "fold": 1,
+          "rows": 2100,
+          "groups": [
+            "benefits_enrollment",
+            "hr_payroll",
+            "subscription_renewal"
+          ]
+        },
+        {
+          "auc": 0.7334114720630871,
+          "accuracy": 0.6592554291623578,
+          "fpr": 0.44570837642192346,
+          "recall": 0.7642192347466391,
+          "fold": 2,
+          "rows": 1934,
+          "groups": [
+            "cloud_document",
+            "password_reset",
+            "procurement_quote"
+          ]
+        },
+        {
+          "auc": 0.8341355742608457,
+          "accuracy": 0.734746639089969,
+          "fpr": 0.40227507755946224,
+          "recall": 0.8717683557394003,
+          "fold": 3,
+          "rows": 1934,
+          "groups": [
+            "card_transaction",
+            "executive_request",
+            "parcel_delivery"
+          ]
+        },
+        {
+          "auc": 0.9451249308797243,
+          "accuracy": 0.8814699792960663,
+          "fpr": 0.14492753623188406,
+          "recall": 0.9078674948240165,
+          "fold": 4,
+          "rows": 1932,
+          "groups": [
+            "account_security",
+            "meeting_invitation",
+            "travel_reservation"
+          ]
+        }
+      ]
+    },
+    {
+      "regularization_c": 3.0,
+      "aggregate": {
+        "auc": 0.8273047974949985,
+        "accuracy": 0.7485380796084451,
+        "fpr": 0.3312678558047022,
+        "recall": 0.8283440150215924,
+        "min_fold_auc": 0.723869064869761,
+        "max_fold_fpr": 0.4405377456049638
+      },
+      "folds": [
+        {
+          "auc": 0.8463210884353742,
+          "accuracy": 0.7471428571428571,
+          "fpr": 0.3,
+          "recall": 0.7942857142857143,
+          "fold": 0,
+          "rows": 2100,
+          "groups": [
+            "invoice_payment",
+            "legal_notice",
+            "tax_notice"
+          ]
+        },
+        {
+          "auc": 0.8096376417233561,
+          "accuracy": 0.7490476190476191,
+          "fpr": 0.3323809523809524,
+          "recall": 0.8304761904761905,
+          "fold": 1,
+          "rows": 2100,
+          "groups": [
+            "benefits_enrollment",
+            "hr_payroll",
+            "subscription_renewal"
+          ]
+        },
+        {
+          "auc": 0.723869064869761,
+          "accuracy": 0.6546018614270941,
+          "fpr": 0.4405377456049638,
+          "recall": 0.749741468459152,
+          "fold": 2,
+          "rows": 1934,
+          "groups": [
+            "cloud_document",
+            "password_reset",
+            "procurement_quote"
+          ]
+        },
+        {
+          "auc": 0.8269052464524766,
+          "accuracy": 0.7264736297828335,
+          "fpr": 0.4157187176835574,
+          "recall": 0.8686659772492245,
+          "fold": 3,
+          "rows": 1934,
+          "groups": [
+            "card_transaction",
+            "executive_request",
+            "parcel_delivery"
+          ]
+        },
+        {
+          "auc": 0.9297909459940246,
+          "accuracy": 0.865424430641822,
+          "fpr": 0.16770186335403728,
+          "recall": 0.8985507246376812,
+          "fold": 4,
+          "rows": 1932,
+          "groups": [
+            "account_security",
+            "meeting_invitation",
+            "travel_reservation"
+          ]
+        }
+      ]
+    }
+  ],
+  "selected_c": 0.001,
+  "selection_rule": "mean AUC, minimum fold AUC, FPR, recall, then stronger regularization"
+}

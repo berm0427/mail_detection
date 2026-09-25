@@ -1,0 +1,51 @@
+Subject: =?utf-8?b?7Jew66eQ7KCV7IKwIO2ZmOq4ieygleuztCDtmZXsnbg=?=
+From: =?utf-8?b?7ZG466W47J247IKs7ISc67mE7IqkIOyViOuCtOyEvO2EsA==?=
+ <notice@notice-pureun-hr-example.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: notice@notice-pureun-hr-example.example
+Return-Path: <bounce@mailer-hr_payroll.example>
+Date: Thu, 01 May 2025 08:49:00 +0900
+Message-ID: <ko-email-03798@dataset.example>
+Received: from mx.notice-pureun-hr-example.example by mx.dataset.example with
+ ESMTP id ko-email-03798
+Authentication-Results:
+ mx.dataset.example; spf=softfail; dkim=none; dmarc=fail
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============2497612847786507439=="
+
+--===============2497612847786507439==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuCgrsmKTtlZjripgg7Jew6rWs7JuQ
+64uY6ruYIOyduOyCrMK36riJ7JesIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK7ZmY
+6riJIOuMgOyDgSDtmZXsnbjsnYQg7JyE7ZW0IOyjvOuvvOygleuztOyZgCDquIjsnLXsoJXrs7Tr
+pbwg65Ox66Gd7ZW0IOyjvOyEuOyalC4KCu2ZleyduCDrjIDsg4Eg6riI7JWh7J2AIDQ4LDAwMOyb
+kOydtOupsCDsoJHsiJjrsojtmLjripQgSFJfLTAwMzc5OOyeheuLiOuLpC4KCuyymOumrCDquLDt
+lZzsnYAg7Jik7KCEIDnsi5zsnoXri4jri6QuCgrtmZXsnbgg7KO87IaMOiBodHRwczovL3B1cmV1
+bi1oci5leGFtcGxlL3Jldmlldy9ocl8tMDAzNzk4CgrtmZXsnbgg67aA7YOB65Oc66a964uI64uk
+LgoK7ZG466W47J247IKs7ISc67mE7IqkIOyViOuCtOyEvO2EsCB8IOydtCDrjbDsnbTthLDripQg
+7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU7J287J6F64uI64ukLgo=
+
+--===============2497612847786507439==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULCDri7Tri7nsnpDsnoXri4jri6QuPGJyPjxi
+cj7smKTtlZjripgg7Jew6rWs7JuQ64uY6ruYIOyduOyCrMK36riJ7JesIOq0gOugqCDslYjrgrTr
+pbwg65Oc66a964uI64ukLjxicj48YnI+7ZmY6riJIOuMgOyDgSDtmZXsnbjsnYQg7JyE7ZW0IOyj
+vOuvvOygleuztOyZgCDquIjsnLXsoJXrs7Trpbwg65Ox66Gd7ZW0IOyjvOyEuOyalC48YnI+PGJy
+Pu2ZleyduCDrjIDsg4Eg6riI7JWh7J2AIDQ4LDAwMOybkOydtOupsCDsoJHsiJjrsojtmLjripQg
+SFJfLTAwMzc5OOyeheuLiOuLpC48YnI+PGJyPuyymOumrCDquLDtlZzsnYAg7Jik7KCEIDnsi5zs
+noXri4jri6QuPGJyPjxicj7tmZXsnbgg7KO87IaMOiA8YSBocmVmPSJodHRwczovL3B1cmV1bi1o
+ci5leGFtcGxlL3Jldmlldy9ocl8tMDAzNzk4Ij7rgrTsmqkg7ZmV7J24PC9hPjxicj48YnI+7ZmV
+7J24IOu2gO2DgeuTnOumveuLiOuLpC48YnI+PGJyPu2RuOuluOyduOyCrOyEnOu5hOyKpCDslYjr
+grTshLzthLAgfCDsnbQg642w7J207YSw64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA
+7IOBIOydtOuplOydvOyeheuLiOuLpC48L3A+PC9ib2R5PjwvaHRtbD4K
+
+--===============2497612847786507439==--

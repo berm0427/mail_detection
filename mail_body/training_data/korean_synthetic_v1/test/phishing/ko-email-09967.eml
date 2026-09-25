@@ -1,0 +1,53 @@
+Subject: =?utf-8?b?6rG06rCV6rKA7KeEIOuMgOyDgeyekCDqsJzsnbjsoJXrs7Qg65Ox66Gd?=
+From: =?utf-8?b?64uk7ZWo67O17KeA7IS87YSwIOyViOuCtOyEvO2EsA==?=
+ <notice@notice-daham-benefit-example.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: notice@notice-daham-benefit-example.example
+Return-Path: <bounce@mailer-benefits_enrollment.example>
+Date: Tue, 30 Dec 2025 12:50:00 +0900
+Message-ID: <ko-email-09967@dataset.example>
+Received: from mx.notice-daham-benefit-example.example by mx.dataset.example
+ with ESMTP id ko-email-09967
+Authentication-Results:
+ mx.dataset.example; spf=softfail; dkim=none; dmarc=fail
+X-Dataset-Label: phishing
+X-Dataset-Split: test
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============3013584475519309830=="
+
+--===============3013584475519309830==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64WV7ZWY7IS47JqULgoK7Jyk7ISc7KSAIOqzvOyepeuLmOq7mCDrs7Xsp4DCt+yngOybkOq4
+iCDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC4KCuuzteyngO2PrOyduO2KuOqwgCDsmKTr
+ipgg7IaM66m465CY66+A66GcIOunge2BrOyXkOyEnCDsponsi5wg67O47J24IOyduOymneydhCDs
+mYTro4ztlbTslbwg7ZWp64uI64ukLgoK7ZmV7J24IOuMgOyDgSDquIjslaHsnYAgMTI2LDUwMOyb
+kOydtOupsCDsoJHsiJjrsojtmLjripQgQkVOLTAwOTk2N+yeheuLiOuLpC4KCuyngOyXsOuQoCDq
+sr3smrAg7J207Jqp7J20IOygnO2VnOuQoCDsiJgg7J6I7Iq164uI64ukLgoK7ZmV7J24IOyjvOyG
+jDogaHR0cHM6Ly9kYWhhbS1iZW5lZml0LmV4YW1wbGUvcmV2aWV3L2Jlbi0wMDk5NjcKCu2Zleyd
+uCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrri6Ttlajrs7Xsp4DshLzthLAg7JWI64K07IS87YSwIHwg
+7J20IOuNsOydtO2EsOuKlCDsl7DqtazsmqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTs
+nbzsnoXri4jri6QuCg==
+
+--===============3013584475519309830==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64WV7ZWY7IS47JqULjxicj48YnI+7Jyk7ISc7KSAIOqzvOyepeuL
+mOq7mCDrs7Xsp4DCt+yngOybkOq4iCDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC48YnI+
+PGJyPuuzteyngO2PrOyduO2KuOqwgCDsmKTripgg7IaM66m465CY66+A66GcIOunge2BrOyXkOyE
+nCDsponsi5wg67O47J24IOyduOymneydhCDsmYTro4ztlbTslbwg7ZWp64uI64ukLjxicj48YnI+
+7ZmV7J24IOuMgOyDgSDquIjslaHsnYAgMTI2LDUwMOybkOydtOupsCDsoJHsiJjrsojtmLjripQg
+QkVOLTAwOTk2N+yeheuLiOuLpC48YnI+PGJyPuyngOyXsOuQoCDqsr3smrAg7J207Jqp7J20IOyg
+nO2VnOuQoCDsiJgg7J6I7Iq164uI64ukLjxicj48YnI+7ZmV7J24IOyjvOyGjDogPGEgaHJlZj0i
+aHR0cHM6Ly9kYWhhbS1iZW5lZml0LmV4YW1wbGUvcmV2aWV3L2Jlbi0wMDk5NjciPuuCtOyaqSDt
+mZXsnbg8L2E+PGJyPjxicj7tmZXsnbgg67aA7YOB65Oc66a964uI64ukLjxicj48YnI+64uk7ZWo
+67O17KeA7IS87YSwIOyViOuCtOyEvO2EsCB8IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy8
+66GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU7J287J6F64uI64ukLjwvcD48L2JvZHk+PC9odG1s
+Pgo=
+
+--===============3013584475519309830==--

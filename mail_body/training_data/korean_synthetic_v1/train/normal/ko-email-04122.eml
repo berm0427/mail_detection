@@ -1,0 +1,51 @@
+Subject: =?utf-8?b?6rKw7KCcIOy3qOyGjCDsmYTro4w=?=
+From:
+ =?utf-8?b?7IOI67SE7Lm065OcIOyduOyCrO2MgA==?= <service@saebom-card.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@saebom-card.example
+Return-Path: <service@saebom-card.example>
+Date: Sun, 31 May 2026 13:23:00 +0900
+Message-ID: <ko-email-04122@dataset.example>
+Received: from mx.saebom-card.example by mx.dataset.example with ESMTP id
+ ko-email-04122
+Authentication-Results: mx.dataset.example; spf=pass; dkim=pass; dmarc=pass
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============8592920654488208788=="
+
+--===============8592920654488208788==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuCgrqsJXtg5zsnKQg7YyA7J6l64uY
+6ruYIOy5tOuTnCDqsrDsoJwg6rSA66CoIOyViOuCtOulvCDrk5zrpr3ri4jri6QuCgrsirnsnbjr
+kJwg7J207Jqp64K07Jet7J2AIOqzteyLnSDslbHsnZgg7J207Jqp64K07JetIOuplOuJtOyXkOyE
+nCDtmZXsnbjtlaAg7IiYIOyeiOyKteuLiOuLpC4KCuuLtOuLuSDrtoDshJzripQg7J247IKs7YyA
+7J206rOgIOywuOyhsOuyiO2YuOuKlCBDQVItMDA0MTIy7J6F64uI64ukLgoK67OE64+E7J2YIOqw
+nOyduOygleuztCDsnoXroKXsnbTrgpgg7Iah6riI7J2EIOyalOyyre2VmOyngCDslYrsirXri4jr
+i6QuCgrtmZXsnbjsnbQg7ZWE7JqU7ZWcIOqyveyasCDqs7Xsi50g7ZmI7Y6Y7J207KeA66W8IOyn
+geygkSDrsKnrrLjtlbQg7KO87IS47JqULgoK6rCQ7IKs7ZWp64uI64ukLgoK7IOI67SE7Lm065Oc
+IOyduOyCrO2MgCB8IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDq
+sIDsg4Eg7J2066mU7J287J6F64uI64ukLgo=
+
+--===============8592920654488208788==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JeF66y07JeQIOywuOqzoCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxi
+cj7qsJXtg5zsnKQg7YyA7J6l64uY6ruYIOy5tOuTnCDqsrDsoJwg6rSA66CoIOyViOuCtOulvCDr
+k5zrpr3ri4jri6QuPGJyPjxicj7sirnsnbjrkJwg7J207Jqp64K07Jet7J2AIOqzteyLnSDslbHs
+nZgg7J207Jqp64K07JetIOuplOuJtOyXkOyEnCDtmZXsnbjtlaAg7IiYIOyeiOyKteuLiOuLpC48
+YnI+PGJyPuuLtOuLuSDrtoDshJzripQg7J247IKs7YyA7J206rOgIOywuOyhsOuyiO2YuOuKlCBD
+QVItMDA0MTIy7J6F64uI64ukLjxicj48YnI+67OE64+E7J2YIOqwnOyduOygleuztCDsnoXroKXs
+nbTrgpgg7Iah6riI7J2EIOyalOyyre2VmOyngCDslYrsirXri4jri6QuPGJyPjxicj7tmZXsnbjs
+nbQg7ZWE7JqU7ZWcIOqyveyasCDqs7Xsi50g7ZmI7Y6Y7J207KeA66W8IOyngeygkSDrsKnrrLjt
+lbQg7KO87IS47JqULjxicj48YnI+6rCQ7IKs7ZWp64uI64ukLjxicj48YnI+7IOI67SE7Lm065Oc
+IOyduOyCrO2MgCB8IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDq
+sIDsg4Eg7J2066mU7J287J6F64uI64ukLjwvcD48L2JvZHk+PC9odG1sPgo=
+
+--===============8592920654488208788==--

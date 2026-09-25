@@ -1,0 +1,10 @@
+{
+  "semantic_ml_model": "models/dise-semantic-synthetic-v2-groupcv.json",
+  "razor_command": [
+    "C:\\Users\\berm0\\Documents\\Codex\\2026-09-11\\x20\\work\\strawberry\\perl\\bin\\perl.exe",
+    "C:\\Users\\berm0\\Documents\\Codex\\2026-09-11\\x20\\work\\strawberry\\perl\\site\\bin\\razor-check",
+    "-home=C:\\Users\\berm0\\Documents\\Codex\\2026-09-11\\x20\\work\\razor-home",
+    "-conf=C:\\Users\\berm0\\Documents\\Codex\\2026-09-11\\x20\\work\\razor-home\\razor-agent.conf"
+  ],
+  "razor_timeout": 25
+}

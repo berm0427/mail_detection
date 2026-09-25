@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "domains": [
+    {
+      "organization": "경찰청",
+      "aliases": ["경찰청", "경찰청 교통민원24", "교통민원24", "이파인", "eFine"],
+      "domain": "efine.go.kr",
+      "include_subdomains": true,
+      "role": "official",
+      "status": "verified",
+      "source": "https://www.efine.go.kr/main/main.do",
+      "verified_at": "2026-09-20",
+      "review_due": "2027-09-20"
+    }
+  ],
+  "templates": []
+}

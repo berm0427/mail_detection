@@ -1,0 +1,69 @@
+Subject: =?utf-8?b?7ZqM7J2YIOykkeydtOuLiCDsponsi5wg7LKY66asIOuwlOuejeuLiA==?=
+ =?utf-8?b?64uk?=
+From: =?utf-8?b?7ZW065Og6rK97JiB7KeA7JuQIOyViOuCtOyEvO2EsA==?=
+ <notice@haedeun-office.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: notice@haedeun-office.example
+Return-Path: <notice@haedeun-office.example>
+Date: Sun, 12 Oct 2025 13:53:00 +0900
+Message-ID: <ko-email-08594@dataset.example>
+Received: from mx.haedeun-office.example by mx.dataset.example with ESMTP id
+ ko-email-08594
+Authentication-Results: mx.dataset.example; spf=pass; dkim=pass; dmarc=pass
+X-Dataset-Label: phishing
+X-Dataset-Split: validation
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/mixed; boundary="===============1914816350763445767=="
+
+--===============1914816350763445767==
+Content-Type: multipart/alternative;
+ boundary="===============7656952015278224265=="
+
+--===============7656952015278224265==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64K065Oc66a964uI64ukLgoK7ZWc7KeA66+8IOyXsOq1rOybkOuLmOq7mCDsnoTsp4Hsm5Ag
+7JqU7LKtIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK6rGw656Y6rCAIOuFuOy2nOuQ
+mOuptCDslYgg65CY66+A66GcIOq4sOyhtCDqsrDsnqwg7KCI7LCoIOyXhuydtCDsponsi5wg7Iah
+6riI7ZW0IOyjvOyEuOyalC4KCu2ZleyduCDrjIDsg4Eg6riI7JWh7J2AIDQ4LDAwMOybkOydtOup
+sCDsoJHsiJjrsojtmLjripQgRVhFLTAwODU5NOyeheuLiOuLpC4KCuyngOyXsOuQoCDqsr3smrAg
+7J207Jqp7J20IOygnO2VnOuQoCDsiJgg7J6I7Iq164uI64ukLgoK7ZmV7J24IOyjvOyGjDogaHR0
+cHM6Ly92ZXJpZnktZXhlY3V0aXZlX3JlcXVlc3QuZXhhbXBsZS9yZXZpZXcvZXhlLTAwODU5NAoK
+7ZmV7J24IOu2gO2DgeuTnOumveuLiOuLpC4KCu2VtOuToOqyveyYgeyngOybkCDslYjrgrTshLzt
+hLAgfCDsnbQg642w7J207YSw64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA7IOBIOyd
+tOuplOydvOyeheuLiOuLpC4K
+
+--===============7656952015278224265==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64K065Oc66a964uI64ukLjxicj48YnI+7ZWc7KeA66+8IOyXsOq1
+rOybkOuLmOq7mCDsnoTsp4Hsm5Ag7JqU7LKtIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64uk
+Ljxicj48YnI+6rGw656Y6rCAIOuFuOy2nOuQmOuptCDslYgg65CY66+A66GcIOq4sOyhtCDqsrDs
+nqwg7KCI7LCoIOyXhuydtCDsponsi5wg7Iah6riI7ZW0IOyjvOyEuOyalC48YnI+PGJyPu2Zleyd
+uCDrjIDsg4Eg6riI7JWh7J2AIDQ4LDAwMOybkOydtOupsCDsoJHsiJjrsojtmLjripQgRVhFLTAw
+ODU5NOyeheuLiOuLpC48YnI+PGJyPuyngOyXsOuQoCDqsr3smrAg7J207Jqp7J20IOygnO2VnOuQ
+oCDsiJgg7J6I7Iq164uI64ukLjxicj48YnI+7ZmV7J24IOyjvOyGjDogPGEgaHJlZj0iaHR0cHM6
+Ly92ZXJpZnktZXhlY3V0aXZlX3JlcXVlc3QuZXhhbXBsZS9yZXZpZXcvZXhlLTAwODU5NCI+64K0
+7JqpIO2ZleyduDwvYT48YnI+PGJyPu2ZleyduCDrtoDtg4Hrk5zrpr3ri4jri6QuPGJyPjxicj7t
+lbTrk6Dqsr3smIHsp4Dsm5Ag7JWI64K07IS87YSwIHwg7J20IOuNsOydtO2EsOuKlCDsl7Dqtazs
+mqnsnLzroZwg7ZWp7ISx65CcIOqwgOyDgSDsnbTrqZTsnbzsnoXri4jri6QuPC9wPjwvYm9keT48
+L2h0bWw+Cg==
+
+--===============7656952015278224265==--
+
+--===============1914816350763445767==
+Content-Type: application/pdf
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment;
+ filename*=utf-8''%EC%8A%B9%EC%9D%B8%EC%9A%94%EC%B2%AD%EC%84%9C.pdf
+MIME-Version: 1.0
+
+U1lOVEhFVElDIFBMQUNFSE9MREVSCk9yaWdpbmFsIHN5bnRoZXRpYyBmaWxlbmFtZTog7Iq57J24
+7JqU7LKt7IScLnBkZgpObyBleGVjdXRhYmxlIG9yIGFjdGl2ZSBjb250ZW50IGlzIGluY2x1ZGVk
+Lgo=
+
+--===============1914816350763445767==--

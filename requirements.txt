@@ -1,0 +1,22 @@
+# Core dependencies
+dnspython>=2.7.0
+python-whois>=0.9.5
+beautifulsoup4>=4.12.3
+email-validator>=2.2.0
+tldextract>=5.2.0
+PyQt5>=5.15.11
+aiohttp>=3.10.5
+requests>=2.32.3
+langdetect>=1.0.9
+sentence-transformers>=5.0.0
+
+# Scientific computing
+numpy>=1.23.5,<2.0
+scipy>=1.14.1,<2.0
+
+# Additional parsing
+lxml>=5.0.0
+html5lib>=1.1
+tqdm
+pandas
+scikit-learn>=1.5,<2

@@ -1,0 +1,50 @@
+Subject: =?utf-8?b?7Iug6recIOqxsOuemOyymCDrk7HroZ0g7ISc66WY?=
+From: =?utf-8?b?7ZWc7Jq47IKw7JeFIOyViOuCtOyEvO2EsA==?=
+ <notice@secure-procurement_quote.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: support@reply-procurement_quote.example
+Return-Path: <bounce@mailer-procurement_quote.example>
+Date: Mon, 06 Oct 2025 11:41:00 +0900
+Message-ID: <ko-email-06380@dataset.example>
+Received: from mx.secure-procurement_quote.example by mx.dataset.example with
+ ESMTP id ko-email-06380
+Authentication-Results: mx.dataset.example; spf=fail; dkim=none; dmarc=fail
+X-Dataset-Label: phishing
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============1072499200810018893=="
+
+--===============1072499200810018893==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64K065Oc66a964uI64ukLgoK7Jyk7ISc7KSAIOuLtOuLueyekOuLmOq7mCDqtazrp6TCt+qy
+rOyggSDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC4KCuuztOyViCDqsqzsoIHshJzrpbwg
+7ZmV7J247ZWY66Ck66m0IOunge2BrOyXkOyEnCDtmozsgqwg66mU7J28IOqzhOygleycvOuhnCDr
+oZzqt7jsnbjtlbTslbwg7ZWp64uI64ukLgoK7ZmV7J24IOuMgOyDgSDquIjslaHsnYAgNDgsMDAw
+7JuQ7J2066mwIOygkeyImOuyiO2YuOuKlCBQUk8tMDA2Mzgw7J6F64uI64ukLgoK7LKY66asIOq4
+sO2VnOydgCDsmKTtm4QgMuyLnOyeheuLiOuLpC4KCu2ZleyduCDso7zshow6IGh0dHBzOi8vaGFu
+dWwtaW5kdXN0cnkuZXhhbXBsZS9yZXZpZXcvcHJvLTAwNjM4MAoK6rCQ7IKs7ZWp64uI64ukLgoK
+7ZWc7Jq47IKw7JeFIOyViOuCtOyEvO2EsCB8IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy8
+66GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU7J287J6F64uI64ukLgo=
+
+--===============1072499200810018893==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64K065Oc66a964uI64ukLjxicj48YnI+7Jyk7ISc7KSAIOuLtOuL
+ueyekOuLmOq7mCDqtazrp6TCt+qyrOyggSDqtIDroKgg7JWI64K066W8IOuTnOumveuLiOuLpC48
+YnI+PGJyPuuztOyViCDqsqzsoIHshJzrpbwg7ZmV7J247ZWY66Ck66m0IOunge2BrOyXkOyEnCDt
+mozsgqwg66mU7J28IOqzhOygleycvOuhnCDroZzqt7jsnbjtlbTslbwg7ZWp64uI64ukLjxicj48
+YnI+7ZmV7J24IOuMgOyDgSDquIjslaHsnYAgNDgsMDAw7JuQ7J2066mwIOygkeyImOuyiO2YuOuK
+lCBQUk8tMDA2Mzgw7J6F64uI64ukLjxicj48YnI+7LKY66asIOq4sO2VnOydgCDsmKTtm4QgMuyL
+nOyeheuLiOuLpC48YnI+PGJyPu2ZleyduCDso7zshow6IDxhIGhyZWY9Imh0dHBzOi8vaGFudWwt
+aW5kdXN0cnkuZXhhbXBsZS9yZXZpZXcvcHJvLTAwNjM4MCI+64K07JqpIO2ZleyduDwvYT48YnI+
+PGJyPuqwkOyCrO2VqeuLiOuLpC48YnI+PGJyPu2VnOyauOyCsOyXhSDslYjrgrTshLzthLAgfCDs
+nbQg642w7J207YSw64qUIOyXsOq1rOyaqeycvOuhnCDtlanshLHrkJwg6rCA7IOBIOydtOuplOyd
+vOyeheuLiOuLpC48L3A+PC9ib2R5PjwvaHRtbD4K
+
+--===============1072499200810018893==--

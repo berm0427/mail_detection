@@ -1,0 +1,51 @@
+Subject: =?utf-8?b?67O07JWIIOyEpOyglSDrs4Dqsr0g7JmE66OMIOyViOuCtA==?=
+From:
+ =?utf-8?b?7ZW07IaU66mU7J28IOyatOyYge2MgA==?= <service@haesol-mail.example>
+To: =?utf-8?b?7Jew6rWs7LC47Jes7J6Q?= <recipient@research.example>
+Reply-To: service@haesol-mail.example
+Return-Path: <service@haesol-mail.example>
+Date: Wed, 30 Jul 2025 17:40:00 +0900
+Message-ID: <ko-email-00015@dataset.example>
+Received: from mx.haesol-mail.example by mx.dataset.example with ESMTP id
+ ko-email-00015
+Authentication-Results: mx.dataset.example; spf=pass; dkim=none; dmarc=none
+X-Dataset-Label: legitimate
+X-Dataset-Split: train
+X-Synthetic-Data: true
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============3038801015467860155=="
+
+--===============3038801015467860155==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+7JWI64K065Oc66a964uI64ukLgoK7J6E64+E7JykIOunpOuLiOyggOuLmOq7mCDqs4TsoJUg67O0
+7JWIIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLgoK7LWc6re8IOuhnOq3uOyduCDquLDr
+oZ3snYQg6rOE7KCVIOyEpOyglSDtmZTrqbTsl5DshJwg7ZmV7J247ZWgIOyImCDsnojsirXri4jr
+i6QuCgrsspjrpqwg6riI7JWh7J2AIDEsMjQwLDAwMOybkOydtOupsCDrrLjshJzrsojtmLjripQg
+QUNDLTAwMDAxNeyeheuLiOuLpC4KCuuzuCDrqZTsnbzsnYAg7LKY66asIOqysOqzvOulvCDslYjr
+grTtlZjquLAg7JyE7ZW0IOuwnOyGoeuQmOyXiOyKteuLiOuLpC4KCu2ZleyduOydtCDtlYTsmpTt
+lZwg6rK97JqwIOqzteyLnSDtmYjtjpjsnbTsp4Drpbwg7KeB7KCRIOuwqeusuO2VtCDso7zshLjs
+mpQuCgrtmZXsnbgg67aA7YOB65Oc66a964uI64ukLgoK7ZW07IaU66mU7J28IOyatOyYge2MgCB8
+IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU
+7J287J6F64uI64ukLgo=
+
+--===============3038801015467860155==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PGh0bWw+PGJvZHk+PHA+7JWI64K065Oc66a964uI64ukLjxicj48YnI+7J6E64+E7JykIOunpOuL
+iOyggOuLmOq7mCDqs4TsoJUg67O07JWIIOq0gOugqCDslYjrgrTrpbwg65Oc66a964uI64ukLjxi
+cj48YnI+7LWc6re8IOuhnOq3uOyduCDquLDroZ3snYQg6rOE7KCVIOyEpOyglSDtmZTrqbTsl5Ds
+hJwg7ZmV7J247ZWgIOyImCDsnojsirXri4jri6QuPGJyPjxicj7sspjrpqwg6riI7JWh7J2AIDEs
+MjQwLDAwMOybkOydtOupsCDrrLjshJzrsojtmLjripQgQUNDLTAwMDAxNeyeheuLiOuLpC48YnI+
+PGJyPuuzuCDrqZTsnbzsnYAg7LKY66asIOqysOqzvOulvCDslYjrgrTtlZjquLAg7JyE7ZW0IOuw
+nOyGoeuQmOyXiOyKteuLiOuLpC48YnI+PGJyPu2ZleyduOydtCDtlYTsmpTtlZwg6rK97JqwIOqz
+teyLnSDtmYjtjpjsnbTsp4Drpbwg7KeB7KCRIOuwqeusuO2VtCDso7zshLjsmpQuPGJyPjxicj7t
+mZXsnbgg67aA7YOB65Oc66a964uI64ukLjxicj48YnI+7ZW07IaU66mU7J28IOyatOyYge2MgCB8
+IOydtCDrjbDsnbTthLDripQg7Jew6rWs7Jqp7Jy866GcIO2VqeyEseuQnCDqsIDsg4Eg7J2066mU
+7J287J6F64uI64ukLjwvcD48L2JvZHk+PC9odG1sPgo=
+
+--===============3038801015467860155==--

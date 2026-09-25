@@ -1,0 +1,43 @@
+ARC-Seal: i=1; a=rsa-sha256; d=naver.com; s=arc-20180730; t=1742659363;
+	cv=none; b=d/5otel/md1JuFDcoazREgcKeUAM+e9WQCHt34VfDAzt1IGj7rTNFqnM3N4z
+	 ODm+SalkFJiX+BahVQX8QveozRjLVxses3QKOyIUL4RjV+cZbuQMMYS+uwY6qvw9noo4oE
+	 YMSUyM//O7OlJRjhduBCJHtdO3qGRdAP5dQ0YoZscqAcLxQO/+aSVCl0isUKykSf5MCQc3
+	 vX+HuugE4nnvELydryKXxiT6W0h04S9di8XujhEyKArZxmoJvBFqmsNdrxxBovmsM+W8YI
+	 93yD4YE4Qcud29mmnZt4hVEmk7hwIkI7MU4LB/e4G1SrFTcoUd8bR1yakBxfL3FIgpujR5
+	 Ow==
+ARC-Message-Signature: i=1; a=rsa-sha256; d=naver.com; s=arc-20180730;
+	t=1742659363; c=relaxed/relaxed;
+	bh=vNwPVPBzfgarDg2QN0TfSM7bP+EYi5//+STQTn5nJcA=;
+	h=date:subject:from:to; b=c82f01UUqqOk0YNPmmbNX+9SjK7h2DX67TjRY5gfJsm36
+	 c0ubzdHtUFswnuzyQFwWoumPNGfYNZbjI0vJRjgqtW+iAutdmvmvAF7BW9zukrtIjMfm2t
+	 IOsK/lJTUdfJyw/aQ+fMkkhIEl8VrZ1mtsTspxpC9iFz60dMNRQcVz9Vp9XwJ4fET+PqPr
+	 NMRvZ5DyhLQpfQRZOElQZMD6fO5t4mSVwaY0gmcFHDuFfEUcgFHw/pfMZy/Rll6MqiWstq
+	 hAnnPiVntksZm778GtR+DVyIaWdKRmbiiMd4LrfiHvpn/JCL7jKB9piT5lyPtRURwzCHd4
+	 29ACX93vOV4WDXrkg==
+ARC-Authentication-Results: i=1; mx.naver.com; 
+  spf=pass (mx.naver.com: domain of return@mailinfo.saramin.co.kr designates 8.8.8.8 as permitted sender) smtp.mailfrom=return@mailinfo.saramin.co.kr;
+  dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=saramin.co.kr
+Return-Path: <return@mailinfo.saramin.co.kr>
+Received-SPF: pass (mx.naver.com: domain of return@mailinfo.saramin.co.kr designates 8.8.8.8 as permitted sender)
+  client-ip=8.8.8.8; x-iptype=default;
+Authentication-Results: mx.naver.com;
+  spf=pass (mx.naver.com: domain of return@mailinfo.saramin.co.kr designates 8.8.8.8 as permitted sender) smtp.mailfrom=return@mailinfo.saramin.co.kr;
+  dmarc=pass (p=NONE sp=NONE dis=NONE) header.from=saramin.co.kr
+X-Naver-ESV: wmRn+6J4p63CbHmqKBwdbXFYKxMmKotqjJ+Y
+X-Session-IP: 8.8.8.8
+Message-ID: <1742659363908.7f1b0.1732152@crcvmail303.nm>
+Received: from sri-eventmailsend1b.saramin.co.kr (sri-eventmailsend1b.saramin.co.kr [8.8.8.8])
+  by crcvmail303.nm.naver.com with ESMTP id DWLS0lANT7e8DUpiz8TpEg
+  for <captain8609@naver.com>;
+  Sat, 22 Mar 2025 16:02:43 -0000
+Date: Sun, 23 Mar 2025 01:02:43 +0900
+Subject: =?UTF-8?B?W+yCrOuejOyduF0g7Zmp7ZiE7Z2s64uYIOqwgOyeheydhCDsp4Tsi6zsnLzroZwg7ZmY7JiB?=
+	=?UTF-8?B?7ZWp64uI64ukLg==?=
+From: "=?UTF-8?B?7IKs656M7J24?=" <webmaster@mailinfo.saramin.co.kr>
+To: <captain8609@naver.com>
+Reply-To: <webmaster@mailinfo.saramin.co.kr>
+MIME-Version: 1.0
+X-Mailer: Netpion Service Server v3.0.0
+X-NetpionMsgID: 1742659363866.17749.249.26202896.1
+Content-transfer-encoding: BASE64
+Content-type: text/html; charset=UTF-8

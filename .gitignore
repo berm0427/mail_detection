@@ -1,0 +1,15 @@
+__pycache__/
+*.py[cod]
+.venv/
+
+# Runtime output
+analysis_result/
+
+# Generated training artifacts
+models/candidates/
+models/tuning/
+evaluation/
+deliverables/
+
+# Local research notes
+docs/

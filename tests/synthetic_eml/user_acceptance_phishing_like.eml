@@ -1,0 +1,14 @@
+From: Account Security <security@delivery-alert.example>
+To: User <user@example.net>
+Subject: 긴급 계정 확인 필요
+Date: Fri, 18 Sep 2026 09:30:00 +0900
+Message-ID: <synthetic-phishing-like@example.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+
+합성 피싱 유사 메일입니다.
+계정 비밀번호가 만료되었습니다. 지금 로그인 페이지를 클릭하고 비밀번호를 입력하여 확인하세요.
+배송 보류와 환급 안내가 동시에 포함되어 있습니다.
+https://example.invalid/login
+

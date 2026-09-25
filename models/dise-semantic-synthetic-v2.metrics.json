@@ -1,0 +1,143 @@
+{
+  "rows": 10000,
+  "split_counts": {
+    "train": 8000,
+    "validation": 1000,
+    "test": 1000
+  },
+  "selection_used_external_data": false,
+  "trials": [
+    {
+      "n": 1000,
+      "auc": 0.941508,
+      "accuracy": 0.865,
+      "tn": 484,
+      "fp": 16,
+      "fn": 119,
+      "tp": 381,
+      "fpr": 0.032,
+      "recall": 0.762,
+      "regularization_c": 0.001
+    },
+    {
+      "n": 1000,
+      "auc": 0.9565319999999999,
+      "accuracy": 0.866,
+      "tn": 493,
+      "fp": 7,
+      "fn": 127,
+      "tp": 373,
+      "fpr": 0.014,
+      "recall": 0.746,
+      "regularization_c": 0.003
+    },
+    {
+      "n": 1000,
+      "auc": 0.9632999999999999,
+      "accuracy": 0.87,
+      "tn": 498,
+      "fp": 2,
+      "fn": 128,
+      "tp": 372,
+      "fpr": 0.004,
+      "recall": 0.744,
+      "regularization_c": 0.01
+    },
+    {
+      "n": 1000,
+      "auc": 0.9663080000000001,
+      "accuracy": 0.856,
+      "tn": 497,
+      "fp": 3,
+      "fn": 141,
+      "tp": 359,
+      "fpr": 0.006,
+      "recall": 0.718,
+      "regularization_c": 0.03
+    },
+    {
+      "n": 1000,
+      "auc": 0.9679,
+      "accuracy": 0.85,
+      "tn": 496,
+      "fp": 4,
+      "fn": 146,
+      "tp": 354,
+      "fpr": 0.008,
+      "recall": 0.708,
+      "regularization_c": 0.1
+    },
+    {
+      "n": 1000,
+      "auc": 0.966168,
+      "accuracy": 0.853,
+      "tn": 496,
+      "fp": 4,
+      "fn": 143,
+      "tp": 357,
+      "fpr": 0.008,
+      "recall": 0.714,
+      "regularization_c": 0.3
+    },
+    {
+      "n": 1000,
+      "auc": 0.9622599999999999,
+      "accuracy": 0.855,
+      "tn": 497,
+      "fp": 3,
+      "fn": 142,
+      "tp": 358,
+      "fpr": 0.006,
+      "recall": 0.716,
+      "regularization_c": 1.0
+    },
+    {
+      "n": 1000,
+      "auc": 0.959348,
+      "accuracy": 0.856,
+      "tn": 497,
+      "fp": 3,
+      "fn": 141,
+      "tp": 359,
+      "fpr": 0.006,
+      "recall": 0.718,
+      "regularization_c": 3.0
+    },
+    {
+      "n": 1000,
+      "auc": 0.9573200000000001,
+      "accuracy": 0.856,
+      "tn": 497,
+      "fp": 3,
+      "fn": 141,
+      "tp": 359,
+      "fpr": 0.006,
+      "recall": 0.718,
+      "regularization_c": 10.0
+    }
+  ],
+  "selected_c": 0.1,
+  "validation": {
+    "n": 1000,
+    "auc": 0.9679,
+    "accuracy": 0.85,
+    "tn": 496,
+    "fp": 4,
+    "fn": 146,
+    "tp": 354,
+    "fpr": 0.008,
+    "recall": 0.708
+  },
+  "test": {
+    "n": 1000,
+    "auc": 0.8417520000000001,
+    "accuracy": 0.764,
+    "tn": 340,
+    "fp": 160,
+    "fn": 76,
+    "tp": 424,
+    "fpr": 0.32,
+    "recall": 0.848
+  },
+  "limitations": "Synthetic internal performance does not establish real-world accuracy."
+}

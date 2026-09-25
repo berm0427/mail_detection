@@ -1,0 +1,50 @@
+ARC-Seal: i=1; a=rsa-sha256; d=naver.com; s=arc-20180730; t=1741072210;
+	cv=none; b=KLqqicIA70tmPrMbWJSnf950TPZlsjWI/a4c6RKk8+1E8cQeRdJQxzzCYLoA
+	 Z4JfxxS2xRZX0CAGekgXKVKexmC39EwhBATcOZv55J51a9LlJsuzDFXqOGMS6+7HililCM
+	 3hTu6LrHsLX+tos+d+kA+b7un/e5yW6OjosuVVDAoZzDi5VWl/EHwz/ZqHncrgy9lL6TvY
+	 guutRLcLnOJ3NLDA9WqPRRfhKzFtCuzzZC3/J9LDIgr9aZfVnPMqn6NE45CU9YJoBOVZO5
+	 gioBt2RFinsfKCZAJ0QrIswW39rU+K3FkqpFSNlX/ufpBE3K4i3iXeK844Q6LA8LEHiGq7
+	 1Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; d=naver.com; s=arc-20180730;
+	t=1741072210; c=relaxed/relaxed;
+	bh=G6vomb69aQZCKo3n5xXAjUBC1qZ1w0K+C34dep8vUic=;
+	h=dkim-signature:date:from:to:message-id:subject; b=nsl9pozs8dbhkMugPGw
+	 m2oEdoMyszX7cEAGSb40FvlGWoHvIsIIf44hBdV2rIAQb0CWV7pQsPZOxaITYZsDaVZUBY
+	 jt17s7zUgD584DbJi4q/Qaa30h4Mig+xCOEUGtzTaEgSA0fvfxtlSyPvi+qEk2lThGuOFt
+	 MMMHqd/rBZxCQptNtOr5ZKRdhIDTTJazvUl9aKZRmCqUFdMm8Ovsy28t+HXMyv6fLj5Ojl
+	 7nnQD0vK2nRoyXn4HX42pb4ksQ8T6yWpcyPk4CuWOKbY8F0diaAnMnsxWZNoM0Z0ZDAeyc
+	 2gG+aqfm6w+aG/xLkvidpB380n/L4cqdsJLPNWtVRpA==
+ARC-Authentication-Results: i=1; mx.naver.com; 
+  spf=pass (mx.naver.com: domain of hello@mail113.stibee.com designates 8.8.8.8 as permitted sender) smtp.mailfrom=hello@mail113.stibee.com;
+  dkim=pass header.i=@stibee.com
+Return-Path: <hello@mail113.stibee.com>
+Received-SPF: pass (mx.naver.com: domain of hello@mail113.stibee.com designates 8.8.8.8 as permitted sender)
+  client-ip=8.8.8.8; x-iptype=default;
+Authentication-Results: mx.naver.com;
+  spf=pass (mx.naver.com: domain of hello@mail113.stibee.com designates 8.8.8.8 as permitted sender) smtp.mailfrom=hello@mail113.stibee.com;
+  dkim=pass header.i=@stibee.com
+X-Naver-ESV: wZ+n+6J4p63qMBIYKNwdbXmmFqumKxIYkXm=
+X-Session-IP: 8.8.8.8
+Received: from mail113.stibee.com (mail113.stibee.com [8.8.8.8])
+  by crcvmail304.nm.naver.com with ESMTP id hSiiuSpKQvKb7STQT75t-A
+  for <captain8609@naver.com>
+  (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256);
+  Tue, 04 Mar 2025 07:10:10 -0000
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=stb; d=stibee.com; t=1741072210; x=1741075810; h=from:to:subject:
+ date:message-id:list-unsubscribe:list-unsubscribe-post;
+ bh=G6vomb69aQZCKo3n5xXAjUBC1qZ1w0K+C34dep8vUic=;
+ b=CGuIXhatvWujLYPn6NHGRUBS5FcfZMPjX0DWnzi3eH/BkrUytRPabS4pufovhOTzfmDgc+
+ JGimz/GWxVGZnyta+QvR3oPXxCoSzzwvRVL3je8SuWiICiLwpx3bvPP8N2Hyz/LHx2OiRZ
+ wsS+OJg5pnNpaJAE+Rdvmf/ICneVGjU=
+Date: Tue, 04 Mar 2025 16:10:10 +0900
+From: "=?UTF-8?B?7Iic7LKc7Zal64yA7ZWZ6rWQIOu4jOuenOuTnO2ZjeuztO2MgA==?=" <schpr@sch.ac.kr>
+To: <captain8609@naver.com>
+Message-ID: <2678790.N.1741072210761947265.425529@mail113.stibee.com>
+List-Unsubscribe-Post: List-Unsubscribe=One-Click
+List-Unsubscribe: <https://page.stibee.com/api/v1.0/lists/unsubscribe/MTQ2MTQyLzI2Nzg3OTAvMTU0Mjkv>
+List-Id: <146142.list-id.stibee.com>
+Subject: =?UTF-8?B?7Zmp7ZiE7Z2s64uYLCDsiJzsspztlqXsnZggM+yblCDshozsi53snbQg7JmU7Iq164uI64ukIPCfkow=?=
+MIME-Version: 1.0
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
