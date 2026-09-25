@@ -26,6 +26,14 @@ class CollectHtmlPairDatasetTests(unittest.TestCase):
         self.assertEqual(source, {'kind': 'url', 'value': 'https://official.example'})
         fetch.assert_called_once_with('https://official.example')
 
+    def test_live_url_cache_avoids_duplicate_fetch(self):
+        fetched = {'status': 'ok', 'structure': {'element_count': 1}}
+        cache = {}
+        with patch('tools.collect_html_pair_dataset.fetch_page', return_value=fetched) as fetch:
+            load_side({'reference_url': 'https://official.example'}, 'reference', Path('.'), cache)
+            load_side({'reference_url': 'https://official.example'}, 'reference', Path('.'), cache)
+        fetch.assert_called_once()
+
     def test_requires_exactly_one_source(self):
         with self.assertRaises(ValueError):
             load_side({}, 'target', Path('.'))

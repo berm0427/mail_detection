@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "reviewed_at": "2026-09-25",
+  "brands": {
+    "Microsoft": {
+      "aliases": ["Outlook", "Office365", "Microsoft OneDrive"],
+      "reference_url": "https://www.microsoft.com/",
+      "normal_pages": ["https://www.microsoft.com/", "https://www.microsoft.com/en-us/microsoft-365/outlook/log-in", "https://www.microsoft.com/en-us/microsoft-365/onedrive/online-cloud-storage"],
+      "source": "https://www.microsoft.com/en-us/microsoft-365/outlook/log-in"
+    },
+    "PayPal": {
+      "aliases": ["PayPal Inc."], "reference_url": "https://www.paypal.com/",
+      "normal_pages": ["https://www.paypal.com/", "https://www.paypal.com/us/digital-wallet/how-paypal-works", "https://www.paypal.com/signin"],
+      "source": "https://www.paypal.com/"
+    },
+    "Amazon": {
+      "aliases": ["Amazon.com Inc."], "reference_url": "https://www.amazon.com/",
+      "normal_pages": ["https://www.amazon.com/", "https://www.amazon.com/amazonprime", "https://www.amazon.com/gp/help/customer/display.html"],
+      "source": "https://www.amazon.com/"
+    },
+    "DHL": {
+      "aliases": ["DHL Airways, Inc."], "reference_url": "https://www.dhl.com/",
+      "normal_pages": ["https://www.dhl.com/", "https://www.dhl.com/us-en/home/about-us.html", "https://www.dhl.com/us-en/home/customer-service.html"],
+      "source": "https://www.dhl.com/us-en/home/about-us.html"
+    },
+    "Apple": {
+      "aliases": ["Apple Inc."], "reference_url": "https://www.apple.com/",
+      "normal_pages": ["https://www.apple.com/", "https://support.apple.com/", "https://www.apple.com/store"],
+      "source": "https://www.apple.com/"
+    },
+    "eBay": {
+      "aliases": ["eBay Inc."], "reference_url": "https://www.ebay.com/",
+      "normal_pages": ["https://www.ebay.com/", "https://www.ebay.com/help/home", "https://www.ebay.com/sellercenter"],
+      "source": "https://www.ebay.com/"
+    },
+    "Orange": {
+      "aliases": ["Orange"], "reference_url": "https://www.orange.com/en",
+      "normal_pages": ["https://www.orange.com/en", "https://www.orange.com/en/about-us", "https://www.orange.com/en/our-expertise"],
+      "source": "https://www.orange.com/en/about-us"
+    },
+    "Free": {
+      "aliases": ["Free (ISP)"], "reference_url": "https://www.free.fr/",
+      "normal_pages": ["https://www.free.fr/", "https://assistance.free.fr/", "https://mobile.free.fr/"],
+      "source": "https://www.free.fr/"
+    },
+    "Facebook": {
+      "aliases": ["Facebook, Inc."], "reference_url": "https://www.facebook.com/",
+      "normal_pages": ["https://www.facebook.com/", "https://www.facebook.com/help/", "https://about.meta.com/technologies/facebook-app/"],
+      "source": "https://www.facebook.com/"
+    },
+    "WeTransfer": {
+      "aliases": ["WeTransfer"], "reference_url": "https://wetransfer.com/",
+      "normal_pages": ["https://wetransfer.com/", "https://wetransfer.com/help", "https://wetransfer.com/resources"],
+      "source": "https://wetransfer.com/help"
+    },
+    "IRS": {
+      "aliases": ["IRS"], "reference_url": "https://www.irs.gov/",
+      "normal_pages": ["https://www.irs.gov/", "https://www.irs.gov/filing", "https://www.irs.gov/about-irs"],
+      "source": "https://www.irs.gov/pub/irs-pdf/p5348.pdf"
+    },
+    "Google": {
+      "aliases": ["Google Inc."], "reference_url": "https://www.google.com/",
+      "normal_pages": ["https://www.google.com/", "https://about.google/products/", "https://support.google.com/"],
+      "source": "https://about.google/"
+    },
+    "Netflix": {
+      "aliases": ["Netflix Inc."], "reference_url": "https://www.netflix.com/",
+      "normal_pages": ["https://www.netflix.com/", "https://help.netflix.com/", "https://about.netflix.com/"],
+      "source": "https://about.netflix.com/"
+    },
+    "Instagram": {
+      "aliases": ["Instagram"], "reference_url": "https://www.instagram.com/",
+      "normal_pages": ["https://www.instagram.com/", "https://help.instagram.com/", "https://about.instagram.com/"],
+      "source": "https://about.instagram.com/"
+    },
+    "Steam": {
+      "aliases": ["Steam"], "reference_url": "https://store.steampowered.com/",
+      "normal_pages": ["https://store.steampowered.com/", "https://store.steampowered.com/about/", "https://help.steampowered.com/"],
+      "source": "https://store.steampowered.com/about/"
+    }
+  }
+}

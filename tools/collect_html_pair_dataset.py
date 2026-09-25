@@ -9,13 +9,21 @@ from email_analyzer.html_pair_features import SCHEMA_VERSION, pair_features
 from email_analyzer.page_structure import fetch_page, inspect_structure
 
 
-def load_side(row, prefix, input_root):
+def load_side(row, prefix, input_root, url_cache=None):
     url = row.get(f'{prefix}_url')
     html_path = row.get(f'{prefix}_html')
     if bool(url) == bool(html_path):
         raise ValueError(f'exactly one of {prefix}_url or {prefix}_html is required')
     if url:
-        return fetch_page(url), {'kind': 'url', 'value': url}
+        if url_cache is not None and url in url_cache:
+            result = url_cache[url]
+        else:
+            try:
+                result = fetch_page(url)
+            except Exception as error:
+                result = {'status': 'error', 'reason': type(error).__name__}
+            if url_cache is not None: url_cache[url] = result
+        return result, {'kind': 'url', 'value': url}
     path = Path(html_path)
     if not path.is_absolute():
         path = input_root / path
@@ -36,6 +44,7 @@ def main():
     args = parser.parse_args()
     written = skipped = 0
     args.output.parent.mkdir(parents=True, exist_ok=True)
+    url_cache = {}
     with args.input.open(encoding='utf-8') as source, args.output.open('w', encoding='utf-8') as destination:
         for line_number, line in enumerate(source, 1):
             if not line.strip():
@@ -43,8 +52,8 @@ def main():
             row = json.loads(line)
             if row.get('label') not in (0, 1) or not row.get('group_id'):
                 raise ValueError(f'line {line_number}: label 0/1 and group_id are required')
-            target, target_source = load_side(row, 'target', args.input.parent)
-            reference, reference_source = load_side(row, 'reference', args.input.parent)
+            target, target_source = load_side(row, 'target', args.input.parent, url_cache)
+            reference, reference_source = load_side(row, 'reference', args.input.parent, url_cache)
             if target.get('status') != 'ok' or reference.get('status') != 'ok':
                 skipped += 1
                 continue

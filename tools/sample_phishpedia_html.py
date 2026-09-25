@@ -80,10 +80,17 @@ def main():
     parser.add_argument('--output', type=Path, default=Path('mail_body/training_data/phishpedia_html'))
     parser.add_argument('--max-samples', type=int, default=1000)
     parser.add_argument('--per-brand', type=int, default=20)
+    parser.add_argument('--brand-config', type=Path,
+                        help='Optional html_brand_pages.json; only its aliases are sampled')
     args = parser.parse_args()
     if args.max_samples < 1 or args.per_brand < 1:
         raise ValueError('sample limits must be positive')
     args.output.mkdir(parents=True, exist_ok=True)
+    allowed_brands = None
+    if args.brand_config:
+        config = json.loads(args.brand_config.read_text(encoding='utf-8'))
+        allowed_brands = {alias.casefold() for item in config['brands'].values()
+                          for alias in item['aliases']}
     remote = RemoteRangeFile(args.url, chunk_size=512 * 1024, cache_chunks=8)
     with zipfile.ZipFile(remote) as archive:
         html_entries = [entry for entry in archive.infolist()
@@ -99,6 +106,8 @@ def main():
                 break
             folder = PurePosixPath(entry.filename).parent.name
             brand = brand_from_folder(folder)
+            if allowed_brands is not None and brand.casefold() not in allowed_brands:
+                continue
             sample_id = hashlib.sha256(entry.filename.encode()).hexdigest()[:16]
             if sample_id in existing_ids or counts[brand] >= args.per_brand:
                 continue

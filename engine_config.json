@@ -1,5 +1,6 @@
 {
   "semantic_ml_model": "models/dise-semantic-synthetic-v2-groupcv.json",
+  "html_pair_ml_model": "models/dise-html-pair-phishpedia-v1.json",
   "razor_command": [
     "C:\\Users\\berm0\\Documents\\Codex\\2026-09-11\\x20\\work\\strawberry\\perl\\bin\\perl.exe",
     "C:\\Users\\berm0\\Documents\\Codex\\2026-09-11\\x20\\work\\strawberry\\perl\\site\\bin\\razor-check",

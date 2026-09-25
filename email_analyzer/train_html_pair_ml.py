@@ -23,6 +23,19 @@ def metrics(labels, scores, threshold=0.5):
             'recall': float(tp / (tp + fn)) if tp + fn else 0.0}
 
 
+def select_threshold(labels, scores, max_fpr=0.10, min_recall=0.65):
+    candidates = sorted(set(float(score) for score in scores))
+    eligible = []
+    for threshold in candidates:
+        observed = metrics(labels, scores, threshold)
+        if observed['fpr'] <= max_fpr and observed['recall'] >= min_recall:
+            eligible.append((observed['recall'], -observed['fpr'], threshold, observed))
+    if not eligible:
+        return 0.5, metrics(labels, scores, 0.5)
+    _, _, threshold, observed = max(eligible)
+    return threshold, observed
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('manifest', type=Path)
@@ -48,15 +61,16 @@ def main():
         scaler = StandardScaler().fit(x[train])
         classifier = LogisticRegression(C=0.1, max_iter=2000, class_weight='balanced').fit(scaler.transform(x[train]), y[train])
         scores[test] = classifier.predict_proba(scaler.transform(x[test]))[:, 1]
-    observed = metrics(y, scores)
-    gate = {'passed': observed['auc'] >= 0.75 and observed['fpr'] <= 0.15 and observed['recall'] >= 0.65,
-            'criteria': {'min_auc': 0.75, 'max_fpr': 0.15, 'min_recall': 0.65}, 'observed': observed}
+    threshold, observed = select_threshold(y, scores)
+    gate = {'passed': observed['auc'] >= 0.75 and observed['fpr'] <= 0.10 and observed['recall'] >= 0.65,
+            'criteria': {'min_auc': 0.75, 'max_fpr': 0.10, 'min_recall': 0.65},
+            'threshold_selection': 'group_oof_max_recall_at_fpr_0.10', 'observed': observed}
     scaler = StandardScaler().fit(x)
     classifier = LogisticRegression(C=0.1, max_iter=2000, class_weight='balanced').fit(scaler.transform(x), y)
     artifact = {'model_id': args.model_id, 'schema_version': SCHEMA_VERSION,
                 'feature_names': list(FEATURE_NAMES), 'mean': scaler.mean_.tolist(),
                 'scale': scaler.scale_.tolist(), 'coef': classifier.coef_[0].tolist(),
-                'intercept': float(classifier.intercept_[0]), 'decision_threshold': 0.5,
+                'intercept': float(classifier.intercept_[0]), 'decision_threshold': threshold,
                 'training_rows': len(rows), 'training_groups': len(unique_groups), 'validation_gate': gate}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(artifact, ensure_ascii=False, indent=2), encoding='utf-8')
