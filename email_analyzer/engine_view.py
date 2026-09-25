@@ -55,6 +55,14 @@ def engine_rows(result):
         rows.append(('본문 문맥 ML',STATUS_LABELS.get(status,'알 수 없는 상태'),
                      f"위험 점수 {score:.3f}" if status=='ok' and valid else '판정에 사용할 결과 없음',
                      (f"모델: {details.get('model_id','설치되지 않음')} · 학습 데이터 {details.get('training_rows','?')}건\n역할: 제목·본문의 문맥 위험 신호를 분석하고 구조 증거와 결합\n{semantic_use}") if status=='ok' else semantic.get('error','')))
+    html_pair=engines.get('html_pair_ml') or {}
+    if html_pair and html_pair.get('status')!='skipped':
+        status=html_pair.get('status','missing');details=html_pair.get('details') or {};score=html_pair.get('score')
+        pair=details.get('highest_risk_pair') or {}
+        valid=isinstance(score,(int,float)) and not isinstance(score,bool) and math.isfinite(score) and 0<=score<=1
+        rows.append(('웹페이지 구조 ML',STATUS_LABELS.get(status,'알 수 없는 상태'),
+                     f"위험 점수 {score:.3f}" if status=='ok' and valid else '판정에 사용할 결과 없음',
+                     (f"모델: {details.get('model_id')} · 검증 기준 통과\n목적지 {pair.get('target_host')} ↔ 공식 {pair.get('reference_host')}\n역할: 실제 수집 페이지와 등록된 공식 페이지의 구조 차이") if status=='ok' else html_pair.get('error','')))
     decision = result.get('decision') or {}
     review = decision.get('html_review')
     if review is not None:
@@ -105,7 +113,12 @@ def engine_rows(result):
         for ref in homepage.get('references',[]):
             lines.append(f"{ref['host']} · {'공식 근거 확인' if ref['verified'] else '공식 여부 미확인 후보'} · 수집 {ref['fetch']['status']} {ref['fetch'].get('reason','')} · 근거 {ref.get('source',ref['basis'])}")
         for comparison in homepage.get('comparisons',[]):
-            lines.append(f"{comparison['target_host']} ↔ {comparison['reference_host']} · 태그 구성 유사도 {comparison['tag_count_similarity']} · 비밀번호 입력란 {comparison['password_fields_target']}/{comparison['password_fields_reference']}")
+            lines.append(
+                f"{comparison['target_host']} ↔ {comparison['reference_host']}"
+                f" · 구조 유사도 {comparison.get('structure_similarity', comparison.get('tag_count_similarity')):.3f}"
+                f" · 태그 유사도 {comparison['tag_count_similarity']:.3f}"
+                f" · 비밀번호 입력란 {comparison['password_fields_target']}/{comparison['password_fields_reference']}"
+            )
         rows.append(('공식 홈페이지 비교', {'compared':'비교 완료','disabled':'미실행'}.get(homepage['status'], '기본 분석만' if any(x.get('status') == 'ok' for x in (result.get('page_analysis') or {}).get('pages', [])) else '비교 불가'),
                      f"비교 {len(homepage.get('comparisons',[]))}건 · 후보 {len(homepage.get('references',[]))}개 · 한도 제외 {homepage.get('omitted',0)}개", '\n'.join(lines)))
     links = result.get('link_evidence')

@@ -1105,6 +1105,9 @@ class IntegratedAnalyzer:
             from email_analyzer.pipeline import analyze_semantic_engine
             result['engine_results']['semantic_ml'] = analyze_semantic_engine(
                 msg, self.runtime_options.get('engine_config_override'))
+            from email_analyzer.pipeline import analyze_html_pair_engine
+            result['engine_results']['html_pair_ml'] = analyze_html_pair_engine(
+                homepage_comparison, self.runtime_options.get('engine_config_override'))
             
             # 결과 JSON 파일로 저장
             result_path = self.result_dir / "analysis_result.json"

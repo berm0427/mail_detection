@@ -7,6 +7,15 @@ import urllib3
 from bs4 import BeautifulSoup
 
 
+def _depth(node):
+    value = 0
+    parent = getattr(node, 'parent', None)
+    while parent is not None and getattr(parent, 'name', None) != '[document]':
+        value += 1
+        parent = getattr(parent, 'parent', None)
+    return value
+
+
 def inspect_structure(html, final_url, csp_header=None):
     soup = BeautifulSoup(html, 'html.parser')
     host = urlsplit(final_url).hostname
@@ -14,9 +23,39 @@ def inspect_structure(html, final_url, csp_header=None):
     base = urljoin(final_url, base_tag['href']) if base_tag else final_url
     from .form_observations import form_observations
     forms = form_observations(soup, final_url, csp_header)
-    return {'tag_counts': dict(Counter(t.name for t in soup.find_all(True))),
+    tags = soup.find_all(True)
+    depths = [_depth(tag) for tag in tags]
+    anchors = soup.find_all('a', href=True)
+    images = soup.find_all('img', src=True)
+    scripts = soup.find_all('script')
+    stylesheets = [tag for tag in soup.find_all('link', href=True)
+                   if 'stylesheet' in [str(value).casefold() for value in (tag.get('rel') or [])]]
+    def external(value):
+        target = urlsplit(urljoin(base, str(value))).hostname
+        return bool(target and host and target.casefold().rstrip('.') != host.casefold().rstrip('.'))
+    resource_hosts = set()
+    for tag, attribute in [(x, 'src') for x in images + [x for x in scripts if x.get('src')]] + [(x, 'href') for x in stylesheets]:
+        target = urlsplit(urljoin(base, str(tag.get(attribute, '')))).hostname
+        if target:
+            resource_hosts.add(target.casefold().rstrip('.'))
+    visible_text = ' '.join(soup.stripped_strings)
+    return {'tag_counts': dict(Counter(t.name for t in tags)),
+            'element_count': len(tags),
+            'max_depth': max(depths, default=0),
+            'mean_depth': (sum(depths) / len(depths)) if depths else 0.0,
+            'visible_text_length': len(visible_text),
+            'link_count': len(anchors),
+            'external_link_count': sum(external(tag['href']) for tag in anchors),
+            'image_count': len(images),
+            'external_image_count': sum(external(tag['src']) for tag in images),
+            'input_count': len(soup.find_all('input')),
+            'hidden_input_count': len(soup.select('input[type="hidden" i]')),
+            'button_count': len(soup.find_all('button')) + len(soup.select('input[type="submit" i], input[type="button" i]')),
+            'stylesheet_count': len(stylesheets),
+            'external_stylesheet_count': sum(external(tag['href']) for tag in stylesheets),
+            'resource_host_count': len(resource_hosts),
             'forms': forms, 'password_fields': len(soup.select('input[type="password" i]')),
-            'iframe_count': len(soup.find_all('iframe')), 'script_count': len(soup.find_all('script')),
+            'iframe_count': len(soup.find_all('iframe')), 'script_count': len(scripts),
             'external_script_count': sum(bool(urlsplit(urljoin(base,t['src'])).hostname != host) for t in soup.find_all('script',src=True)),
             'meta_refresh_count': len(soup.select('meta[http-equiv="refresh" i]'))}
 

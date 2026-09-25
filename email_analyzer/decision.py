@@ -92,6 +92,16 @@ def combine_evidence(result):
         if verdict in ('legitimate','inconclusive','no_signal'):verdict='suspicious'
     elif semantic_positive:
         reasons.append('본문 문맥 ML에서 위험 문맥을 탐지했습니다. 구조 증거를 함께 표시합니다.')
+    html_pair_ml=engines.get('html_pair_ml') or {};html_pair_score=html_pair_ml.get('score')
+    html_pair_details=html_pair_ml.get('details') or {}
+    html_pair_positive=(html_pair_ml.get('status')=='ok' and isinstance(html_pair_score,(int,float))
+                        and not isinstance(html_pair_score,bool) and math.isfinite(html_pair_score)
+                        and 0<=html_pair_score<=1 and html_pair_details.get('predicted_label')==1
+                        and (html_pair_details.get('validation_gate') or {}).get('passed') is True)
+    if html_pair_positive:
+        pair=html_pair_details.get('highest_risk_pair') or {}
+        reasons.append(f"목적지와 등록된 공식 페이지의 HTML 구조 차이를 ML이 위험 신호로 탐지했습니다: {pair.get('target_host')} ↔ {pair.get('reference_host')}.")
+        if verdict in ('legitimate','inconclusive','no_signal'):verdict='suspicious'
     rule_score=rule_result.get('risk_score', result.get('risk_score',0))
     page_analysis=result.get('page_analysis') or {}
     page_ok=any(page.get('status')=='ok' for page in page_analysis.get('pages',[]))
@@ -103,10 +113,10 @@ def combine_evidence(result):
                          (established and reference.get('official_claim_mismatch_count',0)==0 and (page_ok or registered_official)))
     weak_only=(isinstance(rule_score,(int,float)) and rule_score<10 and corroborated_benign and not auth_summary.get('failures')
                and not razor_match and not evidence_positive and not attachment_threats
-               and not attachment_alerts and not attachment_failures and not html['signals'] and not semantic_corroborated)
+               and not attachment_alerts and not attachment_failures and not html['signals'] and not semantic_corroborated and not html_pair_positive)
     no_observed_risk=(isinstance(rule_score,(int,float)) and rule_score<10 and not auth_summary.get('failures')
                       and not razor_match and not evidence_positive and not attachment_threats and not attachment_alerts
-                      and not html['signals'] and not semantic_corroborated)
+                      and not html['signals'] and not semantic_corroborated and not html_pair_positive)
     if verdict=='inconclusive' and (weak_only or no_observed_risk):
         verdict='no_signal'
         reasons.append('위험 판정 기준에 해당하는 URL·HTML·인증·첨부파일 신호가 발견되지 않았습니다.')
@@ -125,5 +135,6 @@ def combine_evidence(result):
             'semantic_ml_integrated':True,
             'semantic_ml_signal':semantic_positive,'semantic_ml_corroborated':semantic_corroborated,
             'semantic_ml_objective_signals':objective_signals,
+            'html_pair_ml_signal':html_pair_positive,
             'attachment_scan':{'threats':len(attachment_threats),'alerts':len(attachment_alerts),'failures':len(attachment_failures)},
             'reasons':reasons}
