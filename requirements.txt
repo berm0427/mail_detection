@@ -1,22 +1,37 @@
-# Core dependencies
-dnspython>=2.7.0
-python-whois>=0.9.5
-beautifulsoup4>=4.12.3
-email-validator>=2.2.0
-tldextract>=5.2.0
-PyQt5>=5.15.11
-aiohttp>=3.10.5
-requests>=2.32.3
-langdetect>=1.0.9
-sentence-transformers>=5.0.0
+# DISE email analyzer
+# Supported runtime: CPython 3.11 (64-bit)
+# Install with: python -m pip install -r requirements.txt
 
-# Scientific computing
-numpy>=1.23.5,<2.0
-scipy>=1.14.1,<2.0
+# GUI
+PyQt5>=5.15.11,<6
 
-# Additional parsing
-lxml>=5.0.0
-html5lib>=1.1
-tqdm
-pandas
+# Mail header, DNS, domain, and HTTP analysis
+dnspython>=2.7,<3
+python-whois>=0.9.5,<1
+tldextract>=5.2,<6
+aiohttp>=3.10,<4
+requests>=2.32,<3
+urllib3>=2.2,<3
+
+# HTML parsing (html.parser is built in; these are fallback parsers)
+beautifulsoup4>=4.12,<5
+lxml>=5,<7
+html5lib>=1.1,<2
+
+# Language detection and progress output
+langdetect>=1.0.9,<2
+tqdm>=4.66,<5
+
+# Context ML inference (MiniLM / sentence-transformers)
+# torch is explicit because the GUI loads the encoder at startup.
+numpy>=1.26,<3
+torch>=2.2,<3
+transformers>=4.41,<6
+sentence-transformers>=5,<7
+
+# Model training and evaluation
+scipy>=1.14,<2
 scikit-learn>=1.5,<2
+
+# Project tests
+pytest>=8,<10
