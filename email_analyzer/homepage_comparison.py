@@ -13,7 +13,9 @@ def compare_homepages(message, pages, links, brands=None, registry_path=None, di
     senders={hostname(a.rsplit('@',1)[1]) for _,a in getaddresses(message.get_all('From',[])) if '@' in a} - {None}
     display={x.get('displayed_host') for x in links.get('links',[])} - {None}
     names={str(x).casefold() for x in (brands or {}).get('extracted_brands',[])}
-    orgs={r['organization'] for r in registry['domains'] if r['organization'].casefold() in names or any(matches(h,r) for h in senders|display)}
+    orgs={r['organization'] for r in registry['domains']
+          if ({r['organization'].casefold()} | {alias.casefold() for alias in r.get('aliases', [])}) & names
+          or any(matches(h,r) for h in senders|display)}
     candidates=[]
     for r in registry['domains']:
         if r['role']=='official' and r['organization'] in orgs:

@@ -22,3 +22,9 @@ class HomepageTests(unittest.TestCase):
  def test_disabled(self):
   with patch('email_analyzer.homepage_comparison.analyze_pages') as fetch:
    self.assertEqual(compare_homepages(self.m,{}, {},disabled=True)['status'],'disabled');fetch.assert_not_called()
+ def test_brand_alias_selects_registered_organization(self):
+  registry={'status':'ok','domains':[{'domain':'official.example','organization':'Microsoft','aliases':['Outlook'],'role':'official','source':'review'}]}
+  with patch('email_analyzer.homepage_comparison.load_registry',return_value=registry),patch('email_analyzer.homepage_comparison.analyze_pages',return_value={'pages':[self.page]}):
+   result=compare_homepages(self.m,{'pages':[self.page]},{'links':[]},{'extracted_brands':['Outlook']})
+  self.assertEqual(result['status'],'compared')
+  self.assertEqual(result['references'][0]['organization'],'Microsoft')
