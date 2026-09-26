@@ -3,7 +3,7 @@ import tempfile
 import unittest
 from pathlib import Path
 from unittest.mock import Mock
-from email_analyzer.attachment_scanner import scan_attachment
+from email_analyzer.attachment_scanner import defender_product_status,scan_attachment
 
 
 class AttachmentScannerTests(unittest.TestCase):
@@ -25,6 +25,22 @@ class AttachmentScannerTests(unittest.TestCase):
         alert=scan_attachment(self.file,executable=self.tool,runner=Mock(return_value=self.result(2,b'scanning error')))
         self.assertEqual(detected['status'],'threat_detected');self.assertFalse(detected['safe'])
         self.assertEqual(alert['status'],'clean_static');self.assertIsNone(alert['safe'])
+        self.assertEqual(alert['external_scan_status'],'failed')
+        self.assertEqual(alert['external_error'],'defender_scan_failed')
+    def test_disabled_defender_is_reported_without_false_alert(self):
+        output=b'WARN: Product/Feature disabled\n[Failed][0x80004005] unspecified error'
+        result=scan_attachment(self.file,executable=self.tool,runner=Mock(return_value=self.result(2,output)))
+        self.assertEqual(result['status'],'clean_static')
+        self.assertIsNone(result['safe'])
+        self.assertEqual(result['external_scan_status'],'disabled')
+        self.assertEqual(result['external_error'],'defender_product_disabled')
+        self.assertEqual(result['external_error_code'],'0x80004005')
+        self.assertEqual(result['reason'],'internal_static_scan_clean; defender_product_disabled')
+    def test_defender_product_status_distinguishes_disabled(self):
+        defender_product_status.cache_clear()
+        runner=Mock(return_value=subprocess.CompletedProcess([],0,b'False\r\n',b''))
+        self.assertEqual(defender_product_status(runner),'disabled')
+        defender_product_status.cache_clear()
     def test_missing_scanner_and_timeout_are_not_clean(self):
         missing=scan_attachment(self.file,executable=self.root/'none.exe')
         runner=Mock(side_effect=subprocess.TimeoutExpired([],1))

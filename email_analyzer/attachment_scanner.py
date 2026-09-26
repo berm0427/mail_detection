@@ -9,6 +9,7 @@ import re
 import subprocess
 import sys
 import zipfile
+from functools import lru_cache
 
 EXECUTABLE_EXTENSIONS={'.exe','.com','.scr','.msi','.bat','.cmd','.ps1','.vbs','.js','.jse','.hta','.lnk','.dll'}
 DOCUMENT_EXTENSIONS={'.pdf','.doc','.docx','.xls','.xlsx','.ppt','.pptx','.hwp','.txt','.jpg','.jpeg','.png'}
@@ -92,12 +93,31 @@ def _decode(data: bytes) -> str:
     return data.decode('utf-8', errors='replace')
 
 
+@lru_cache(maxsize=1)
+def defender_product_status(runner=subprocess.run):
+    """Return enabled/disabled/unknown for the installed Defender service."""
+    if sys.platform != 'win32':
+        return 'unavailable'
+    command=['powershell.exe','-NoProfile','-NonInteractive','-Command',
+             '(Get-MpComputerStatus).AntivirusEnabled']
+    try:
+        completed=runner(command,capture_output=True,text=False,timeout=8,shell=False,
+                         creationflags=subprocess.CREATE_NO_WINDOW)
+    except (OSError,subprocess.TimeoutExpired):
+        return 'unknown'
+    output=_decode(completed.stdout or b'').strip().casefold()
+    if completed.returncode==0 and output=='true':
+        return 'enabled'
+    if completed.returncode==0 and output=='false':
+        return 'disabled'
+    return 'unknown'
+
+
 def scan_attachment(path, *, executable=None, timeout=90, runner=subprocess.run):
     """Run one Defender custom scan with remediation disabled.
 
-    Exit code 2 is deliberately reported as an alert rather than a confirmed
-    infection because Microsoft documents it as either an unremediated threat
-    or a scanning error.
+    Exit code 2 is never sufficient to claim an infection. Defender also uses
+    it when the product is disabled or a scan cannot start.
     """
     target = Path(path).resolve()
     base = {
@@ -108,10 +128,16 @@ def scan_attachment(path, *, executable=None, timeout=90, runner=subprocess.run)
         return {**base, 'status': 'error', 'reason': 'attachment_missing'}
     base['file_sha256'] = _sha256(target)
     base['static_findings'] = static_findings(target)
+    use_installed_defender=executable is None
     tool = Path(executable).resolve() if executable else find_defender()
     if not tool or not tool.is_file():
         return {**base, 'status': 'suspicious_structure' if base['static_findings'] else 'clean_static',
                 'safe': None, 'reason': ', '.join(base['static_findings']) if base['static_findings'] else 'internal_static_scan_clean'}
+    if use_installed_defender and defender_product_status()=='disabled':
+        return {**base,'status':'suspicious_structure' if base['static_findings'] else 'clean_static',
+                'safe':None,'reason':(', '.join(base['static_findings']) if base['static_findings']
+                                      else 'internal_static_scan_clean; defender_product_disabled'),
+                'scanner':str(tool),'external_scan_status':'disabled','external_error':'defender_product_disabled'}
     command = [str(tool), '-Scan', '-ScanType', '3', '-File', str(target), '-DisableRemediation']
     try:
         completed = runner(command, capture_output=True, text=False, timeout=timeout,
@@ -122,8 +148,12 @@ def scan_attachment(path, *, executable=None, timeout=90, runner=subprocess.run)
         return {**base, 'status': 'error', 'reason': type(exc).__name__}
     output = (_decode(completed.stdout or b'') + '\n' + _decode(completed.stderr or b'')).strip()
     output_hash = hashlib.sha256(output.encode('utf-8')).hexdigest()
+    error_code_match=re.search(r'0x[0-9a-f]{8}',output,re.I)
     details = {'return_code': int(completed.returncode), 'output_sha256': output_hash,
-               'scanner': str(tool), 'remediation_disabled': True}
+               'scanner': str(tool), 'remediation_disabled': True,
+               'external_scan_status':'completed' if completed.returncode==0 else 'failed'}
+    if error_code_match:
+        details['external_error_code']=error_code_match.group(0).lower()
     if completed.returncode == 0:
         if base['static_findings']:
             return {**base, **details, 'status': 'suspicious_structure', 'safe': None,
@@ -134,11 +164,19 @@ def scan_attachment(path, *, executable=None, timeout=90, runner=subprocess.run)
         if detected:
             return {**base, **details, 'status': 'threat_detected', 'safe': False,
                     'reason': 'Defender reported a threat'}
+        product_disabled=bool(re.search(r'product\s*/?\s*feature\s+disabled|product.{0,12}disabled|기능.{0,12}사용.{0,6}안',output,re.I))
+        if product_disabled:
+            details['external_scan_status']='disabled'
+            details['external_error']='defender_product_disabled'
+        else:
+            details['external_error']='defender_scan_failed'
         if base['static_findings']:
             return {**base, **details, 'status': 'suspicious_structure',
                     'reason': ', '.join(base['static_findings'])}
         return {**base, **details, 'status': 'clean_static',
-                'reason': 'internal_static_scan_clean; defender_scan_unavailable_or_failed'}
+                'reason': ('internal_static_scan_clean; defender_product_disabled' if product_disabled
+                           else 'internal_static_scan_clean; defender_scan_failed')}
     if base['static_findings']:
         return {**base, **details, 'status': 'suspicious_structure', 'reason': ', '.join(base['static_findings'])}
+    details['external_error']='defender_scan_failed'
     return {**base, **details, 'status': 'clean_static', 'reason': f'internal_static_scan_clean; defender_exit_{completed.returncode}'}
