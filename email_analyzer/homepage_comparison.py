@@ -34,6 +34,22 @@ def compare_homepages(message, pages, links, brands=None, registry_path=None, di
         if not verified or fetched['status']!='ok':continue
         for index,page in enumerate(pages.get('pages',[])):
             if page['status']!='ok':continue
+            structure = page.get('structure') or {}
+            target_host = page.get('requested_host')
+            registered_target = any(
+                r['organization'] == candidate.get('organization')
+                and r['role'] in ('official', 'delegated_link') and matches(target_host, r)
+                for r in registry['domains']
+            )
+            interactive_target = bool(
+                structure.get('password_fields') or structure.get('forms')
+                or structure.get('input_count')
+            )
+            # Comparing every resource or unrelated external link to the sender's
+            # homepage creates false positives. Compare registered organization
+            # pages, or an unregistered page that actually solicits user input.
+            if not registered_target and not interactive_target:
+                continue
             features=pair_features(page['structure'],fetched['structure'])
             comparisons.append({'page_index':index,'target_host':page.get('requested_host'),'reference_host':candidate['host'],
                 'feature_schema_version':SCHEMA_VERSION,'features':features,

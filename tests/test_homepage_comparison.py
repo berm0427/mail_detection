@@ -28,3 +28,9 @@ class HomepageTests(unittest.TestCase):
    result=compare_homepages(self.m,{'pages':[self.page]},{'links':[]},{'extracted_brands':['Outlook']})
   self.assertEqual(result['status'],'compared')
   self.assertEqual(result['references'][0]['organization'],'Microsoft')
+ def test_unrelated_noninteractive_page_is_not_compared(self):
+  unrelated={**self.page,'requested_host':'university.example','hops':[{'host':'university.example'}],
+             'structure':{'tag_counts':{'meta':1},'element_count':1,'input_count':0,'forms':[],'password_fields':0}}
+  result=self.run_case(self.reg,unrelated)
+  self.assertEqual(result['status'],'basic_only')
+  self.assertEqual(result['comparisons'],[])

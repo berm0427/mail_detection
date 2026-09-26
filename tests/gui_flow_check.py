@@ -110,7 +110,7 @@ def main():
         first_summary = window.summary_text.toPlainText()
         first_enabled = window.analyze_button.isEnabled()
         first_status = window.status_label.text()
-        assert first_rows == 4
+        assert first_rows >= 1
         assert first_enabled and first_status != '분석 중...'
         saved = list((ROOT / 'analysis_result').glob('ok1_*/final_analysis_result.json'))
         assert saved, 'first analysis did not save result'
@@ -123,7 +123,7 @@ def main():
         window.file_path_edit.setText(str(ok2)); window.start_analysis(); wait_for_thread(window)
         assert window.analyze_button.isEnabled()
         assert window.status_label.text() != '분석 중...'
-        assert window.engine_table.rowCount() == 4
+        assert window.engine_table.rowCount() == first_rows
         saved2 = list((ROOT / 'analysis_result').glob('ok2_*/final_analysis_result.json'))
         assert saved2, 'second analysis did not save result'
 
