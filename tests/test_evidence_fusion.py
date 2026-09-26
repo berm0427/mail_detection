@@ -3,6 +3,7 @@ import unittest
 
 from email_analyzer.evidence_fusion import EvidenceMass, experimental_fusion, fuse_masses
 from email_analyzer.fusion_baselines import all_baselines
+from email_analyzer.fusion_features import FEATURE_NAMES, fusion_feature_dict, fusion_feature_vector
 
 
 class EvidenceFusionTests(unittest.TestCase):
@@ -66,6 +67,23 @@ class EvidenceFusionTests(unittest.TestCase):
         self.assertEqual(values["simple_mean"]["sources"], 1)
         self.assertEqual(values["reliability_weighted_mean"]["sources"], 1)
         self.assertEqual(values["majority_vote"]["prediction"], 1)
+
+    def test_meta_features_do_not_read_final_verdict_or_label(self):
+        base = {"decision": {"signals": [], "attachment_scan": {}, "html_review": {}},
+                "engine_results": {}, "rule_result": {"risk_score": 0}}
+        changed = dict(base, verdict="dangerous", label=1)
+        self.assertEqual(fusion_feature_vector(base), fusion_feature_vector(changed))
+        self.assertEqual(len(fusion_feature_vector(base)), len(FEATURE_NAMES))
+
+    def test_meta_features_preserve_engine_availability(self):
+        result = {"decision": {"signals": [], "attachment_scan": {}, "html_review": {}},
+                  "engine_results": {"semantic_ml": {"score": 0.8},
+                                     "html_pair_ml": {"status": "error"}},
+                  "rule_result": {"risk_score": 25}}
+        features = fusion_feature_dict(result)
+        self.assertEqual(features["semantic_available"], 1)
+        self.assertEqual(features["html_pair_available"], 0)
+        self.assertEqual(features["rule_score"], 0.25)
 
 
 if __name__ == "__main__":
