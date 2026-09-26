@@ -9,6 +9,7 @@ import re
 import subprocess
 import sys
 import zipfile
+import shutil
 from functools import lru_cache
 
 EXECUTABLE_EXTENSIONS={'.exe','.com','.scr','.msi','.bat','.cmd','.ps1','.vbs','.js','.jse','.hta','.lnk','.dll'}
@@ -81,6 +82,33 @@ def find_defender() -> Path | None:
     return next((path.resolve() for path in roots if path.is_file()), None)
 
 
+def find_clamav() -> Path | None:
+    """Find an official ClamAV clamscan binary without requiring PATH changes."""
+    candidates=[]
+    command=shutil.which('clamscan.exe' if sys.platform=='win32' else 'clamscan')
+    if command:
+        candidates.append(Path(command))
+    if sys.platform=='win32':
+        for variable in ('ProgramFiles','ProgramFiles(x86)'):
+            root=os.environ.get(variable)
+            if root:
+                candidates.append(Path(root)/'ClamAV'/'clamscan.exe')
+        local_app_data=os.environ.get('LOCALAPPDATA')
+        if local_app_data:
+            candidates.append(Path(local_app_data)/'Programs'/'ClamAV'/'clamscan.exe')
+            portable_root=Path(local_app_data)/'DISE'/'ClamAV'
+            if portable_root.is_dir():
+                candidates.extend(sorted(portable_root.glob('*/clamscan.exe'),reverse=True))
+        # Codex desktop may virtualize LocalAppData while installing the portable runtime.
+        # Keep it usable when the GUI is later launched directly from Explorer.
+        user_profile=os.environ.get('USERPROFILE')
+        if user_profile:
+            package_root=Path(user_profile)/'AppData'/'Local'/'Packages'
+            candidates.extend(sorted(package_root.glob(
+                'OpenAI.Codex_*/LocalCache/Local/DISE/ClamAV/*/clamscan.exe'),reverse=True))
+    return next((path.resolve() for path in candidates if path.is_file()),None)
+
+
 def _decode(data: bytes) -> str:
     if data.startswith((b'\xff\xfe',b'\xfe\xff')) or (data and data.count(b'\x00')>len(data)//4):
         try:return data.decode('utf-16')
@@ -113,7 +141,36 @@ def defender_product_status(runner=subprocess.run):
     return 'unknown'
 
 
-def scan_attachment(path, *, executable=None, timeout=90, runner=subprocess.run):
+def scan_with_clamav(path, *, executable=None, timeout=120, runner=subprocess.run):
+    """Run ClamAV and preserve its documented 0/1/2 exit-code boundary."""
+    tool=Path(executable).resolve() if executable else find_clamav()
+    if not tool or not tool.is_file():
+        return {'status':'unavailable','scanner':str(tool) if tool else None}
+    command=[str(tool),'--no-summary','--infected']
+    portable_database=tool.parent/'database'
+    if portable_database.is_dir() and any(portable_database.glob('*.cvd')):
+        command.append(f'--database={portable_database}')
+    command.append(str(Path(path).resolve()))
+    try:
+        completed=runner(command,capture_output=True,text=False,timeout=timeout,shell=False,
+                         creationflags=subprocess.CREATE_NO_WINDOW if sys.platform=='win32' else 0)
+    except subprocess.TimeoutExpired:
+        return {'status':'timeout','scanner':str(tool),'error':'clamav_timeout'}
+    except OSError as exc:
+        return {'status':'error','scanner':str(tool),'error':type(exc).__name__}
+    output=(_decode(completed.stdout or b'')+'\n'+_decode(completed.stderr or b'')).strip()
+    result={'scanner':str(tool),'return_code':int(completed.returncode),
+            'output_sha256':hashlib.sha256(output.encode('utf-8')).hexdigest()}
+    if completed.returncode==0:
+        return {**result,'status':'clean'}
+    if completed.returncode==1:
+        match=re.search(r':\s*(.+?)\s+FOUND(?:\r?\n|$)',output,re.I)
+        return {**result,'status':'threat_detected','threat_name':match.group(1).strip() if match else 'ClamAV detection'}
+    return {**result,'status':'error','error':'clamav_scan_failed'}
+
+
+def scan_attachment(path, *, executable=None, timeout=90, runner=subprocess.run,
+                    clamav_executable=None, clamav_runner=subprocess.run):
     """Run one Defender custom scan with remediation disabled.
 
     Exit code 2 is never sufficient to claim an infection. Defender also uses
@@ -121,22 +178,32 @@ def scan_attachment(path, *, executable=None, timeout=90, runner=subprocess.run)
     """
     target = Path(path).resolve()
     base = {
-        'engine': 'internal_static+optional_microsoft_defender', 'path_sha256': hashlib.sha256(str(target).encode()).hexdigest(),
+        'engine': 'internal_static+optional_clamav+optional_microsoft_defender', 'path_sha256': hashlib.sha256(str(target).encode()).hexdigest(),
         'file_sha256': None, 'status': 'error', 'safe': None, 'reason': None, 'static_findings': [],
     }
     if not target.is_file():
         return {**base, 'status': 'error', 'reason': 'attachment_missing'}
     base['file_sha256'] = _sha256(target)
     base['static_findings'] = static_findings(target)
+    clamav=scan_with_clamav(target,executable=clamav_executable,runner=clamav_runner)
+    base['clamav']=clamav
+    if clamav.get('status')=='threat_detected':
+        return {**base,'status':'threat_detected','safe':False,
+                'reason':'ClamAV reported a threat','threat_name':clamav.get('threat_name')}
     use_installed_defender=executable is None
     tool = Path(executable).resolve() if executable else find_defender()
     if not tool or not tool.is_file():
-        return {**base, 'status': 'suspicious_structure' if base['static_findings'] else 'clean_static',
-                'safe': None, 'reason': ', '.join(base['static_findings']) if base['static_findings'] else 'internal_static_scan_clean'}
+        if base['static_findings']:
+            return {**base,'status':'suspicious_structure','safe':None,'reason':', '.join(base['static_findings'])}
+        if clamav.get('status')=='clean':
+            return {**base,'status':'clean','safe':True,'reason':'ClamAV scan completed; Defender unavailable'}
+        return {**base,'status':'clean_static','safe':None,'reason':'internal_static_scan_clean'}
     if use_installed_defender and defender_product_status()=='disabled':
-        return {**base,'status':'suspicious_structure' if base['static_findings'] else 'clean_static',
-                'safe':None,'reason':(', '.join(base['static_findings']) if base['static_findings']
-                                      else 'internal_static_scan_clean; defender_product_disabled'),
+        status='suspicious_structure' if base['static_findings'] else ('clean' if clamav.get('status')=='clean' else 'clean_static')
+        return {**base,'status':status,'safe':True if status=='clean' else None,
+                'reason':(', '.join(base['static_findings']) if base['static_findings'] else
+                          ('ClamAV scan completed; defender_product_disabled' if status=='clean'
+                           else 'internal_static_scan_clean; defender_product_disabled')),
                 'scanner':str(tool),'external_scan_status':'disabled','external_error':'defender_product_disabled'}
     command = [str(tool), '-Scan', '-ScanType', '3', '-File', str(target), '-DisableRemediation']
     try:

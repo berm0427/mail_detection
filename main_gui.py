@@ -382,12 +382,22 @@ class AnalysisThread(QThread):
                         'internal_static_scan_clean; defender_product_disabled': '자체 정적 검사에서 위험 구조 없음 · 다른 백신 사용으로 Defender가 비활성화됨',
                         'internal_static_scan_clean; defender_scan_failed': '자체 정적 검사에서 위험 구조 없음 · Defender 검사 시작 실패',
                         'Defender reported a threat': 'Defender가 위협을 탐지함',
+                        'ClamAV reported a threat': 'ClamAV가 위협을 탐지함',
+                        'ClamAV scan completed; Defender unavailable': 'ClamAV 검사 완료 · Defender 사용 불가',
+                        'ClamAV scan completed; defender_product_disabled': 'ClamAV 검사 완료 · 다른 백신 사용으로 Defender 비활성화',
                         'attachment_missing': '저장된 첨부파일을 찾을 수 없음',
                     }
                     reason_text = reason_labels.get(att['reason'], att['reason'])
                     summary += f"    - 검사 근거: {reason_text}\n"
                 if scan.get('external_error_code'):
                     summary += f"    - 외부 백신 오류 코드: {scan['external_error_code']}\n"
+                clamav = scan.get('clamav') or {}
+                clamav_labels = {'clean':'위험 신호 없음','threat_detected':'위협 탐지',
+                                  'unavailable':'설치되지 않음','error':'검사 오류','timeout':'검사 시간 초과'}
+                if clamav:
+                    summary += f"    - ClamAV: {clamav_labels.get(clamav.get('status'),clamav.get('status'))}\n"
+                    if clamav.get('threat_name'):
+                        summary += f"      탐지명: {clamav['threat_name']}\n"
             
             # 첨부 파일 안전성에 대한 추가 설명
             if has_unsafe_attachment:
