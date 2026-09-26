@@ -1,0 +1,23 @@
+Return-Path: <security@accounts.example>
+Received: from mail.accounts.example (mail.accounts.example [192.0.2.10]) by mx.receiver.example with ESMTPS id TEST-AR-001 for <recipient@receiver.example>; Fri, 26 Sep 2026 23:40:00 +0900
+Received-SPF: none (receiver.example: accounts.example does not designate permitted sender hosts)
+Authentication-Results: mx.receiver.example; spf=none smtp.mailfrom=accounts.example; dkim=none; dmarc=none header.from=accounts.example
+From: Account Security <security@accounts.example>
+Reply-To: Account Security <help@accounts.example>
+To: recipient@receiver.example
+Date: Fri, 26 Sep 2026 23:39:52 +0900
+Message-ID: <translation-integration-ar-001@accounts.example>
+Subject: تحقق من حسابك فورًا
+MIME-Version: 1.0
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head><meta charset="UTF-8"><title>تحقق من حسابك فورًا</title></head>
+<body>
+  <h1>تحقق من حسابك فورًا</h1>
+  <p>سيتم تعليق حسابك اليوم بسبب نشاط غير معتاد. أكد كلمة المرور فورًا لتجنب إغلاق الحساب.</p>
+  <p><a href="https://verify.example/account">https://accounts.example/security</a></p>
+</body>
+</html>

@@ -1151,6 +1151,19 @@ class IntegratedAnalyzer:
             from email_analyzer.pipeline import analyze_semantic_engine
             result['engine_results']['semantic_ml'] = analyze_semantic_engine(
                 msg, self.runtime_options.get('engine_config_override'))
+            semantic_result = result['engine_results']['semantic_ml']
+            semantic_details = semantic_result.get('details') or {}
+            if semantic_result.get('status') == 'ok':
+                score = semantic_result.get('score')
+                source_language = semantic_details.get('source_language', 'unknown')
+                if semantic_details.get('translation_status') == 'translated':
+                    logger.info(
+                        '본문 문맥 ML: %s → 한국어 로컬 번역 성공 · 위험 점수 %.3f',
+                        source_language, score)
+                else:
+                    logger.info('본문 문맥 ML: %s 원문 분석 · 위험 점수 %.3f', source_language, score)
+            else:
+                logger.warning('본문 문맥 ML: %s', semantic_result.get('error') or semantic_result.get('status'))
             from email_analyzer.pipeline import analyze_html_pair_engine
             result['engine_results']['html_pair_ml'] = analyze_html_pair_engine(
                 homepage_comparison, self.runtime_options.get('engine_config_override'))
