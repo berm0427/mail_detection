@@ -171,7 +171,7 @@ class PhishingURLDetector:
 class BodyAnalyzer:
     """이메일 본문 분석기"""
     
-    def __init__(self, keywords_dir=None):
+    def __init__(self):
         self.url_detector = PhishingURLDetector()
     
     def extract_urls(self, text):
@@ -264,8 +264,6 @@ class BodyAnalyzer:
         """텍스트 본문 분석 (URL 분석 포함)"""
         if not text:
             return {
-                "total_matches": 0, 
-                "categories": {},
                 "url_analysis": {
                     'total_urls': 0,
                     'suspicious_urls': [],
@@ -275,14 +273,9 @@ class BodyAnalyzer:
             }
         
         result = {
-            "total_matches": 0,
-            "categories": {},
-            "excluded_categories": {},
-            "context_exclusions": [],
-            "unique_scoring_matches": 0,
+            "action_signals": [],
         }
         # Direct urgent payment requests, not isolated institution names.
-        result['action_signals'] = []
         for m in re.finditer(r'(?:즉시|지금|긴급히)\s*(?:납부|송금|입금|결제)(?:해\s*주(?:시기|세요)|하(?:세요|십시오)|바랍니다)', text):
             result['action_signals'].append({'kind':'urgent_payment_request','span':list(m.span())})
 

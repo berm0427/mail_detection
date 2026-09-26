@@ -1,5 +1,4 @@
 import sys
-import json
 import os
 import traceback
 from pathlib import Path
@@ -50,11 +49,10 @@ class LogSignals(QObject):
 
 class AnalysisThread(QThread):
     """이메일 분석을 위한 별도 스레드"""
-    def __init__(self, email_path, base_dir, keywords_dir, signals, runtime_options=None):
+    def __init__(self, email_path, base_dir, signals, runtime_options=None):
         super().__init__()
         self.email_path = email_path
         self.base_dir = base_dir
-        self.keywords_dir = keywords_dir
         self.signals = signals
         self.runtime_options = dict(runtime_options or {})
         
@@ -107,7 +105,6 @@ class AnalysisThread(QThread):
             
             try:
                 analyzer = analyzer_factory(
-                    keywords_dir=self.keywords_dir,
                     result_dir=result_dir,
                     attachments_dir=attachments_dir,
                     runtime_options=self.runtime_options,
@@ -126,11 +123,6 @@ class AnalysisThread(QThread):
             if isinstance(e, FileNotFoundError):
                 error_msg += "파일 시스템 오류:\n"
                 error_msg += f" - {str(e)}\n"
-            elif isinstance(e, json.JSONDecodeError):
-                error_msg += "키워드 파일 형식 오류:\n"
-                error_msg += f" - {e.doc}\n"
-                error_msg += f" - 위치: {e.pos}, 줄: {e.lineno}, 열: {e.colno}\n"
-                error_msg += f" - 수정 방법: JSON 형식을 확인하세요. 일반적으로 따옴표, 쉼표, 괄호 등의 오류입니다.\n"
             else:
                 error_msg += "시스템 오류:\n"
                 error_msg += f" - {type(e).__name__}: {str(e)}\n"
@@ -201,73 +193,6 @@ class AnalysisThread(QThread):
         if not decision.get('signals'):
             summary += " • 판정에 반영된 위험 신호 없음\n"
 
-        # 제목 위험 키워드 정보 추가 - 로그 및 간접 추출
-        subject_keywords_count = 0
-        found_keywords = []
-        subject = ""
-        
-        # 제목 가져오기
-        if 'subject' in result:
-            subject = result['subject']
-        elif 'metadata' in result and 'Subject' in result['metadata']:
-            subject = result['metadata']['Subject']
-        
-        # 제목 키워드 수 파악 - result에서 직접 가져오기
-        for reason in result.get('reasons', []):
-            if "제목에 의심스러운 키워드" in reason:
-                match = re.search(r'제목에 의심스러운 키워드 (\d+)개', reason)
-                if match:
-                    subject_keywords_count = int(match.group(1))
-                    break
-        
-        # integration.py의 subject_suspicious_patterns 가져오기
-        try:
-            # 프로젝트 경로 구하기
-            project_root = self.base_dir
-            integration_path = project_root / "email_analyzer" / "integration.py"
-            
-            if integration_path.exists():
-                with open(integration_path, 'r', encoding='utf-8') as f:
-                    content = f.read()
-                
-                # subject_suspicious_patterns 변수 찾기
-                pattern = r"subject_suspicious_patterns\s*=\s*\[(.*?)\]"
-                matches = re.search(pattern, content, re.DOTALL)
-                
-                if matches:
-                    patterns_block = matches.group(1)
-                    
-                    # 각 패턴에서 키워드 추출
-                    keywords_from_patterns = []
-                    for line in patterns_block.split('\n'):
-                        line = line.strip()
-                        if line.startswith('r\'') or line.startswith('r"'):
-                            # 정규식 패턴에서 키워드 추출
-                            pattern_match = re.search(r'r[\'"](.+?)[\'"]', line)
-                            if pattern_match:
-                                pattern = pattern_match.group(1)
-                                # '|' 구분자로 나눠진 키워드 추출
-                                keywords = pattern.split('|')
-                                for keyword in keywords:
-                                    # 정규식 이스케이프 문자 제거
-                                    keyword = re.sub(r'\\', '', keyword)
-                                    if keyword and keyword not in keywords_from_patterns:
-                                        keywords_from_patterns.append(keyword)
-                    
-                    # 제목에서 키워드 찾기
-                    if subject:
-                        for keyword in keywords_from_patterns:
-                            if keyword in subject and keyword not in found_keywords:
-                                found_keywords.append(keyword)
-                                if len(found_keywords) >= subject_keywords_count:
-                                    break
-        except Exception as e:
-            self.signals.log_message.emit(f"subject_suspicious_patterns 패턴 추출 오류: {e}")
-        
-        # 키워드 정보가 있으면 표시
-        if subject_keywords_count > 0:
-            summary += f"\n[제목 위험 키워드: {subject_keywords_count}개 발견]\n"
-        
         # 도메인 평판 정보 추가
         if header.get('sender_domain'):
             sender_domain = header.get('sender_domain', '알 수 없음')
@@ -312,16 +237,6 @@ class AnalysisThread(QThread):
             else:
                 summary += f" ℹ️ 도메인 정보를 확인할 수 없습니다.\n"
                 
-        # 본문 분석 요약
-        if body.get('total_matches', 0) > 0:
-            summary += f"\n[본문 위험 패턴: {body.get('total_matches', 0)}개 발견]\n"
-            for category, info in body.get('categories', {}).items():
-                if 'examples' in info:
-                    examples = ', '.join(f'"{ex}"' for ex in info['examples'][:3])
-                    summary += f" - {category}: {info['count']}건 (발견: {examples})\n"
-                else:
-                    summary += f" - {category}: {info['count']}건\n"
-        
         # 첨부 파일 정보
         if result.get('attachments'):
             summary += f"\n[첨부 파일: {len(result['attachments'])}개]\n"
@@ -429,9 +344,6 @@ class AnalysisThread(QThread):
             if header.get('impersonation') == 'suspected':
                 summary += f" ⚠️ 사칭 가능성 있음: {header.get('impersonation_reason', '')}\n"
         
-        if body.get('context_exclusions'):
-            summary += "\n[문맥 참고] 명시적인 요구 부재 안내의 키워드는 가산에서 제외했습니다. 다른 문장과 URL은 별도로 검사합니다.\n"
-
         # 헤더 검증 정보 요약
         if header:
             summary += "\n[헤더 검증 결과]\n"
@@ -689,7 +601,6 @@ class EmailAnalyzerGUI(QMainWindow):
         self.analysis_thread = AnalysisThread(
             filepath, 
             self.base_dir, 
-            None,
             self.signals,
             runtime_options=self.runtime_options,
         )

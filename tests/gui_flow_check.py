@@ -33,7 +33,7 @@ def make_eml(path, subject, body):
 class FakeAnalyzer:
     calls = 0
 
-    def __init__(self, keywords_dir, result_dir=None, attachments_dir=None, runtime_options=None):
+    def __init__(self, result_dir=None, attachments_dir=None, runtime_options=None):
         self.result_dir = Path(result_dir)
         self.attachments_dir = Path(attachments_dir)
 

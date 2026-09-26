@@ -55,7 +55,7 @@ from email_analyzer.body_analyzer import BodyAnalyzer
 class IntegratedAnalyzer:
     """통합 이메일 분석기"""
         
-    def __init__(self, keywords_dir, result_dir=None, attachments_dir=None, runtime_options=None):
+    def __init__(self, result_dir=None, attachments_dir=None, runtime_options=None):
         self.runtime_options = dict(runtime_options or {})
         self.header_analyzer = EmailHeaderAnalyzer()
         self.body_analyzer = BodyAnalyzer()
@@ -923,7 +923,7 @@ class IntegratedAnalyzer:
                 span_texts = re.findall(r'<span[^>]*>([^<]+)</span>', html)
                 div_texts = re.findall(r'<div[^>]*>([^<]+)</div>', html)
                 
-                # 제목에서 키워드 추출
+                # 짧은 HTML에서도 제목과 링크 텍스트를 보존한다.
                 subject = self.current_email_subject if hasattr(self, 'current_email_subject') else ""
                 
                 # 모든 텍스트 조합
