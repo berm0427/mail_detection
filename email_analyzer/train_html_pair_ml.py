@@ -8,7 +8,7 @@ from pathlib import Path
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import confusion_matrix, roc_auc_score
-from sklearn.model_selection import GroupKFold
+from sklearn.model_selection import StratifiedGroupKFold
 from sklearn.preprocessing import StandardScaler
 
 from email_analyzer.html_pair_features import FEATURE_NAMES, SCHEMA_VERSION
@@ -23,12 +23,28 @@ def metrics(labels, scores, threshold=0.5):
             'recall': float(tp / (tp + fn)) if tp + fn else 0.0}
 
 
-def select_threshold(labels, scores, max_fpr=0.10, min_recall=0.65):
+def slice_metrics(labels, scores, threshold):
+    predictions = (scores >= threshold).astype(int)
+    tn, fp, fn, tp = confusion_matrix(labels, predictions, labels=[0, 1]).ravel()
+    result = {'n': len(labels), 'tn': int(tn), 'fp': int(fp), 'fn': int(fn), 'tp': int(tp),
+              'fpr': float(fp / (fp + tn)) if fp + tn else None,
+              'recall': float(tp / (tp + fn)) if tp + fn else None}
+    result['auc'] = float(roc_auc_score(labels, scores)) if len(set(labels.tolist())) == 2 else None
+    return result
+
+
+def select_threshold(labels, scores, max_fpr=0.10, min_recall=0.65, normal_slices=()):
     candidates = sorted(set(float(score) for score in scores))
     eligible = []
     for threshold in candidates:
         observed = metrics(labels, scores, threshold)
-        if observed['fpr'] <= max_fpr and observed['recall'] >= min_recall:
+        slice_fprs = []
+        for mask in normal_slices:
+            slice_observed = slice_metrics(labels[mask], scores[mask], threshold)
+            if slice_observed['fpr'] is not None:
+                slice_fprs.append(slice_observed['fpr'])
+        if (observed['fpr'] <= max_fpr and observed['recall'] >= min_recall and
+                all(value <= max_fpr for value in slice_fprs)):
             eligible.append((observed['recall'], -observed['fpr'], threshold, observed))
     if not eligible:
         return 0.5, metrics(labels, scores, 0.5)
@@ -55,23 +71,56 @@ def main():
     if len(unique_groups) < args.folds or set(y) != {0, 1}:
         raise ValueError('Both labels and enough independent groups are required')
     scores = np.zeros(len(rows))
-    for train, test in GroupKFold(args.folds).split(x, y, groups):
+    splitter = StratifiedGroupKFold(n_splits=args.folds, shuffle=True, random_state=42)
+    for train, test in splitter.split(x, y, groups):
         if set(y[train]) != {0, 1} or set(y[test]) != {0, 1}:
             raise ValueError('Each group fold must contain both labels')
         scaler = StandardScaler().fit(x[train])
         classifier = LogisticRegression(C=0.1, max_iter=2000, class_weight='balanced').fit(scaler.transform(x[train]), y[train])
         scores[test] = classifier.predict_proba(scaler.transform(x[test]))[:, 1]
-    threshold, observed = select_threshold(y, scores)
+    roles = np.asarray([str(row.get('corpus_role') or 'unspecified') for row in rows])
+    normal_slices = tuple((roles == role) for role in sorted(set(roles.tolist()))
+                          if np.any((roles == role) & (y == 0)))
+    threshold, observed = select_threshold(y, scores, normal_slices=normal_slices)
+    evaluation_slices = {
+        role: slice_metrics(y[roles == role], scores[roles == role], threshold)
+        for role in sorted(set(roles.tolist()))
+    }
+    korean_normal = evaluation_slices.get('korean_official_normal')
+    korean_normal_passed = bool(korean_normal and korean_normal['n'] >= 20 and
+                                korean_normal['fpr'] is not None and korean_normal['fpr'] <= 0.10)
+    corpus_normal_fpr_passed = all(
+        values['fpr'] is None or values['fpr'] <= 0.10
+        for values in evaluation_slices.values()
+    )
     gate = {'passed': observed['auc'] >= 0.75 and observed['fpr'] <= 0.10 and observed['recall'] >= 0.65,
             'criteria': {'min_auc': 0.75, 'max_fpr': 0.10, 'min_recall': 0.65},
-            'threshold_selection': 'group_oof_max_recall_at_fpr_0.10', 'observed': observed}
+            'threshold_selection': 'stratified_group_oof_max_recall_at_fpr_0.10_per_corpus',
+            'observed': observed, 'evaluation_slices': evaluation_slices,
+            'corpus_normal_fpr_gate': {'passed': corpus_normal_fpr_passed, 'max_fpr': 0.10},
+            'korean_official_normal_gate': {
+                'passed': korean_normal_passed, 'criteria': {'min_rows': 20, 'max_fpr': 0.10},
+                'observed': korean_normal,
+            }}
+    gate['passed'] = bool(gate['passed'] and korean_normal_passed and corpus_normal_fpr_passed)
     scaler = StandardScaler().fit(x)
     classifier = LogisticRegression(C=0.1, max_iter=2000, class_weight='balanced').fit(scaler.transform(x), y)
+    corpus_roles = {}
+    corpus_groups = {}
+    for row in rows:
+        role = str(row.get('corpus_role') or 'unspecified')
+        corpus_roles[role] = corpus_roles.get(role, 0) + 1
+        corpus_groups.setdefault(role, set()).add(str(row['group_id']))
+    provenance = {
+        role: {'rows': corpus_roles[role], 'groups': len(corpus_groups[role])}
+        for role in sorted(corpus_roles)
+    }
     artifact = {'model_id': args.model_id, 'schema_version': SCHEMA_VERSION,
                 'feature_names': list(FEATURE_NAMES), 'mean': scaler.mean_.tolist(),
                 'scale': scaler.scale_.tolist(), 'coef': classifier.coef_[0].tolist(),
                 'intercept': float(classifier.intercept_[0]), 'decision_threshold': threshold,
-                'training_rows': len(rows), 'training_groups': len(unique_groups), 'validation_gate': gate}
+                'training_rows': len(rows), 'training_groups': len(unique_groups),
+                'training_provenance': provenance, 'validation_gate': gate}
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(artifact, ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(gate, ensure_ascii=False, indent=2))

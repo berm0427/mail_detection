@@ -59,6 +59,9 @@ def main():
                 continue
             output = {
                 'label': row['label'], 'group_id': str(row['group_id']),
+                'corpus_role': str(row.get('corpus_role') or 'unspecified'),
+                'source': str(row.get('source') or ''),
+                'reviewed_at': str(row.get('reviewed_at') or ''),
                 'target': target_source, 'reference': reference_source,
                 'schema_version': SCHEMA_VERSION,
                 'features': pair_features(
