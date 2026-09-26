@@ -47,12 +47,13 @@ def profile(row):
 def main():
     parser=argparse.ArgumentParser();parser.add_argument('metadata',type=Path);parser.add_argument('eml_directory',type=Path);parser.add_argument('output',type=Path)
     args=parser.parse_args();rows=[];groups={}
+    eml_index={path.stem:path.resolve() for path in args.eml_directory.rglob('*.eml')}
     for line_no,line in enumerate(args.metadata.read_text(encoding='utf-8').splitlines(),1):
         if not line.strip():continue
         row=json.loads(line);split=row.get('split');group=row.get('scenario_id');label=row.get('label_id')
         if split not in ('train','validation','test') or label not in (0,1) or not group:raise ValueError(f'invalid row {line_no}')
-        groups.setdefault(group,set()).add(split);eml=(args.eml_directory/f"{row['id']}.eml").resolve()
-        if not eml.is_file():raise FileNotFoundError(eml)
+        groups.setdefault(group,set()).add(split);eml=eml_index.get(str(row['id']))
+        if not eml or not eml.is_file():raise FileNotFoundError(row['id'])
         rows.append({'eml':str(eml),'label':label,'split':split,'group_id':group,'analysis':profile(row)})
     if any(len(splits)>1 for splits in groups.values()):raise ValueError('scenario group leakage')
     args.output.parent.mkdir(parents=True,exist_ok=True)
