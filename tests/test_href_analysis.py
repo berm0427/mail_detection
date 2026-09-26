@@ -5,6 +5,10 @@ from email_analyzer.link_evidence import collect_href_urls
 from email_analyzer.body_analyzer import BodyAnalyzer
 
 class HrefTests(unittest.TestCase):
+    def test_body_text_does_not_emit_keyword_action_signals(self):
+        result = BodyAnalyzer().analyze_text('지금 즉시 송금하세요')
+        self.assertNotIn('action_signals', result)
+
     def msg(self, html):
         m=EmailMessage();m.set_content(html,subtype='html');return m
     def test_destination_and_dedup(self):

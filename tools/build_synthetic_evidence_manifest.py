@@ -39,7 +39,7 @@ def profile(row):
             'domain_relationships':relationships},
         'page_analysis':{'status':'not_collected','pages':[]},
         'rule_result':{'auth_summary':{'failures':failures,'limitations':limitations,'errors':[]}},
-        'body':{'categories':{},'action_signals':[]},'attachments':attachment,
+        'body':{},'attachments':attachment,
         'engine_results':{'numerical_features':{'details':{'features':{
             'executable_attachment_count':int(bool(attachment and Path(attachment[0]['filename']).suffix.lower() in EXECUTABLE))}}}},
     }

@@ -106,6 +106,17 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['risk_score'],30)
         self.assertEqual(result['verdict'],'suspicious')
 
+    def test_content_word_list_signal_does_not_change_rule_score(self):
+        body = {'action_signals': [{'kind': 'urgent_payment_request'}]}
+        result = score_rules(
+            {'spf_check': 'pass', 'dkim_check': 'pass', 'dmarc_check': 'pass'},
+            body,
+            {},
+            {},
+        )
+        self.assertEqual(result['risk_score'], 0)
+        self.assertEqual(result['verdict'], 'legitimate')
+
     def test_sender_insertable_authentication_results_is_not_verified_pass(self):
         body={'total_matches':0,'categories':{}}
         msg=EmailMessage();msg['Authentication-Results']='mx.example; spf=pass dkim=pass dmarc=pass'

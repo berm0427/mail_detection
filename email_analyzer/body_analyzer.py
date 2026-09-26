@@ -22,8 +22,6 @@ class PhishingURLDetector:
         # 4. URL 단축 서비스
         self.url_shortener = re.compile(r'https?://(bit\.ly|tinyurl|t\.co|goo\.gl|ow\.ly|short\.link|tiny\.cc|is\.gd|buff\.ly)', re.IGNORECASE)
         
-        # 5. 의심스러운 키워드가 포함된 도메인 - 정확한 브랜드 사칭만 탐지
-        self.suspicious_keywords = re.compile(r'(secure|login|verify|update|confirm|account)[-.]?(bank|paypal|amazon|apple|google|microsoft|naver|kakao|samsung)[-.]?\w*\.(com|net|org|co\.kr)', re.IGNORECASE)
         
         # 6. 과도한 하이픈 사용 (3개 이상 연속)
         self.excessive_hyphens = re.compile(r'https?://[^/]*-{3,}[^/]*', re.IGNORECASE)
@@ -31,8 +29,6 @@ class PhishingURLDetector:
         # 7. 도메인에 의심스러운 숫자 패턴 (도메인 부분만, 경로 제외)
         self.numeric_domain = re.compile(r'https?://[^/]*[0-9]{5,}[^/]*/', re.IGNORECASE)  # 5자리 이상 숫자
         
-        # 8. 유명 브랜드명 뒤에 추가 문자 - 더 정교한 패턴
-        self.brand_impersonation = re.compile(r'(naver|daum|kakao|samsung|lotte|hyundai|lg|sk|kt|payco|toss|kbank|woori|shinhan|hana|nh|keb)[-_][a-z0-9]{3,}\.(com|net|org|co\.kr)', re.IGNORECASE)
         
         # 9. 과도하게 긴 URL (150자 이상으로 완화)
         self.long_url = re.compile(r'^.{150,}$')
@@ -64,8 +60,6 @@ class PhishingURLDetector:
         # 18. 신뢰할 수 있는 도메인 패턴 (화이트리스트)
         self.trusted_domains = re.compile(r'https?://[^/]*\.(edu|gov|mil|org|ac\.kr|go\.kr|re\.kr)(?:/|$)', re.IGNORECASE)
         
-        # 19. 신뢰할 수 있는 브랜드 도메인
-        self.trusted_brands = re.compile(r'https?://(?:www\.)?(hacktheon|github|gitlab|stackoverflow|microsoft|google|apple|amazon|naver|kakao|daum)\.(?:org|com|net|co\.kr)(?:/|$)', re.IGNORECASE)
 
     def detect_phishing_features(self, url):
         """URL에서 피싱 특징들을 탐지 (개선된 버전)"""
@@ -73,18 +67,15 @@ class PhishingURLDetector:
         
         # 먼저 신뢰할 수 있는 도메인인지 확인
         is_trusted_domain = bool(self.trusted_domains.search(url))
-        is_trusted_brand = bool(self.trusted_brands.search(url))
         
-        if is_trusted_domain or is_trusted_brand:
+        if is_trusted_domain:
             # 신뢰할 수 있는 도메인은 완화된 기준 적용
             features['has_ip'] = bool(self.ip_pattern.search(url))
             features['suspicious_tld'] = False  # 신뢰 도메인은 TLD 검사 제외
             features['long_subdomain'] = False  # 신뢰 도메인은 서브도메인 검사 완화
             features['url_shortener'] = bool(self.url_shortener.search(url))
-            features['suspicious_keywords'] = False  # 신뢰 도메인은 키워드 검사 제외
             features['excessive_hyphens'] = bool(self.excessive_hyphens.search(url))
             features['numeric_domain'] = False  # 신뢰 도메인은 숫자 검사 제외
-            features['brand_impersonation'] = False  # 신뢰 도메인은 브랜드 사칭 제외
             features['long_url'] = bool(self.long_url.search(url))
             features['suspicious_params'] = bool(self.suspicious_params.search(url))
             features['confusing_chars'] = bool(self.confusing_chars.search(url))
@@ -98,10 +89,8 @@ class PhishingURLDetector:
             features['suspicious_tld'] = bool(self.suspicious_tld.search(url))
             features['long_subdomain'] = bool(self.long_subdomain.search(url))
             features['url_shortener'] = bool(self.url_shortener.search(url))
-            features['suspicious_keywords'] = bool(self.suspicious_keywords.search(url))
             features['excessive_hyphens'] = bool(self.excessive_hyphens.search(url))
             features['numeric_domain'] = bool(self.numeric_domain.search(url))
-            features['brand_impersonation'] = bool(self.brand_impersonation.search(url))
             features['long_url'] = bool(self.long_url.search(url))
             features['suspicious_params'] = bool(self.suspicious_params.search(url))
             features['confusing_chars'] = bool(self.confusing_chars.search(url))
@@ -120,19 +109,16 @@ class PhishingURLDetector:
         
         # 신뢰할 수 있는 도메인 확인
         is_trusted_domain = bool(self.trusted_domains.search(url))
-        is_trusted_brand = bool(self.trusted_brands.search(url))
         
-        if is_trusted_domain or is_trusted_brand:
+        if is_trusted_domain:
             # 신뢰할 수 있는 도메인은 가중치 대폭 완화
             weights = {
                 'has_ip': 30,           # IP 사용은 여전히 의심
                 'suspicious_tld': 0,    # TLD 검사 제외
                 'long_subdomain': 0,    # 서브도메인 검사 제외
                 'url_shortener': 10,    # 단축 URL 완화
-                'suspicious_keywords': 0, # 키워드 검사 제외
                 'excessive_hyphens': 5,
                 'numeric_domain': 0,    # 숫자 도메인 검사 제외
-                'brand_impersonation': 0, # 브랜드 사칭 제외
                 # 추적·서명 URL도 흔히 길어지므로 길이만으로 위험 점수를 주지 않는다.
                 # 특성 자체는 관측·향후 ML 입력을 위해 유지한다.
                 'long_url': 0,
@@ -149,10 +135,8 @@ class PhishingURLDetector:
                 'suspicious_tld': 15,
                 'long_subdomain': 10,
                 'url_shortener': 8,
-                'suspicious_keywords': 20,
                 'excessive_hyphens': 5,
                 'numeric_domain': 12,   # 숫자 도메인 가중치 증가
-                'brand_impersonation': 25,
                 # URL 길이는 단독 피싱 증거가 아니다. 다른 구조 신호만 점수화한다.
                 'long_url': 0,
                 'suspicious_params': 15,
@@ -272,12 +256,7 @@ class BodyAnalyzer:
                 }
             }
         
-        result = {
-            "action_signals": [],
-        }
-        # Direct urgent payment requests, not isolated institution names.
-        for m in re.finditer(r'(?:즉시|지금|긴급히)\s*(?:납부|송금|입금|결제)(?:해\s*주(?:시기|세요)|하(?:세요|십시오)|바랍니다)', text):
-            result['action_signals'].append({'kind':'urgent_payment_request','span':list(m.span())})
+        result = {}
 
         # 2. URL 분석
         url_analysis = self.analyze_urls(text, additional_urls)

@@ -141,8 +141,6 @@ def score_rules(header, body, url, brand, reference=None):
     if url.get('risk_score',0) > 0:
         points=min(url['risk_score'],30)
         score += points; reasons.append(f'의심스러운 URL: +{points}')
-    if any(x.get('kind') == 'urgent_payment_request' for x in body.get('action_signals', [])):
-        score += 25; reasons.append('즉시 납부·송금을 요구하는 문장: +25')
     claim_mismatches = int((reference or {}).get('official_claim_mismatch_count', 0) or 0)
     if claim_mismatches:
         points = min(claim_mismatches * 30, 30)
