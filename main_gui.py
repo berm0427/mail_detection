@@ -29,6 +29,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QH
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject
 from PyQt5.QtGui import QIcon
 
+_NATIVE_ICON_HANDLES = []
 
 
 # 이모티콘 설정
@@ -50,6 +51,24 @@ def application_icon_path():
         if candidate.is_file():
             return candidate
     return None
+
+
+def apply_native_windows_icon(window, icon_path):
+    """Apply both Windows taskbar icon sizes to the native window handle."""
+    if sys.platform != 'win32' or not icon_path or icon_path.suffix.lower() != '.ico':
+        return
+    try:
+        import ctypes
+        load_image = ctypes.windll.user32.LoadImageW
+        load_image.restype = ctypes.c_void_p
+        handle = load_image(None, str(icon_path), 1, 0, 0, 0x10)
+        if handle:
+            _NATIVE_ICON_HANDLES.append(handle)
+            hwnd = int(window.winId())
+            ctypes.windll.user32.SendMessageW(hwnd, 0x0080, 0, handle)
+            ctypes.windll.user32.SendMessageW(hwnd, 0x0080, 1, handle)
+    except (AttributeError, OSError, TypeError, ValueError):
+        pass
 
 
 def build_analysis_summary(result):
@@ -464,11 +483,13 @@ def main():
     if sys.platform == 'win32':
         try:
             import ctypes
-            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('DISE.EmailAnalyzer')
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('DISE.EmailAnalyzer.2026')
         except (AttributeError, OSError):
             pass
 
     app = QApplication(sys.argv)
+    app.setApplicationName('DISE 이메일 분석 시스템')
+    app.setOrganizationName('DISE')
     icon_path = application_icon_path()
     if icon_path:
         app.setWindowIcon(QIcon(str(icon_path)))
@@ -490,6 +511,7 @@ def main():
     
     window = EmailAnalyzerGUI()
     window.show()
+    apply_native_windows_icon(window, icon_path)
     sys.exit(app.exec_())
 
 
