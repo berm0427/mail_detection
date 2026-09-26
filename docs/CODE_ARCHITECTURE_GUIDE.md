@@ -10,7 +10,7 @@
 
 - `email_analyzer/engines/semantic_ml.py`: 제목·본문 문맥 모델
 - `email_analyzer/engines/html_pair_ml.py`: 목적지와 공식 페이지 HTML 구조 쌍 모델
-- `models/dise-semantic-synthetic-v2-groupcv.json`: 현재 문맥 모델
+- `models/dise-multilingual-semantic-v3.json`: 현재 다국어 문맥 모델
 - `email_analyzer/text_translation.py`: 비한국어 제목·본문을 로컬에서 한국어로 정규화하는 선택 경로
 
 비한국어 제목·본문은 로컬 `M2M100 418M` 번역 모델이 지원하는 경우 한국어로 변환한 뒤

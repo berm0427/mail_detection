@@ -51,7 +51,7 @@ class SemanticMLEngine:
             return EngineResult(self.name,'ok',score,{'model_id':artifact['model_id'],'predicted_label':int(score>=float(artifact.get('decision_threshold',.5))),
                 'decision_threshold':float(artifact.get('decision_threshold',.5)),'training_rows':artifact.get('training_rows'),
                 'role':'context_evidence','requires_objective_corroboration':True,
-                'selection':'scenario_group_cv','translation_status':translation['status'],
+                'selection':artifact.get('selection','unspecified'),'translation_status':translation['status'],
                 'source_language':translation['source_language'],'translated_to':'ko' if translation['translated'] else None})
         except (OSError,ValueError,TypeError,KeyError,ImportError,OverflowError) as exc:
             return EngineResult(self.name,'error',error=f'본문 문맥 ML 실행 실패: {type(exc).__name__}: {exc}')

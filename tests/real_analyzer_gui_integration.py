@@ -150,7 +150,9 @@ def main():
     # Match the supported GUI launcher: load the native semantic runtime before
     # importing header/GUI modules that may load other Windows DLLs.
     from email_analyzer.engines.semantic_ml import preload_semantic_encoder
-    preload_semantic_encoder(ROOT / 'models' / 'dise-semantic-synthetic-v2-groupcv.json')
+    import json
+    configured = json.loads((ROOT / 'engine_config.json').read_text(encoding='utf-8'))['semantic_ml_model']
+    preload_semantic_encoder(ROOT / configured)
     RUN_ROOT.mkdir(parents=True, exist_ok=False)
     INPUT_DIR.mkdir(parents=True, exist_ok=True)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)

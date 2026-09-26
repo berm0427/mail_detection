@@ -138,6 +138,7 @@ $EngineConfig = Join-Path $ProjectRoot 'engine_config.json'
 $ClamSetup = Join-Path $ProjectRoot 'tools\setup_clamav.py'
 $LanguageSetup = Join-Path $ProjectRoot 'tools\setup_language_models.py'
 $TranslationModel = Join-Path $WorkRoot 'models\m2m100_418M'
+$EmbeddingModel = Join-Path $WorkRoot 'models\multilingual-minilm-l12-v2'
 
 Write-Host '=== User acceptance GUI launcher preflight ==='
 
@@ -179,6 +180,33 @@ else {
         }
         else {
             Write-WarnLine 'Translation model download failed. The GUI will continue; foreign-language context ML will be skipped.'
+        }
+    }
+}
+
+$EmbeddingMarkers = @('modules.json', 'config.json')
+$EmbeddingReady = $true
+foreach ($Marker in $EmbeddingMarkers) {
+    if (-not (Test-Path -LiteralPath (Join-Path $EmbeddingModel $Marker))) {
+        $EmbeddingReady = $false
+    }
+}
+if ($EmbeddingReady) {
+    Write-Ok 'Local multilingual semantic embedding model'
+}
+else {
+    if ($CheckOnly) {
+        Write-WarnLine 'Local multilingual semantic embedding model is missing. A normal launch will download it automatically.'
+    }
+    else {
+        Write-Host 'Local multilingual semantic embedding model is missing or incomplete. Downloading it now...'
+        & $PythonExe -B $LanguageSetup --root (Join-Path $WorkRoot 'models') --model multilingual_embedding
+        if ($LASTEXITCODE -eq 0) {
+            $EmbeddingReady = $true
+            Write-Ok 'Local multilingual semantic embedding model downloaded and verified'
+        }
+        else {
+            Write-WarnLine 'Semantic embedding model download failed. The GUI will continue without context ML.'
         }
     }
 }

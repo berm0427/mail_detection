@@ -101,7 +101,8 @@ def main() -> None:
                 "embedding_model_path": str(args.embedding_model.resolve()), "decision_threshold": .5,
                 "mean": scaler.mean_.tolist(), "scale": scaler.scale_.tolist(),
                 "coef": selected.coef_[0].tolist(), "intercept": float(selected.intercept_[0]),
-                "regularization_c": selected_c, "manifest_sha256": digest}
+                "regularization_c": selected_c, "manifest_sha256": digest,
+                "training_rows": int(train.sum()), "selection": "validation_split"}
     report = {"rows": len(rows), "split_counts": {s: int((splits == s).sum()) for s in ("train", "validation", "test")},
               "selection_used_external_data": False, "trials": trials, "selected_c": selected_c,
               "validation": validation_metrics, "test": test_metrics,
