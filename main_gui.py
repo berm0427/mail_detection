@@ -27,6 +27,7 @@ from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout, QH
                             QTextEdit, QProgressBar, QMessageBox, QFrame, QGroupBox, 
                             QStatusBar, QSplitter, QTableWidget, QTableWidgetItem, QHeaderView)
 from PyQt5.QtCore import Qt, QThread, pyqtSignal, QObject
+from PyQt5.QtGui import QIcon
 
 
 
@@ -39,6 +40,16 @@ EMOJI = {
     "no_signal": "ℹ️ 탐지된 위험 신호 없음",
     "error": "❌ 오류"
 }
+
+
+def application_icon_path():
+    """Return the bundled icon path for source and frozen executions."""
+    base_dir = Path(getattr(sys, '_MEIPASS', Path(__file__).resolve().parent))
+    for filename in ('app_icon.ico', 'app_icon.png'):
+        candidate = base_dir / 'assets' / filename
+        if candidate.is_file():
+            return candidate
+    return None
 
 
 def build_analysis_summary(result):
@@ -227,6 +238,9 @@ class EmailAnalyzerGUI(QMainWindow):
         
     def setup_ui(self):
         self.setWindowTitle("이메일 분석 시스템")
+        icon_path = application_icon_path()
+        if icon_path:
+            self.setWindowIcon(QIcon(str(icon_path)))
         self.setGeometry(100, 100, 900, 700)
         self.setMinimumSize(700, 600)
         
@@ -447,8 +461,17 @@ class EmailAnalyzerGUI(QMainWindow):
 
 
 def main():
-    
+    if sys.platform == 'win32':
+        try:
+            import ctypes
+            ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID('DISE.EmailAnalyzer')
+        except (AttributeError, OSError):
+            pass
+
     app = QApplication(sys.argv)
+    icon_path = application_icon_path()
+    if icon_path:
+        app.setWindowIcon(QIcon(str(icon_path)))
     
     # 애플리케이션 폰트 설정
     font = app.font()

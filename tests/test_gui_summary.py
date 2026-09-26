@@ -1,9 +1,14 @@
 import unittest
 
-from main_gui import build_analysis_summary
+from main_gui import application_icon_path, build_analysis_summary
 
 
 class GuiSummaryTests(unittest.TestCase):
+    def test_application_icon_is_available(self):
+        icon_path = application_icon_path()
+        self.assertIsNotNone(icon_path)
+        self.assertTrue(icon_path.is_file())
+
     def test_summary_contains_only_reflected_decision_evidence(self):
         result = {
             'verdict': 'suspicious', 'session_path': 'email8_test',
