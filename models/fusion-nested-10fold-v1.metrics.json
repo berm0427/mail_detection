@@ -1,0 +1,400 @@
+{
+  "protocol": "nested_stratified_group_cv_with_oof_stacking",
+  "rows": 10000,
+  "groups": 15,
+  "outer_folds": 10,
+  "inner_folds": 5,
+  "feature_names": [
+    "signal:attachment_malware",
+    "signal:official_domain_confusable",
+    "signal:unsafe_password_route",
+    "signal:authentication_failure",
+    "signal:semantic_ml_corroborated",
+    "signal:html_pair_ml_positive",
+    "signal:razor_catalogue_match",
+    "signal:attachment_structure_alert",
+    "signal:legacy_rule_threshold",
+    "semantic_score",
+    "semantic_available",
+    "html_pair_score",
+    "html_pair_available",
+    "rule_score",
+    "authentication_failure_count",
+    "attachment_threat_count",
+    "attachment_alert_count",
+    "attachment_failure_count",
+    "display_target_mismatch_count",
+    "official_claim_mismatch_count",
+    "page_success_count",
+    "html_structure_signal_count",
+    "unavailable_engine_count"
+  ],
+  "semantic_only": {
+    "n": 10000,
+    "auc": 0.9988718000000001,
+    "accuracy": 0.9885,
+    "tn": 4991,
+    "fp": 9,
+    "fn": 106,
+    "tp": 4894,
+    "fpr": 0.0018,
+    "recall": 0.9788
+  },
+  "models": {
+    "structure_logistic": {
+      "n": 10000,
+      "auc": 0.8035589999999999,
+      "accuracy": 0.8248,
+      "tn": 4798,
+      "fp": 202,
+      "fn": 1550,
+      "tp": 3450,
+      "fpr": 0.0404,
+      "recall": 0.69
+    },
+    "fusion_logistic": {
+      "n": 10000,
+      "auc": 0.9985284799999999,
+      "accuracy": 0.9903,
+      "tn": 4990,
+      "fp": 10,
+      "fn": 87,
+      "tp": 4913,
+      "fpr": 0.002,
+      "recall": 0.9826
+    },
+    "fusion_random_forest": {
+      "n": 10000,
+      "auc": 0.99800816,
+      "accuracy": 0.9918,
+      "tn": 4971,
+      "fp": 29,
+      "fn": 53,
+      "tp": 4947,
+      "fpr": 0.0058,
+      "recall": 0.9894
+    }
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "test_rows": 1600,
+      "test_groups": [
+        "invoice_payment",
+        "parcel_delivery"
+      ],
+      "selected_semantic_c": 0.01,
+      "semantic": {
+        "n": 1600,
+        "auc": 1.0,
+        "accuracy": 0.998125,
+        "tn": 800,
+        "fp": 0,
+        "fn": 3,
+        "tp": 797,
+        "fpr": 0.0,
+        "recall": 0.99625
+      },
+      "inner_selection_best": {
+        "n": 8400,
+        "auc": 0.9997378117913831,
+        "accuracy": 0.986547619047619,
+        "tn": 4197,
+        "fp": 3,
+        "fn": 110,
+        "tp": 4090,
+        "fpr": 0.0007142857142857143,
+        "recall": 0.9738095238095238,
+        "regularization_c": 0.01
+      }
+    },
+    {
+      "fold": 2,
+      "test_rows": 800,
+      "test_groups": [
+        "procurement_quote"
+      ],
+      "selected_semantic_c": 0.03,
+      "semantic": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 400,
+        "fp": 0,
+        "fn": 0,
+        "tp": 400,
+        "fpr": 0.0,
+        "recall": 1.0
+      },
+      "inner_selection_best": {
+        "n": 9200,
+        "auc": 0.9998841209829868,
+        "accuracy": 0.9918478260869565,
+        "tn": 4592,
+        "fp": 8,
+        "fn": 67,
+        "tp": 4533,
+        "fpr": 0.0017391304347826088,
+        "recall": 0.9854347826086957,
+        "regularization_c": 0.03
+      }
+    },
+    {
+      "fold": 3,
+      "test_rows": 800,
+      "test_groups": [
+        "account_security"
+      ],
+      "selected_semantic_c": 0.03,
+      "semantic": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 400,
+        "fp": 0,
+        "fn": 0,
+        "tp": 400,
+        "fpr": 0.0,
+        "recall": 1.0
+      },
+      "inner_selection_best": {
+        "n": 9200,
+        "auc": 0.9999184310018903,
+        "accuracy": 0.9935869565217391,
+        "tn": 4593,
+        "fp": 7,
+        "fn": 52,
+        "tp": 4548,
+        "fpr": 0.0015217391304347826,
+        "recall": 0.9886956521739131,
+        "regularization_c": 0.03
+      }
+    },
+    {
+      "fold": 4,
+      "test_rows": 800,
+      "test_groups": [
+        "tax_notice"
+      ],
+      "selected_semantic_c": 1.0,
+      "semantic": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 0.89375,
+        "tn": 400,
+        "fp": 0,
+        "fn": 85,
+        "tp": 315,
+        "fpr": 0.0,
+        "recall": 0.7875
+      },
+      "inner_selection_best": {
+        "n": 9200,
+        "auc": 0.9999773629489603,
+        "accuracy": 0.9975,
+        "tn": 4595,
+        "fp": 5,
+        "fn": 18,
+        "tp": 4582,
+        "fpr": 0.0010869565217391304,
+        "recall": 0.9960869565217392,
+        "regularization_c": 1.0
+      }
+    },
+    {
+      "fold": 5,
+      "test_rows": 800,
+      "test_groups": [
+        "hr_payroll"
+      ],
+      "selected_semantic_c": 0.1,
+      "semantic": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 0.99875,
+        "tn": 400,
+        "fp": 0,
+        "fn": 1,
+        "tp": 399,
+        "fpr": 0.0,
+        "recall": 0.9975
+      },
+      "inner_selection_best": {
+        "n": 9200,
+        "auc": 0.9998676275992439,
+        "accuracy": 0.9906521739130435,
+        "tn": 4597,
+        "fp": 3,
+        "fn": 83,
+        "tp": 4517,
+        "fpr": 0.0006521739130434783,
+        "recall": 0.9819565217391304,
+        "regularization_c": 0.1
+      }
+    },
+    {
+      "fold": 6,
+      "test_rows": 800,
+      "test_groups": [
+        "meeting_invitation"
+      ],
+      "selected_semantic_c": 0.03,
+      "semantic": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 400,
+        "fp": 0,
+        "fn": 0,
+        "tp": 400,
+        "fpr": 0.0,
+        "recall": 1.0
+      },
+      "inner_selection_best": {
+        "n": 9200,
+        "auc": 0.9997921550094518,
+        "accuracy": 0.9890217391304348,
+        "tn": 4592,
+        "fp": 8,
+        "fn": 93,
+        "tp": 4507,
+        "fpr": 0.0017391304347826088,
+        "recall": 0.9797826086956521,
+        "regularization_c": 0.03
+      }
+    },
+    {
+      "fold": 7,
+      "test_rows": 800,
+      "test_groups": [
+        "card_transaction"
+      ],
+      "selected_semantic_c": 0.01,
+      "semantic": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 400,
+        "fp": 0,
+        "fn": 0,
+        "tp": 400,
+        "fpr": 0.0,
+        "recall": 1.0
+      },
+      "inner_selection_best": {
+        "n": 9200,
+        "auc": 0.9998235349716446,
+        "accuracy": 0.9908695652173913,
+        "tn": 4593,
+        "fp": 7,
+        "fn": 77,
+        "tp": 4523,
+        "fpr": 0.0015217391304347826,
+        "recall": 0.9832608695652174,
+        "regularization_c": 0.01
+      }
+    },
+    {
+      "fold": 8,
+      "test_rows": 1300,
+      "test_groups": [
+        "benefits_enrollment",
+        "subscription_renewal"
+      ],
+      "selected_semantic_c": 0.1,
+      "semantic": {
+        "n": 1300,
+        "auc": 1.0,
+        "accuracy": 0.9930769230769231,
+        "tn": 641,
+        "fp": 9,
+        "fn": 0,
+        "tp": 650,
+        "fpr": 0.013846153846153847,
+        "recall": 1.0
+      },
+      "inner_selection_best": {
+        "n": 8700,
+        "auc": 0.9998674593737613,
+        "accuracy": 0.9882758620689656,
+        "tn": 4350,
+        "fp": 0,
+        "fn": 102,
+        "tp": 4248,
+        "fpr": 0.0,
+        "recall": 0.976551724137931,
+        "regularization_c": 0.1
+      }
+    },
+    {
+      "fold": 9,
+      "test_rows": 832,
+      "test_groups": [
+        "legal_notice",
+        "travel_reservation"
+      ],
+      "selected_semantic_c": 0.01,
+      "semantic": {
+        "n": 832,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 416,
+        "fp": 0,
+        "fn": 0,
+        "tp": 416,
+        "fpr": 0.0,
+        "recall": 1.0
+      },
+      "inner_selection_best": {
+        "n": 9168,
+        "auc": 0.999933803060345,
+        "accuracy": 0.9926919720767888,
+        "tn": 4582,
+        "fp": 2,
+        "fn": 65,
+        "tp": 4519,
+        "fpr": 0.0004363001745200698,
+        "recall": 0.9858202443280978,
+        "regularization_c": 0.01
+      }
+    },
+    {
+      "fold": 10,
+      "test_rows": 1468,
+      "test_groups": [
+        "cloud_document",
+        "executive_request",
+        "password_reset"
+      ],
+      "selected_semantic_c": 0.03,
+      "semantic": {
+        "n": 1468,
+        "auc": 0.9999795825939758,
+        "accuracy": 0.9884196185286104,
+        "tn": 734,
+        "fp": 0,
+        "fn": 17,
+        "tp": 717,
+        "fpr": 0.0,
+        "recall": 0.9768392370572208
+      },
+      "inner_selection_best": {
+        "n": 8532,
+        "auc": 0.9999153238825775,
+        "accuracy": 0.9941397093295827,
+        "tn": 4257,
+        "fp": 9,
+        "fn": 41,
+        "tp": 4225,
+        "fpr": 0.002109704641350211,
+        "recall": 0.9903891233005157,
+        "regularization_c": 0.03
+      }
+    }
+  ],
+  "limitations": [
+    "All rows are synthetic; this does not establish real-world performance.",
+    "Only 15 scenario groups are available, so several outer folds contain one scenario group.",
+    "The eight real emails remain a small audit set and are not used for fitting."
+  ]
+}
