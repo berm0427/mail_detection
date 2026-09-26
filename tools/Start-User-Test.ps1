@@ -136,6 +136,7 @@ $PythonWrapper = Join-Path $ProjectRoot 'tools\run_user_test_gui.py'
 $MainGui = Join-Path $ProjectRoot 'main_gui.py'
 $EngineConfig = Join-Path $ProjectRoot 'engine_config.json'
 $ClamSetup = Join-Path $ProjectRoot 'tools\setup_clamav.py'
+$LanguageSetup = Join-Path $ProjectRoot 'tools\setup_language_models.py'
 $TranslationModel = Join-Path $WorkRoot 'models\m2m100_418M'
 
 Write-Host '=== User acceptance GUI launcher preflight ==='
@@ -147,6 +148,7 @@ $allRequired = (Test-RequiredPath 'GUI entrypoint' $MainGui) -and $allRequired
 $allRequired = (Test-RequiredPath 'Python GUI wrapper' $PythonWrapper) -and $allRequired
 $allRequired = (Test-RequiredPath 'Engine configuration' $EngineConfig) -and $allRequired
 $allRequired = (Test-RequiredPath 'ClamAV bootstrap' $ClamSetup) -and $allRequired
+$allRequired = (Test-RequiredPath 'Language model bootstrap' $LanguageSetup) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor Perl runtime' $PerlExe) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor check command' $RazorCheck) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor home directory' $RazorHome) -and $allRequired
@@ -154,11 +156,31 @@ $allRequired = (Test-RequiredPath 'Razor agent configuration file' $RazorConf) -
 $allRequired = (Test-RequiredPath 'Razor relay script' $RazorTunnel) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor relay launcher Python' $RazorTunnelPython) -and $allRequired
 
-if (Test-Path -LiteralPath (Join-Path $TranslationModel 'config.json')) {
+$TranslationMarkers = @('config.json', 'sentencepiece.bpe.model', 'vocab.json')
+$TranslationReady = $true
+foreach ($Marker in $TranslationMarkers) {
+    if (-not (Test-Path -LiteralPath (Join-Path $TranslationModel $Marker))) {
+        $TranslationReady = $false
+    }
+}
+if ($TranslationReady) {
     Write-Ok 'Local multilingual translation model'
 }
 else {
-    Write-WarnLine 'Local translation model is missing. Foreign-language context ML will be skipped; run PrepareLanguageModels.bat.'
+    if ($CheckOnly) {
+        Write-WarnLine 'Local translation model is missing. A normal launch will download it automatically.'
+    }
+    else {
+        Write-Host 'Local translation model is missing or incomplete. Downloading it now (about 2 GB)...'
+        & $PythonExe -B $LanguageSetup --root (Join-Path $WorkRoot 'models') --model translation
+        if ($LASTEXITCODE -eq 0) {
+            $TranslationReady = $true
+            Write-Ok 'Local multilingual translation model downloaded and verified'
+        }
+        else {
+            Write-WarnLine 'Translation model download failed. The GUI will continue; foreign-language context ML will be skipped.'
+        }
+    }
 }
 
 if (Test-Path -LiteralPath $PythonExe) {

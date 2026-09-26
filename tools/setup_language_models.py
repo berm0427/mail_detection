@@ -29,9 +29,17 @@ def main():
     parser.add_argument('--root', type=Path,
                         default=Path.home() / '.dise' / 'language_models')
     parser.add_argument('--check', action='store_true')
+    parser.add_argument(
+        '--model',
+        action='append',
+        choices=tuple(MODELS),
+        help='prepare only the selected model (repeatable); default: all models',
+    )
     args = parser.parse_args()
     result = {}
-    for name, (repository, directory, required) in MODELS.items():
+    selected = args.model or list(MODELS)
+    for name in selected:
+        repository, directory, required = MODELS[name]
         destination = args.root.resolve() / directory
         ready = model_ready(destination, required)
         if not ready and not args.check:
