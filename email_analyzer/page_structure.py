@@ -93,7 +93,12 @@ def fetch_page(url, max_bytes=524288, max_redirects=6):
             if len(data)>max_bytes:return {'status':'limited','reason':'size_limit','hops':history}
             if response.headers.get('Content-Encoding','identity').lower() not in ('','identity'):
                 return {'status':'limited','reason':'encoded_response','hops':history}
-            return {'status':'ok','hops':history,'bytes':len(data),'structure':inspect_structure(data,url,response.headers.get('Content-Security-Policy'))}
+            final_url = str(response.url)
+            return {
+                'status': 'ok', 'hops': history, 'bytes': len(data),
+                'final_url': final_url,
+                'structure': inspect_structure(data, final_url, response.headers.get('Content-Security-Policy')),
+            }
         finally:
             if response is not None:response.close()
             pool.close()
@@ -115,6 +120,7 @@ def analyze_pages(urls, disabled=False, limit=3):
     for url in representatives[:limit]:
         try:result=fetch_page(url)
         except Exception as exc:result={'status':'error','reason':type(exc).__name__}
+        result['requested_url'] = url
         result['requested_host']=urlsplit(url).hostname
         pages.append(result)
     return {'status':'complete','pages':pages,'omitted':max(0,len(representatives)-limit),

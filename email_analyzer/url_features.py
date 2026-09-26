@@ -39,6 +39,7 @@ class URLFeatureExtractor:
         hostname_length = len(hostname)
         return {
             "scheme": parsed.scheme.lower(),
+            "scheme_is_https": parsed.scheme.lower() == "https",
             "hostname": hostname,
             "host_is_ip": host_is_ip,
             "has_userinfo": parsed.username is not None or parsed.password is not None,
@@ -58,3 +59,29 @@ class URLFeatureExtractor:
             "fragment_length": len(parsed.fragment),
             "embedded_redirect_target_count": redirect_target_count,
         }
+
+
+URL_NUMERIC_FEATURE_NAMES = (
+    "scheme_is_https",
+    "host_is_ip",
+    "has_userinfo",
+    "has_explicit_port",
+    "uses_punycode",
+    "hostname_label_count",
+    "hostname_length",
+    "hostname_digit_ratio",
+    "hostname_hyphen_count",
+    "hostname_entropy",
+    "url_length",
+    "path_length",
+    "path_segment_count",
+    "query_length",
+    "query_parameter_count",
+    "fragment_length",
+    "embedded_redirect_target_count",
+)
+
+
+def numeric_url_features(url: str) -> dict[str, float]:
+    observed = URLFeatureExtractor().extract(url)
+    return {name: float(observed[name]) for name in URL_NUMERIC_FEATURE_NAMES}

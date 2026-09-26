@@ -61,7 +61,10 @@ def main():
                 'label': row['label'], 'group_id': str(row['group_id']),
                 'target': target_source, 'reference': reference_source,
                 'schema_version': SCHEMA_VERSION,
-                'features': pair_features(target['structure'], reference['structure']),
+                'features': pair_features(
+                    target['structure'], reference['structure'],
+                    target_source.get('source_url') or target_source.get('value') or '',
+                ),
             }
             destination.write(json.dumps(output, ensure_ascii=False) + '\n')
             written += 1

@@ -104,7 +104,10 @@ def compare_homepages(message, pages, links, brands=None, disabled=False,
             # pages, or an unregistered page that actually solicits user input.
             if not same_official_site and not interactive_target:
                 continue
-            features=pair_features(page['structure'],fetched['structure'])
+            features=pair_features(
+                page['structure'], fetched['structure'],
+                page.get('final_url') or page.get('requested_url') or page.get('url') or '',
+            )
             comparisons.append({'page_index':index,'target_host':page.get('requested_host'),'reference_host':candidate['host'],
                 'feature_schema_version':SCHEMA_VERSION,'features':features,
                 'tag_count_similarity':features['tag_histogram_similarity'],

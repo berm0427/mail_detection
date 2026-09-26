@@ -60,9 +60,9 @@ def engine_rows(result):
         status=html_pair.get('status','missing');details=html_pair.get('details') or {};score=html_pair.get('score')
         pair=details.get('highest_risk_pair') or {}
         valid=isinstance(score,(int,float)) and not isinstance(score,bool) and math.isfinite(score) and 0<=score<=1
-        rows.append(('웹페이지 구조 ML',STATUS_LABELS.get(status,'알 수 없는 상태'),
+        rows.append(('URL·웹페이지 구조 ML',STATUS_LABELS.get(status,'알 수 없는 상태'),
                      f"위험 점수 {score:.3f}" if status=='ok' and valid else '판정에 사용할 결과 없음',
-                         (f"모델: {details.get('model_id')} · 검증 기준 통과\n목적지 {pair.get('target_host')} ↔ 공식 {pair.get('reference_host')}\n역할: 실제 수집 페이지와 실시간 검색된 공식 페이지의 구조 차이") if status=='ok' else html_pair.get('error','')))
+                         (f"모델: {details.get('model_id')} · 검증 기준 통과\n목적지 {pair.get('target_host')} ↔ 공식 {pair.get('reference_host')}\n역할: 목적지 URL 구조와 실제 수집 페이지·공식 페이지의 HTML 구조를 함께 분석") if status=='ok' else html_pair.get('error','')))
     decision = result.get('decision') or {}
     review = decision.get('html_review')
     if review is not None:

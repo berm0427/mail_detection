@@ -55,7 +55,7 @@ class HtmlPairMLEngine:
                 'validation_gate': gate,
                 'highest_risk_pair': highest,
                 'pairs': observations,
-                'role': 'destination_official_structure_evidence',
+                'role': 'destination_url_and_official_html_structure_evidence',
             })
         except (OSError, ValueError, TypeError, KeyError, OverflowError) as exc:
             return EngineResult(self.name, 'error', error=f'HTML 구조 ML 실행 실패: {type(exc).__name__}: {exc}')

@@ -112,9 +112,9 @@ def combine_evidence(result):
     if html_pair_positive:
         pair=html_pair_details.get('highest_risk_pair') or {}
         add_signal('html_pair_ml_positive','html_pair_ml','suspicious',
-                   f"목적지·공식 페이지 구조 위험: {pair.get('target_host')} ↔ {pair.get('reference_host')}",
+                   f"목적지 URL·공식 페이지 구조 위험: {pair.get('target_host')} ↔ {pair.get('reference_host')}",
                    details={'score':html_pair_score,'pair':pair})
-        reasons.append(f"목적지와 실시간 검색된 공식 페이지의 HTML 구조 차이를 ML이 위험 신호로 탐지했습니다: {pair.get('target_host')} ↔ {pair.get('reference_host')}.")
+        reasons.append(f"목적지 URL 구조와 실시간 검색된 공식 페이지의 HTML 구조를 결합한 ML이 위험 신호를 탐지했습니다: {pair.get('target_host')} ↔ {pair.get('reference_host')}.")
         if verdict in ('legitimate','inconclusive','no_signal'):verdict='suspicious'
     rule_score=rule_result.get('risk_score', result.get('risk_score',0))
     page_analysis=result.get('page_analysis') or {}

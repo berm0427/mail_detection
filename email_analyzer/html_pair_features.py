@@ -3,8 +3,10 @@ from __future__ import annotations
 
 import math
 
+from email_analyzer.url_features import URL_NUMERIC_FEATURE_NAMES, numeric_url_features
 
-SCHEMA_VERSION = 1
+
+SCHEMA_VERSION = 2
 COUNT_FIELDS = (
     'element_count', 'visible_text_length', 'max_depth', 'mean_depth',
     'link_count', 'external_link_count', 'image_count', 'external_image_count',
@@ -39,7 +41,7 @@ def histogram_similarity(left, right):
     return sum(min(_number(left.get(key)), _number(right.get(key))) for key in keys) / denominator
 
 
-def pair_features(target, reference):
+def pair_features(target, reference, target_url=''):
     """Return stable numeric observations. Higher similarity never means safe."""
     values = {
         'tag_histogram_similarity': histogram_similarity(target.get('tag_counts'), reference.get('tag_counts')),
@@ -66,6 +68,10 @@ def pair_features(target, reference):
         + sum(similarities) / len(similarities) * 0.55
         + values['form_count_similarity'] * 0.10
     )
+    url_values = numeric_url_features(target_url) if target_url else {
+        name: 0.0 for name in URL_NUMERIC_FEATURE_NAMES
+    }
+    values.update({f'target_url_{name}': value for name, value in url_values.items()})
     return values
 
 
