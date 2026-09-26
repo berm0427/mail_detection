@@ -49,10 +49,16 @@ def main() -> None:
         raise ValueError("group leakage across splits")
 
     digest = hashlib.sha256(args.manifest.read_bytes()).hexdigest()
+    model_fingerprint = hashlib.sha256(
+        (str(args.embedding_model.resolve()) + '\n').encode('utf-8') +
+        b''.join((args.embedding_model / name).read_bytes() if (args.embedding_model / name).is_file() else b''
+                 for name in ('config.json', 'modules.json', 'tokenizer_config.json'))
+    ).hexdigest()
     embeddings = None
     if args.cache and args.cache.is_file():
         cached = np.load(args.cache, allow_pickle=False)
-        if str(cached["manifest_sha256"]) == digest:
+        cached_fingerprint = str(cached['embedding_model_sha256']) if 'embedding_model_sha256' in cached else ''
+        if str(cached["manifest_sha256"]) == digest and cached_fingerprint == model_fingerprint:
             embeddings = cached["embeddings"]
     if embeddings is None:
         texts = []
@@ -65,7 +71,8 @@ def main() -> None:
                                     normalize_embeddings=True, show_progress_bar=True)
         if args.cache:
             args.cache.parent.mkdir(parents=True, exist_ok=True)
-            np.savez_compressed(args.cache, embeddings=embeddings, manifest_sha256=np.asarray(digest))
+            np.savez_compressed(args.cache, embeddings=embeddings, manifest_sha256=np.asarray(digest),
+                                embedding_model_sha256=np.asarray(model_fingerprint))
 
     train = splits == "train"; validation = splits == "validation"; test = splits == "test"
     scaler = StandardScaler().fit(embeddings[train])

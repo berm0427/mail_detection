@@ -41,7 +41,11 @@ def analyze_semantic_engine(message, config_override=None):
     if model:
         model=Path(model)
         if not model.is_absolute():model=root/model
-    return asdict(SemanticMLEngine(model).analyze(message))
+    translation_model=config.get('translation_model')
+    if translation_model:
+        translation_model=Path(translation_model)
+        if not translation_model.is_absolute():translation_model=root/translation_model
+    return asdict(SemanticMLEngine(model,translation_model).analyze(message))
 
 
 def analyze_html_pair_engine(homepage_comparison, config_override=None):

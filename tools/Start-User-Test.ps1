@@ -136,6 +136,7 @@ $PythonWrapper = Join-Path $ProjectRoot 'tools\run_user_test_gui.py'
 $MainGui = Join-Path $ProjectRoot 'main_gui.py'
 $EngineConfig = Join-Path $ProjectRoot 'engine_config.json'
 $ClamSetup = Join-Path $ProjectRoot 'tools\setup_clamav.py'
+$TranslationModel = Join-Path $WorkRoot 'models\m2m100_418M'
 
 Write-Host '=== User acceptance GUI launcher preflight ==='
 
@@ -152,6 +153,13 @@ $allRequired = (Test-RequiredPath 'Razor home directory' $RazorHome) -and $allRe
 $allRequired = (Test-RequiredPath 'Razor agent configuration file' $RazorConf) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor relay script' $RazorTunnel) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor relay launcher Python' $RazorTunnelPython) -and $allRequired
+
+if (Test-Path -LiteralPath (Join-Path $TranslationModel 'config.json')) {
+    Write-Ok 'Local multilingual translation model'
+}
+else {
+    Write-WarnLine 'Local translation model is missing. Foreign-language context ML will be skipped; run PrepareLanguageModels.bat.'
+}
 
 if (Test-Path -LiteralPath $PythonExe) {
     $pyVersion = (& $PythonExe -c "import sys; print(f'{sys.version_info.major}.{sys.version_info.minor}')" 2>$null)

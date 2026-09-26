@@ -52,9 +52,17 @@ def engine_rows(result):
             semantic_use='위험 문맥 탐지 · 구조 증거와 함께 검토'
         else:
             semantic_use='위험 문맥 기준 미만'
+        source_language=details.get('source_language','unknown')
+        translation_status=details.get('translation_status','unknown')
+        if translation_status=='translated':
+            context_input=f'문맥 입력: {source_language} → 한국어 로컬 번역'
+        elif source_language=='ko':
+            context_input='문맥 입력: 한국어 원문'
+        else:
+            context_input=f'문맥 입력: 원문 · 언어 {source_language}'
         rows.append(('본문 문맥 ML',STATUS_LABELS.get(status,'알 수 없는 상태'),
                      f"위험 점수 {score:.3f}" if status=='ok' and valid else '판정에 사용할 결과 없음',
-                     (f"모델: {details.get('model_id','설치되지 않음')} · 학습 데이터 {details.get('training_rows','?')}건\n역할: 제목·본문의 문맥 위험 신호를 분석하고 구조 증거와 결합\n{semantic_use}") if status=='ok' else semantic.get('error','')))
+                     (f"모델: {details.get('model_id','설치되지 않음')} · 학습 데이터 {details.get('training_rows','?')}건\n{context_input}\n역할: 제목·본문의 문맥 위험 신호를 분석하고 구조 증거와 결합\n{semantic_use}") if status=='ok' else semantic.get('error','')))
     html_pair=engines.get('html_pair_ml') or {}
     if html_pair and html_pair.get('status')!='skipped':
         status=html_pair.get('status','missing');details=html_pair.get('details') or {};score=html_pair.get('score')

@@ -19,5 +19,7 @@ numpy==1.26.4
 torch==2.14.0
 transformers==5.17.0
 sentence-transformers==6.0.1
+sentencepiece==0.2.2
+huggingface-hub==1.31.0
 scipy==1.17.1
 scikit-learn==1.9.1
