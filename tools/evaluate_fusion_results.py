@@ -55,16 +55,21 @@ def main():
         baselines = all_baselines(result)
         legacy = baselines["production_policy"]["verdict"]
         fusion = result.get("experimental_fusion") or experimental_fusion(result)
+        learned = result.get("experimental_learned_fusion")
         fusion_decisive = fusion["verdict"] in {"high_risk", "benign_supported"}
         for method, value in baselines.items():
             labels, predictions = method_values.setdefault(method, ([], []))
             labels.append(label); predictions.append(value["prediction"])
+        if learned and learned.get("prediction") in {0, 1}:
+            labels, predictions = method_values.setdefault("learned_logistic_fusion", ([], []))
+            labels.append(label); predictions.append(int(learned["prediction"]))
         if fusion_decisive:
             fusion_labels.append(label)
             fusion_predictions.append(int(fusion["verdict"] == "high_risk"))
         details.append({
             "id": row.get("id", path.stem), "label": label,
             "legacy_verdict": legacy, "baselines": baselines, "fusion": fusion,
+            "learned_fusion": learned,
             "fusion_decisive": fusion_decisive,
         })
     report = {

@@ -4,6 +4,7 @@ import unittest
 from email_analyzer.evidence_fusion import EvidenceMass, experimental_fusion, fuse_masses
 from email_analyzer.fusion_baselines import all_baselines
 from email_analyzer.fusion_features import FEATURE_NAMES, fusion_feature_dict, fusion_feature_vector
+from email_analyzer.learned_fusion import analyze_learned_fusion
 
 
 class EvidenceFusionTests(unittest.TestCase):
@@ -84,6 +85,17 @@ class EvidenceFusionTests(unittest.TestCase):
         self.assertEqual(features["semantic_available"], 1)
         self.assertEqual(features["html_pair_available"], 0)
         self.assertEqual(features["rule_score"], 0.25)
+
+    def test_learned_fusion_rejects_wrong_schema(self):
+        import json
+        import tempfile
+        from pathlib import Path
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "model.json"
+            path.write_text(json.dumps({"model_id": "bad", "feature_names": [],
+                                        "coef": [], "intercept": 0}), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                analyze_learned_fusion({}, path)
 
 
 if __name__ == "__main__":

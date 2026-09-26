@@ -70,6 +70,7 @@ def main():
     parser.add_argument("manifest", type=Path)
     parser.add_argument("--folds", type=int, default=10)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--artifact", type=Path)
     args = parser.parse_args()
     rows = load_rows(args.manifest.resolve())
     x = np.asarray([fusion_feature_vector(row["analysis"]) for row in rows], dtype=float)
@@ -94,6 +95,26 @@ def main():
             model.fit(x[fit_index], y[fit_index])
             probability = model.predict_proba(x[test_index])[:, 1]
             report["models"][name] = {"independent_test": metrics(y[test_index], probability)}
+            if name == "logistic_regression" and args.artifact:
+                artifact = {
+                    "model_id": "dise-fusion-logistic-v1-experimental",
+                    "experimental": True,
+                    "promoted_to_gui": False,
+                    "feature_names": list(FEATURE_NAMES),
+                    "coef": model.coef_[0].tolist(),
+                    "intercept": float(model.intercept_[0]),
+                    "decision_threshold": 0.5,
+                    "training_protocol": report["protocol"],
+                    "training_rows": int(len(fit_index)),
+                    "training_groups": report["fit_groups"],
+                    "independent_test": report["models"][name]["independent_test"],
+                    "limitations": [
+                        "Synthetic data does not establish real-world performance.",
+                        "This model is for parallel research evaluation only.",
+                    ],
+                }
+                args.artifact.parent.mkdir(parents=True, exist_ok=True)
+                args.artifact.write_text(json.dumps(artifact, ensure_ascii=False, indent=2), encoding="utf-8")
         args.output.parent.mkdir(parents=True, exist_ok=True)
         args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
         print(json.dumps({"output": str(args.output), "protocol": report["protocol"],
