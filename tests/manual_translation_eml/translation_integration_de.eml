@@ -1,0 +1,41 @@
+Return-Path: <security@accounts.example>
+Received: from mail.accounts.example (mail.accounts.example [192.0.2.10]) by
+ mx.receiver.example with ESMTPS id TEST-DE-002 for
+ <recipient@receiver.example>; Fri, 26 Sep 2026 23:40:00 +0900
+Received-SPF: none (receiver.example: accounts.example does not designate
+ permitted sender hosts)
+Authentication-Results: mx.receiver.example; spf=none
+ smtp.mailfrom=accounts.example; dkim=none; dmarc=none
+ header.from=accounts.example
+From: Account Security <security@accounts.example>
+Reply-To: Account Security <help@accounts.example>
+To: recipient@receiver.example
+Date: Sat, 26 Sep 2026 23:39:52 +0900
+Message-ID: <translation-integration-de-001@accounts.example>
+Subject: =?utf-8?q?Best=C3=A4tigen?= Sie sofort Ihr Konto
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============2352519604729480377=="
+
+--===============2352519604729480377==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Ihr Konto wird heute wegen ungew=C3=B6hnlicher Aktivit=C3=A4ten gesperrt. Bes=
+t=C3=A4tigen Sie sofort Ihr Passwort, um die Schlie=C3=9Fung des Kontos zu ve=
+rhindern.
+https://accounts.example/security
+
+--===============2352519604729480377==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<!doctype html><html lang=3D"de"><head><meta charset=3D"UTF-8"><title>Best=C3=
+=A4tigen Sie sofort Ihr Konto</title></head><body><h1>Best=C3=A4tigen Sie sof=
+ort Ihr Konto</h1><p>Ihr Konto wird heute wegen ungew=C3=B6hnlicher Aktivit=
+=C3=A4ten gesperrt. Best=C3=A4tigen Sie sofort Ihr Passwort, um die Schlie=C3=
+=9Fung des Kontos zu verhindern.</p><p><a href=3D"https://verify.example/acco=
+unt">https://accounts.example/security</a></p></body></html>
+
+--===============2352519604729480377==--

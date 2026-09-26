@@ -1,0 +1,40 @@
+Return-Path: <security@accounts.example>
+Received: from mail.accounts.example (mail.accounts.example [192.0.2.10]) by
+ mx.receiver.example with ESMTPS id TEST-ES-004 for
+ <recipient@receiver.example>; Fri, 26 Sep 2026 23:40:00 +0900
+Received-SPF: none (receiver.example: accounts.example does not designate
+ permitted sender hosts)
+Authentication-Results: mx.receiver.example; spf=none
+ smtp.mailfrom=accounts.example; dkim=none; dmarc=none
+ header.from=accounts.example
+From: Account Security <security@accounts.example>
+Reply-To: Account Security <help@accounts.example>
+To: recipient@receiver.example
+Date: Sat, 26 Sep 2026 23:39:52 +0900
+Message-ID: <translation-integration-es-001@accounts.example>
+Subject: Verifique su cuenta inmediatamente
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============6275653770690014578=="
+
+--===============6275653770690014578==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Su cuenta ser=C3=A1 suspendida hoy debido a una actividad inusual. Confirme i=
+nmediatamente su contrase=C3=B1a para evitar el cierre de la cuenta.
+https://accounts.example/security
+
+--===============6275653770690014578==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<!doctype html><html lang=3D"es"><head><meta charset=3D"UTF-8"><title>Verifiq=
+ue su cuenta inmediatamente</title></head><body><h1>Verifique su cuenta inmed=
+iatamente</h1><p>Su cuenta ser=C3=A1 suspendida hoy debido a una actividad in=
+usual. Confirme inmediatamente su contrase=C3=B1a para evitar el cierre de la=
+ cuenta.</p><p><a href=3D"https://verify.example/account">https://accounts.ex=
+ample/security</a></p></body></html>
+
+--===============6275653770690014578==--

@@ -1,0 +1,40 @@
+Return-Path: <security@accounts.example>
+Received: from mail.accounts.example (mail.accounts.example [192.0.2.10]) by
+ mx.receiver.example with ESMTPS id TEST-EN-001 for
+ <recipient@receiver.example>; Fri, 26 Sep 2026 23:40:00 +0900
+Received-SPF: none (receiver.example: accounts.example does not designate
+ permitted sender hosts)
+Authentication-Results: mx.receiver.example; spf=none
+ smtp.mailfrom=accounts.example; dkim=none; dmarc=none
+ header.from=accounts.example
+From: Account Security <security@accounts.example>
+Reply-To: Account Security <help@accounts.example>
+To: recipient@receiver.example
+Date: Sat, 26 Sep 2026 23:39:52 +0900
+Message-ID: <translation-integration-en-001@accounts.example>
+Subject: Verify your account immediately
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============5659420999781624947=="
+
+--===============5659420999781624947==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Your account will be suspended today because of unusual activity. Confirm you=
+r password immediately to prevent the account from being closed.
+https://accounts.example/security
+
+--===============5659420999781624947==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<!doctype html><html lang=3D"en"><head><meta charset=3D"UTF-8"><title>Verify =
+your account immediately</title></head><body><h1>Verify your account immediat=
+ely</h1><p>Your account will be suspended today because of unusual activity. =
+Confirm your password immediately to prevent the account from being closed.</=
+p><p><a href=3D"https://verify.example/account">https://accounts.example/secu=
+rity</a></p></body></html>
+
+--===============5659420999781624947==--

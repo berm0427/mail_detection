@@ -1,0 +1,41 @@
+Return-Path: <security@accounts.example>
+Received: from mail.accounts.example (mail.accounts.example [192.0.2.10]) by
+ mx.receiver.example with ESMTPS id TEST-FR-003 for
+ <recipient@receiver.example>; Fri, 26 Sep 2026 23:40:00 +0900
+Received-SPF: none (receiver.example: accounts.example does not designate
+ permitted sender hosts)
+Authentication-Results: mx.receiver.example; spf=none
+ smtp.mailfrom=accounts.example; dkim=none; dmarc=none
+ header.from=accounts.example
+From: Account Security <security@accounts.example>
+Reply-To: Account Security <help@accounts.example>
+To: recipient@receiver.example
+Date: Sat, 26 Sep 2026 23:39:52 +0900
+Message-ID: <translation-integration-fr-001@accounts.example>
+Subject: =?utf-8?q?V=C3=A9rifiez_imm=C3=A9diatement?= votre compte
+MIME-Version: 1.0
+Content-Type: multipart/alternative;
+ boundary="===============8575487188790681426=="
+
+--===============8575487188790681426==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+
+Votre compte sera suspendu aujourd'hui en raison d'une activit=C3=A9 inhabitu=
+elle. Confirmez imm=C3=A9diatement votre mot de passe pour =C3=A9viter sa fer=
+meture.
+https://accounts.example/security
+
+--===============8575487188790681426==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+
+<!doctype html><html lang=3D"fr"><head><meta charset=3D"UTF-8"><title>V=C3=A9=
+rifiez imm=C3=A9diatement votre compte</title></head><body><h1>V=C3=A9rifiez =
+imm=C3=A9diatement votre compte</h1><p>Votre compte sera suspendu aujourd'hui=
+ en raison d'une activit=C3=A9 inhabituelle. Confirmez imm=C3=A9diatement vot=
+re mot de passe pour =C3=A9viter sa fermeture.</p><p><a href=3D"https://verif=
+y.example/account">https://accounts.example/security</a></p></body></html>
+
+--===============8575487188790681426==--

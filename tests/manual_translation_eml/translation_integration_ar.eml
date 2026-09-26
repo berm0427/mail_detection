@@ -1,23 +1,43 @@
 Return-Path: <security@accounts.example>
-Received: from mail.accounts.example (mail.accounts.example [192.0.2.10]) by mx.receiver.example with ESMTPS id TEST-AR-001 for <recipient@receiver.example>; Fri, 26 Sep 2026 23:40:00 +0900
-Received-SPF: none (receiver.example: accounts.example does not designate permitted sender hosts)
-Authentication-Results: mx.receiver.example; spf=none smtp.mailfrom=accounts.example; dkim=none; dmarc=none header.from=accounts.example
+Received: from mail.accounts.example (mail.accounts.example [192.0.2.10]) by
+ mx.receiver.example with ESMTPS id TEST-AR-006 for
+ <recipient@receiver.example>; Fri, 26 Sep 2026 23:40:00 +0900
+Received-SPF: none (receiver.example: accounts.example does not designate
+ permitted sender hosts)
+Authentication-Results: mx.receiver.example; spf=none
+ smtp.mailfrom=accounts.example; dkim=none; dmarc=none
+ header.from=accounts.example
 From: Account Security <security@accounts.example>
 Reply-To: Account Security <help@accounts.example>
 To: recipient@receiver.example
-Date: Fri, 26 Sep 2026 23:39:52 +0900
+Date: Sat, 26 Sep 2026 23:39:52 +0900
 Message-ID: <translation-integration-ar-001@accounts.example>
-Subject: تحقق من حسابك فورًا
+Subject: =?utf-8?b?2KrYrdmC2YIg2YXZhiDYrdiz2KfYqNmDINmB2YjYsdmL2Kc=?=
 MIME-Version: 1.0
-Content-Type: text/html; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/alternative;
+ boundary="===============5460593409329848987=="
 
-<!doctype html>
-<html lang="ar" dir="rtl">
-<head><meta charset="UTF-8"><title>تحقق من حسابك فورًا</title></head>
-<body>
-  <h1>تحقق من حسابك فورًا</h1>
-  <p>سيتم تعليق حسابك اليوم بسبب نشاط غير معتاد. أكد كلمة المرور فورًا لتجنب إغلاق الحساب.</p>
-  <p><a href="https://verify.example/account">https://accounts.example/security</a></p>
-</body>
-</html>
+--===============5460593409329848987==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+
+2LPZitiq2YUg2KrYudmE2YrZgiDYrdiz2KfYqNmDINin2YTZitmI2YUg2KjYs9io2Kgg2YbYtNin
+2Lcg2LrZitixINmF2LnYqtin2K8uINij2YPYryDZg9mE2YXYqSDYp9mE2YXYsdmI2LEg2YHZiNix
+2YvYpyDZhNiq2KzZhtioINil2LrZhNin2YIg2KfZhNit2LPYp9ioLg0KaHR0cHM6Ly9hY2NvdW50
+cy5leGFtcGxlL3NlY3VyaXR5DQo=
+
+--===============5460593409329848987==
+Content-Type: text/html; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+
+PCFkb2N0eXBlIGh0bWw+PGh0bWwgbGFuZz0iYXIiIGRpcj0icnRsIj48aGVhZD48bWV0YSBjaGFy
+c2V0PSJVVEYtOCI+PHRpdGxlPtiq2K3ZgtmCINmF2YYg2K3Ys9in2KjZgyDZgdmI2LHZi9inPC90
+aXRsZT48L2hlYWQ+PGJvZHk+PGgxPtiq2K3ZgtmCINmF2YYg2K3Ys9in2KjZgyDZgdmI2LHZi9in
+PC9oMT48cD7Ys9mK2KrZhSDYqti52YTZitmCINit2LPYp9io2YMg2KfZhNmK2YjZhSDYqNiz2KjY
+qCDZhti02KfYtyDYutmK2LEg2YXYudiq2KfYry4g2KPZg9ivINmD2YTZhdipINin2YTZhdix2YjY
+sSDZgdmI2LHZi9inINmE2KrYrNmG2Kgg2KXYutmE2KfZgiDYp9mE2K3Ys9in2KguPC9wPjxwPjxh
+IGhyZWY9Imh0dHBzOi8vdmVyaWZ5LmV4YW1wbGUvYWNjb3VudCI+aHR0cHM6Ly9hY2NvdW50cy5l
+eGFtcGxlL3NlY3VyaXR5PC9hPjwvcD48L2JvZHk+PC9odG1sPg0K
+
+--===============5460593409329848987==--
