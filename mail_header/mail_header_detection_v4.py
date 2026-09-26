@@ -711,12 +711,22 @@ class EmailHeaderAnalyzer:
                         logger.info(f"SPF include 도메인 검사: {include_domain}")
                         self.check_spf_record(include_domain)
                     
-                    # SPF 레코드에 -all 또는 ~all과 같은 엄격한 정책이 있는지 확인
-                    if re.search(r'[-~]all', txt_record):
-                        logger.info("엄격한 SPF 정책 발견 (-all 또는 ~all)")
-                    else:
-                        logger.warning("약한 SPF 정책: ?all 또는 +all이 사용되었거나 all 지시자 누락")
-                        self.analysis_result["reasons"].append("약한 SPF 정책 사용")
+                    # Record the terminal qualifier without turning policy
+                    # publication into a message-level authentication result.
+                    terminal = re.search(r'(?:^|\s)([-~+?]?)all(?:\s|$|\")', txt_record, re.I)
+                    qualifier = terminal.group(1) if terminal else None
+                    policy = {'-': 'hardfail', '~': 'softfail', '?': 'neutral', '+': 'pass', '': 'pass'}.get(qualifier, 'missing')
+                    self.analysis_result['details'].setdefault('spf_policy_observations', []).append({
+                        'domain': domain, 'all_qualifier': qualifier, 'policy': policy,
+                    })
+                    labels = {
+                        'hardfail': 'SPF 종결 정책 관측: -all (HardFail)',
+                        'softfail': 'SPF 종결 정책 관측: ~all (SoftFail)',
+                        'neutral': 'SPF 종결 정책 관측: ?all (Neutral)',
+                        'pass': 'SPF 종결 정책 관측: +all/all (모든 송신원 허용)',
+                        'missing': 'SPF 종결 all 메커니즘 없음',
+                    }
+                    logger.info(labels[policy])
             
             return True
         except dns.resolver.NoAnswer:
@@ -732,10 +742,8 @@ class EmailHeaderAnalyzer:
         mechanisms = re.findall(r'[\+\-\~\?]?(?:ip4|ip6|a|mx|include|exists|redirect|exp):[^\s]+', spf_record)
         logger.info(f"추출된 SPF 메커니즘: {mechanisms}")
         
-        # '+all'과 같은 위험한 메커니즘 확인
-        if "+all" in spf_record:
-            logger.warning(f"도메인 {domain}에 위험한 SPF 설정 발견: +all")
-            self.analysis_result["reasons"].append(f"위험한 SPF 설정: +all (모든 발신자 허용)")
+        # The terminal all qualifier is recorded by check_spf_record.  It is
+        # domain policy metadata, not evidence about this individual message.
     
     def extract_spf_ip(self, msg):
         """Received-SPF 헤더에서 IP 주소 추출 및 검증"""

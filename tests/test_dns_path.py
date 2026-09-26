@@ -2,6 +2,7 @@ import unittest
 from unittest.mock import patch
 from email.message import EmailMessage
 import dns.resolver
+from unittest.mock import Mock
 from mail_header.mail_header_detection_v4 import EmailHeaderAnalyzer
 
 class DNSPathTests(unittest.TestCase):
@@ -49,3 +50,12 @@ class DNSPathTests(unittest.TestCase):
         self.a.dig_ip_list=['220.64.109.0/24']
         self.assertTrue(self.a.compare_ip_lists())
         self.assertEqual(self.a.analysis_result['spf_check'],'observed')
+    def test_spf_all_qualifiers_are_not_conflated(self):
+        def answers(record):
+            item=Mock();item.to_text.return_value=f'"v=spf1 {record}"';return [item]
+        with patch.object(self.a,'_resolve_dns',return_value=answers('~all')):
+            self.a.check_spf_record('soft.example')
+        with patch.object(self.a,'_resolve_dns',return_value=answers('-all')):
+            self.a.check_spf_record('hard.example')
+        observations=self.a.analysis_result['details']['spf_policy_observations']
+        self.assertEqual([item['policy'] for item in observations],['softfail','hardfail'])
