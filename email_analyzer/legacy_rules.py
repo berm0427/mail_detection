@@ -20,6 +20,7 @@ MISSING_STATUSES = {
     '', 'unknown', 'missing', 'none', 'neutral', 'softfail', 'no_reference',
     'no_ip', 'not_applicable', 'unverified_pass', 'observed',
     'observed_signature', 'arc_pass', 'arc_none', 'arc_missing',
+    'arc_observed',
 }
 ERROR_STATUSES = {'error', 'temperror', 'permerror', 'timeout', 'lookup_error', 'dns_error'}
 

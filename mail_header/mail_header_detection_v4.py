@@ -581,11 +581,13 @@ class EmailHeaderAnalyzer:
             self.analysis_result["details"]["domain_info"] = domain_info
 
             # DNSSEC 상태 처리
-            dnssec_status = "unsigned"
+            # WHOIS may expose a registry-side DNSSEC field, but it does not
+            # cryptographically validate the DNSSEC chain for this lookup.
+            dnssec_status = "not_validated"
             if hasattr(w, 'dnssec'):
                 dnssec_value = str(w.dnssec).lower()
                 if 'signed' in dnssec_value or 'yes' in dnssec_value:
-                    dnssec_status = "signed"
+                    dnssec_status = "registry_signed_observed"
             self.analysis_result["dnssec_status"] = dnssec_status
 
             return w
@@ -751,10 +753,8 @@ class EmailHeaderAnalyzer:
             result_match = re.search(r'^(\w+)', spf_header)
             if result_match:
                 spf_result = result_match.group(1).lower()
-                logger.info(f"SPF 검사 결과: {spf_result}")
-                
-                if spf_result not in ['pass', 'pass,']:
-                    self.analysis_result["reasons"].append(f"SPF 검사 실패: {spf_result}")
+                logger.info(f"Received-SPF 원문 주장값: {spf_result}")
+                self.analysis_result["details"]["received_spf_header_assertion"] = spf_result
             
             # designates 다음에 오는 IP 주소 추출
             match = re.search(r'designates\s+(\d+\.\d+\.\d+\.\d+(?:/\d+)?)', spf_header)
@@ -790,13 +790,6 @@ class EmailHeaderAnalyzer:
     
     def compare_ip_lists(self):
         """추출한 IP 리스트와 SPF IP 리스트 비교"""
-        # 개인 이메일 도메인인 경우 IP 비교 생략
-        from_domain = self.analysis_result.get("from_domain")
-        if from_domain and self.is_user_email_domain(from_domain):
-            logger.info(f"개인 이메일 도메인 {from_domain}은 IP 리스트 비교를 생략합니다.")
-            self.analysis_result["spf_check"] = "not_applicable"
-            return True
-            
         try:
             if not self.spf_ip_list:
                 logger.warning("SPF IP 리스트가 비어 있습니다.")
@@ -834,19 +827,15 @@ class EmailHeaderAnalyzer:
                     logger.warning(f"IP 비교 오류 (spf): {spf_ip} - {e}")
         
             if match_found:
-                logger.info(f"IP 리스트 비교: 일치 - {matching_ips}")
-                self.analysis_result["spf_check"] = "match"
+                logger.info(f"원문 SPF 주장 IP와 DNS SPF ip4 관측값 일치: {matching_ips}")
+                self.analysis_result["spf_check"] = "observed"
                 self.analysis_result["details"]["matching_ips"] = matching_ips
+                self.analysis_result["details"]["spf_ip_comparison"] = "observed_match_not_spf_verification"
                 return True
             else:
-                logger.warning("IP 리스트 비교: 불일치")
-                self.analysis_result["spf_check"] = "mismatch"
-                self.analysis_result["reasons"].append("발신자 IP가 SPF에 허용된 범위에 없음")
-                print("발신자 IP가 SPF에 허용된 범위에 없습니다. SPF 허용 범위 불일치가 관측되었습니다.")
-                logging.shutdown()  # 로그 정리
-                import time
-                time.sleep(0.1)     # 로그 완료 대기
-                os._exit(1)         # 즉시 프로그램 종료
+                logger.info("원문 SPF 주장 IP와 수집한 DNS SPF ip4 관측값 불일치")
+                self.analysis_result["spf_check"] = "observed"
+                self.analysis_result["details"]["spf_ip_comparison"] = "observed_mismatch_not_spf_verification"
                 return False
                 
         except Exception as e:
@@ -892,14 +881,13 @@ class EmailHeaderAnalyzer:
         if auth_results:
             logger.info(f"Authentication-Results: {auth_results}")
             
-            # DKIM 결과
+            # Authentication-Results is sender-controllable in a standalone
+            # EML. Record it without claiming local cryptographic verification.
             dkim_match = re.search(r'dkim=(\w+)', auth_results)
             if dkim_match:
                 dkim_result = dkim_match.group(1).lower()
-                self.analysis_result["dkim_check"] = dkim_result
-                
-                if dkim_result not in ["pass", "none"]:  # none은 오류로 간주하지 않음
-                    self.analysis_result["reasons"].append(f"DKIM 검증 실패: {dkim_result}")
+                self.analysis_result["dkim_check"] = "observed"
+                self.analysis_result["details"]["dkim_header_assertion"] = dkim_result
             else:
                 self.analysis_result["dkim_check"] = "missing"
                 # DKIM 서명 부재를 심각한 문제로 보지 않음 (정상 이메일도 DKIM 없는 경우 많음)
@@ -909,10 +897,8 @@ class EmailHeaderAnalyzer:
             dmarc_match = re.search(r'dmarc=(\w+)', auth_results)
             if dmarc_match:
                 dmarc_result = dmarc_match.group(1).lower()
-                self.analysis_result["dmarc_check"] = dmarc_result
-                
-                if dmarc_result not in ["pass", "none"]:  # none은 오류로 간주하지 않음
-                    self.analysis_result["reasons"].append(f"DMARC 검증 실패: {dmarc_result}")
+                self.analysis_result["dmarc_check"] = "observed"
+                self.analysis_result["details"]["dmarc_header_assertion"] = dmarc_result
             else:
                 self.analysis_result["dmarc_check"] = "missing"
                 # DMARC 정책 부재를 심각한 문제로 보지 않음 (정상 이메일도 DMARC 없는 경우 많음)
@@ -934,7 +920,8 @@ class EmailHeaderAnalyzer:
             if domain_match:
                 dkim_domain = domain_match.group(1).strip()
                 logger.info(f"DKIM 서명 도메인: {dkim_domain}")
-                self.analysis_result["dkim_check"] = 'match'
+                self.analysis_result["dkim_check"] = 'observed_signature'
+                self.analysis_result["details"]["dkim_signature_domain"] = dkim_domain
                 
                 # 발신자 도메인과 DKIM 도메인 비교 (하위 도메인 허용)
                 sender_domain = self.analysis_result.get("sender_domain")
@@ -942,7 +929,7 @@ class EmailHeaderAnalyzer:
                                          sender_domain.endswith(f".{dkim_domain}") or 
                                          any(d.endswith(f".{dkim_domain}") for d in sender_domain.split('.'))):
                     logger.warning(f"DKIM 도메인과 발신자 도메인 불일치: {dkim_domain} vs {sender_domain}")
-                    self.analysis_result["reasons"].append(f"DKIM 도메인 불일치: {dkim_domain}")
+                    self.analysis_result["details"]["dkim_from_domain_alignment"] = "observed_mismatch_not_signature_verification"
         
         # ARC-Authentication-Results 헤더 확인 (DKIM/DMARC 정보 추가 소스)
         arc_auth = msg.get('ARC-Authentication-Results', '')
@@ -954,20 +941,16 @@ class EmailHeaderAnalyzer:
                 dkim_match = re.search(r'dkim=(\w+)', arc_auth)
                 if dkim_match:
                     dkim_result = dkim_match.group(1).lower()
-                    self.analysis_result["dkim_check"] = f"arc_{dkim_result}"
-                    
-                    if dkim_result not in ["pass", "none"]:
-                        self.analysis_result["reasons"].append(f"ARC DKIM 검증 실패: {dkim_result}")
+                    self.analysis_result["dkim_check"] = "arc_observed"
+                    self.analysis_result["details"]["arc_dkim_header_assertion"] = dkim_result
             
             # DMARC 결과가 없을 경우 ARC에서 확인
             if self.analysis_result["dmarc_check"] == "unknown" or self.analysis_result["dmarc_check"] == "missing":
                 dmarc_match = re.search(r'dmarc=(\w+)', arc_auth)
                 if dmarc_match:
                     dmarc_result = dmarc_match.group(1).lower()
-                    self.analysis_result["dmarc_check"] = f"arc_{dmarc_result}"
-                    
-                    if dmarc_result not in ["pass", "none"]:
-                        self.analysis_result["reasons"].append(f"ARC DMARC 검증 실패: {dmarc_result}")
+                    self.analysis_result["dmarc_check"] = "arc_observed"
+                    self.analysis_result["details"]["arc_dmarc_header_assertion"] = dmarc_result
     
     def analyze_arc_headers(self, msg):
         """ARC(Authenticated Received Chain) 헤더 분석"""
@@ -990,12 +973,7 @@ class EmailHeaderAnalyzer:
                     self.analysis_result["reasons"].append(f"ARC 체인 검증 실패: {cv_value}")
         
             # ARC Authentication 결과 확인
-            if 'spf=pass' in arc_auth:
-                logger.info("ARC 인증 결과: SPF 통과")
-                # DKIM이 없는 것은 오류가 아님, 많은 메일에서 DKIM을 사용하지 않음
-            else:
-                logger.warning("ARC 인증 결과에 SPF 실패 항목이 있음")
-                self.analysis_result["reasons"].append("원본 이메일의 SPF 인증 실패 (ARC 헤더 기준)")
+            self.analysis_result["details"]["arc_authentication_results_observed"] = True
 
     
     def analyze_sender_organization(self, domain):

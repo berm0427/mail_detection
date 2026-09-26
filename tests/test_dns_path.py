@@ -27,3 +27,25 @@ class DNSPathTests(unittest.TestCase):
         with patch.object(self.a,'check_dns_records') as dns_call, patch.object(self.a,'check_whois_info'), patch.object(self.a,'analyze_dkim_dmarc'), patch.object(self.a,'compare_ip_lists'):
             self.a.analyze_email(msg.as_bytes())
         dns_call.assert_called_once_with('iana.org')
+    def test_dkim_signature_presence_is_not_cryptographic_pass(self):
+        msg=EmailMessage();msg['From']='sender@example.org'
+        msg['DKIM-Signature']='v=1; d=example.org; s=selector; b=not-a-real-signature'
+        msg.set_content('test')
+        self.a.analysis_result['sender_domain']='example.org'
+        self.a.analyze_dkim_dmarc(msg)
+        self.assertEqual(self.a.analysis_result['dkim_check'],'observed_signature')
+        self.assertEqual(self.a.analysis_result['details']['dkim_signature_domain'],'example.org')
+    def test_spf_observation_mismatch_does_not_exit_or_claim_verified_failure(self):
+        self.a.analysis_result['from_domain']='corp.example'
+        self.a.spf_ip_list=['192.0.2.1']
+        self.a.dig_ip_list=['198.51.100.0/24']
+        self.assertFalse(self.a.compare_ip_lists())
+        self.assertEqual(self.a.analysis_result['spf_check'],'observed')
+        self.assertEqual(self.a.analysis_result['details']['spf_ip_comparison'],
+                         'observed_mismatch_not_spf_verification')
+    def test_consumer_mail_domain_does_not_skip_spf_observation(self):
+        self.a.analysis_result['from_domain']='kakao.com'
+        self.a.spf_ip_list=['220.64.109.48']
+        self.a.dig_ip_list=['220.64.109.0/24']
+        self.assertTrue(self.a.compare_ip_lists())
+        self.assertEqual(self.a.analysis_result['spf_check'],'observed')
