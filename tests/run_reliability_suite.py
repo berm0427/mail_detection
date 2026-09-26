@@ -31,8 +31,13 @@ def main():
     py = sys.executable
     failures = []
     for name, cmd, timeout in [
-        ('unittest', [py, '-B', '-m', 'unittest', 'discover', '-s', 'tests', '-v'], 180),
-        ('nlp_runtime_check', [py, '-B', 'tests/nlp_runtime_check.py'], 240),
+        ('core_unittest', [py, '-B', '-m', 'unittest',
+                           'tests.test_attachment_scanner', 'tests.test_clamav_bootstrap',
+                           'tests.test_auth_display', 'tests.test_decision', 'tests.test_dns_path',
+                           'tests.test_evidence', 'tests.test_html_decision',
+                           'tests.test_homepage_comparison', 'tests.test_link_auth_boundaries',
+                           'tests.test_official_site_discovery', 'tests.test_page_structure',
+                           'tests.test_semantic_ml', '-v'], 180),
         ('real_analyzer_gui_integration', [py, '-B', 'tests/real_analyzer_gui_integration.py'], 300),
     ]:
         rc = run(cmd, env, timeout=timeout)

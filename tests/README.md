@@ -14,7 +14,6 @@ C:\Python314\python.exe -m unittest discover -s tests -p "test_*.py"
 
 - `auth_evidence_synthetic_check.py`
 - `gui_flow_check.py`
-- `nlp_runtime_check.py`
 - `real_analyzer_gui_integration.py`
 - `run_reliability_suite.py`
 

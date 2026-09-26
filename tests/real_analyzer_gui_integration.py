@@ -147,6 +147,10 @@ def run_gui_case(eml_path, runtime_options, timeout_ms=20000):
 
 
 def main():
+    # Match the supported GUI launcher: load the native semantic runtime before
+    # importing header/GUI modules that may load other Windows DLLs.
+    from email_analyzer.engines.semantic_ml import preload_semantic_encoder
+    preload_semantic_encoder(ROOT / 'models' / 'dise-semantic-synthetic-v2-groupcv.json')
     RUN_ROOT.mkdir(parents=True, exist_ok=False)
     INPUT_DIR.mkdir(parents=True, exist_ok=True)
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
