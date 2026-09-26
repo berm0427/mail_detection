@@ -49,6 +49,13 @@ def combine_evidence(result):
     if razor.get('status')=='ok' and type((razor.get('details') or {}).get('catalogue_match')) is not bool:
         razor_match=False
     verdict=original
+    homepage=result.get('homepage_comparison') or {}
+    official_domain_mismatches=homepage.get('official_domain_mismatches') or []
+    if official_domain_mismatches:
+        item=official_domain_mismatches[0]
+        reasons.append(f"실시간 공식 사이트 검색 결과와 유사한 사칭 도메인을 탐지했습니다: {item.get('observed_site')} → {item.get('official_site')} ({item.get('organization')}).")
+        if verdict in ('legitimate','inconclusive','no_signal'):
+            verdict='suspicious'
     rule_result=result.get('rule_result') or result
     auth_summary=rule_result.get('auth_summary') or {}
     # A legacy baseline may exist in old saved results. It is deliberately
@@ -100,7 +107,7 @@ def combine_evidence(result):
                         and (html_pair_details.get('validation_gate') or {}).get('passed') is True)
     if html_pair_positive:
         pair=html_pair_details.get('highest_risk_pair') or {}
-        reasons.append(f"목적지와 등록된 공식 페이지의 HTML 구조 차이를 ML이 위험 신호로 탐지했습니다: {pair.get('target_host')} ↔ {pair.get('reference_host')}.")
+        reasons.append(f"목적지와 실시간 검색된 공식 페이지의 HTML 구조 차이를 ML이 위험 신호로 탐지했습니다: {pair.get('target_host')} ↔ {pair.get('reference_host')}.")
         if verdict in ('legitimate','inconclusive','no_signal'):verdict='suspicious'
     rule_score=rule_result.get('risk_score', result.get('risk_score',0))
     page_analysis=result.get('page_analysis') or {}
@@ -113,10 +120,11 @@ def combine_evidence(result):
                          (established and reference.get('official_claim_mismatch_count',0)==0 and (page_ok or registered_official)))
     weak_only=(isinstance(rule_score,(int,float)) and rule_score<10 and corroborated_benign and not auth_summary.get('failures')
                and not razor_match and not evidence_positive and not attachment_threats
-               and not attachment_alerts and not attachment_failures and not html['signals'] and not semantic_corroborated and not html_pair_positive)
+               and not attachment_alerts and not attachment_failures and not html['signals'] and not semantic_corroborated and not html_pair_positive
+               and not official_domain_mismatches)
     no_observed_risk=(isinstance(rule_score,(int,float)) and rule_score<10 and not auth_summary.get('failures')
                       and not razor_match and not evidence_positive and not attachment_threats and not attachment_alerts
-                      and not html['signals'] and not semantic_corroborated and not html_pair_positive)
+                      and not html['signals'] and not semantic_corroborated and not html_pair_positive and not official_domain_mismatches)
     if verdict=='inconclusive' and (weak_only or no_observed_risk):
         verdict='no_signal'
         reasons.append('위험 판정 기준에 해당하는 URL·HTML·인증·첨부파일 신호가 발견되지 않았습니다.')
@@ -136,5 +144,6 @@ def combine_evidence(result):
             'semantic_ml_signal':semantic_positive,'semantic_ml_corroborated':semantic_corroborated,
             'semantic_ml_objective_signals':objective_signals,
             'html_pair_ml_signal':html_pair_positive,
+            'official_domain_mismatch_signal':bool(official_domain_mismatches),
             'attachment_scan':{'threats':len(attachment_threats),'alerts':len(attachment_alerts),'failures':len(attachment_failures)},
             'reasons':reasons}

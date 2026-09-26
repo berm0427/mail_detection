@@ -8,6 +8,7 @@ analysis_result/
 # Generated training artifacts
 models/candidates/
 models/tuning/
+models/runtime/*.sqlite3
 mail_body/training_data/phishpedia_html/
 mail_body/training_data/html_pairs/
 evaluation/

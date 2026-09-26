@@ -365,16 +365,6 @@ class IntegratedAnalyzer:
         return "\n".join(analysis) if analysis else "HTML 분석 데이터 없음"
     
     
-    def extract_urls_from_headers(self, headers: Dict[str, str]) -> List[str]:
-        """Registered reference candidates, never inferred from DNS or reachability."""
-        from email_analyzer.reference_evidence import load_registry, matches
-        from email_analyzer.link_evidence import hostname
-        registry = load_registry(self.runtime_options.get('reference_registry_path'))
-        sender = hostname(self.get_sender_domain(headers))
-        orgs = {r['organization'] for r in registry['domains'] if r['role'] in ('official', 'delegated_sender') and matches(sender, r)}
-        return sorted({'https://' + r['domain'] for r in registry['domains'] if r['role'] == 'official' and r['organization'] in orgs})
-
-    
     def get_sender_domain(self, headers: Dict[str, str]) -> str:
         """발신자 도메인 추출"""
         # From 헤더에서 도메인 추출
@@ -1045,14 +1035,17 @@ class IntegratedAnalyzer:
             header_result = annotate_auth_evidence(header_result, msg)
             from email_analyzer.reference_evidence import analyze_references
             try:
-                reference_evidence = analyze_references(msg, self.runtime_options.get('reference_registry_path'))
+                reference_evidence = analyze_references(msg)
             except Exception as exc:
                 reference_evidence = {'status': 'error', 'error_type': type(exc).__name__, 'template_status': 'error',
                                       'ml': {'status': 'not_applied', 'reason': '참조 분석 오류'}}
             from email_analyzer.homepage_comparison import compare_homepages
             try:
+                from email_analyzer.pipeline import configured_model_path
+                semantic_model_path = configured_model_path(
+                    'semantic_ml_model', self.runtime_options.get('engine_config_override'))
                 homepage_comparison = compare_homepages(msg, page_analysis, link_evidence, brand_analysis,
-                    self.runtime_options.get('reference_registry_path'), self.runtime_options.get('disable_network', False))
+                    self.runtime_options.get('disable_network', False), semantic_model_path)
             except Exception as exc:
                 homepage_comparison = {'status': 'basic_only', 'references': [], 'comparisons': [], 'reason': type(exc).__name__}
             rule_result = score_rules(header_result, body_result, url_analysis, brand_analysis, reference_evidence)

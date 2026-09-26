@@ -62,7 +62,7 @@ def engine_rows(result):
         valid=isinstance(score,(int,float)) and not isinstance(score,bool) and math.isfinite(score) and 0<=score<=1
         rows.append(('웹페이지 구조 ML',STATUS_LABELS.get(status,'알 수 없는 상태'),
                      f"위험 점수 {score:.3f}" if status=='ok' and valid else '판정에 사용할 결과 없음',
-                     (f"모델: {details.get('model_id')} · 검증 기준 통과\n목적지 {pair.get('target_host')} ↔ 공식 {pair.get('reference_host')}\n역할: 실제 수집 페이지와 등록된 공식 페이지의 구조 차이") if status=='ok' else html_pair.get('error','')))
+                         (f"모델: {details.get('model_id')} · 검증 기준 통과\n목적지 {pair.get('target_host')} ↔ 공식 {pair.get('reference_host')}\n역할: 실제 수집 페이지와 실시간 검색된 공식 페이지의 구조 차이") if status=='ok' else html_pair.get('error','')))
     decision = result.get('decision') or {}
     review = decision.get('html_review')
     if review is not None:
@@ -119,8 +119,14 @@ def engine_rows(result):
                 f" · 태그 유사도 {comparison['tag_count_similarity']:.3f}"
                 f" · 비밀번호 입력란 {comparison['password_fields_target']}/{comparison['password_fields_reference']}"
             )
+        for mismatch in homepage.get('official_domain_mismatches',[]):
+            lines.append(
+                f"사칭 도메인 탐지: {mismatch.get('observed_site')} → 공식 {mismatch.get('official_site')}"
+                f" · 기관 {mismatch.get('organization')} · 유사도 {mismatch.get('brand_similarity',0):.3f}"
+                f" · 실시간 검색 점수 {mismatch.get('discovery_score',0):.3f}"
+            )
         rows.append(('공식 홈페이지 비교', {'compared':'비교 완료','disabled':'미실행'}.get(homepage['status'], '기본 분석만' if any(x.get('status') == 'ok' for x in (result.get('page_analysis') or {}).get('pages', [])) else '비교 불가'),
-                     f"비교 {len(homepage.get('comparisons',[]))}건 · 후보 {len(homepage.get('references',[]))}개 · 한도 제외 {homepage.get('omitted',0)}개", '\n'.join(lines)))
+                     f"비교 {len(homepage.get('comparisons',[]))}건 · 사칭 도메인 {homepage.get('official_domain_mismatch_count',0)}건 · 후보 {len(homepage.get('references',[]))}개 · 한도 제외 {homepage.get('omitted',0)}개", '\n'.join(lines)))
     links = result.get('link_evidence')
     if links is not None:
         ok = links.get('status') == 'ok'
@@ -138,8 +144,8 @@ def engine_rows(result):
             f"{x.get('organization')} 공식 링크 주장 → {x.get('target_host')} ({x.get('relationship')})"
             for x in claims
         )
-        rows.append(('기관·도메인 근거', reference.get('status', 'unknown'),
-                     f"등록 도메인 {reference.get('registered_domains', 0)}개 · 공식 링크 불일치 {reference.get('official_claim_mismatch_count', 0)}건",
+        rows.append(('발신·링크 도메인 관계', '분석 완료' if reference.get('status') == 'dynamic' else reference.get('status', 'unknown'),
+                     f"관측 호스트 {len(reference.get('domain_relationships', []))}개",
                      reference.get('note', '') + '\n' +
                      f"From/Reply-To: {reference.get('from_reply_relation', 'not_observed')}\n" +
                      '\n'.join(f"{x.get('host')} : {relationship_labels.get(x.get('relationship'),x.get('relationship'))}" for x in reference.get('domain_relationships', [])) +
