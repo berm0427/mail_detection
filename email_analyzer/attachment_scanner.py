@@ -215,8 +215,18 @@ def scan_attachment(path, *, executable=None, timeout=90, runner=subprocess.run,
         completed = runner(command, capture_output=True, text=False, timeout=timeout,
                            shell=False, creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0)
     except subprocess.TimeoutExpired:
+        if clamav.get('status')=='clean' and not base['static_findings']:
+            return {**base, 'status':'clean', 'safe':True,
+                    'reason':'ClamAV scan completed; Defender timed out',
+                    'scanner':str(tool), 'external_scan_status':'timeout',
+                    'external_error':'defender_scan_timeout'}
         return {**base, 'status': 'timeout', 'reason': f'scan_timeout_{timeout}s'}
     except OSError as exc:
+        if clamav.get('status')=='clean' and not base['static_findings']:
+            return {**base, 'status':'clean', 'safe':True,
+                    'reason':'ClamAV scan completed; Defender failed',
+                    'scanner':str(tool), 'external_scan_status':'failed',
+                    'external_error':type(exc).__name__}
         return {**base, 'status': 'error', 'reason': type(exc).__name__}
     output = (_decode(completed.stdout or b'') + '\n' + _decode(completed.stderr or b'')).strip()
     output_hash = hashlib.sha256(output.encode('utf-8')).hexdigest()
@@ -245,10 +255,17 @@ def scan_attachment(path, *, executable=None, timeout=90, runner=subprocess.run,
         if base['static_findings']:
             return {**base, **details, 'status': 'suspicious_structure',
                     'reason': ', '.join(base['static_findings'])}
+        if clamav.get('status')=='clean':
+            return {**base, **details, 'status':'clean', 'safe':True,
+                    'reason':('ClamAV scan completed; defender_product_disabled' if product_disabled
+                              else 'ClamAV scan completed; Defender failed')}
         return {**base, **details, 'status': 'clean_static',
                 'reason': ('internal_static_scan_clean; defender_product_disabled' if product_disabled
                            else 'internal_static_scan_clean; defender_scan_failed')}
     if base['static_findings']:
         return {**base, **details, 'status': 'suspicious_structure', 'reason': ', '.join(base['static_findings'])}
     details['external_error']='defender_scan_failed'
+    if clamav.get('status')=='clean':
+        return {**base, **details, 'status':'clean', 'safe':True,
+                'reason':'ClamAV scan completed; Defender failed'}
     return {**base, **details, 'status': 'clean_static', 'reason': f'internal_static_scan_clean; defender_exit_{completed.returncode}'}

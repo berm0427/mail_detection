@@ -107,5 +107,15 @@ class DecisionTests(unittest.TestCase):
         self.assertEqual(d['signals'],[])
         self.assertEqual(d['highest_severity'],'none')
 
+    def test_attachment_threat_is_dangerous_and_scan_failure_is_not_a_threat(self):
+        threat=self.result();threat['attachments']=[{'malware_scan':{'status':'threat_detected'}}]
+        decision=combine_evidence(threat)
+        self.assertEqual(decision['verdict'],'dangerous')
+        self.assertEqual(decision['signals'][0]['id'],'attachment_malware')
+        failed=self.result();failed['attachments']=[{'malware_scan':{'status':'error'}}]
+        decision=combine_evidence(failed)
+        self.assertEqual(decision['verdict'],'legitimate')
+        self.assertEqual(decision['attachment_scan']['failures'],1)
+
 
 if __name__=='__main__':unittest.main()

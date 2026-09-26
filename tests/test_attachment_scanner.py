@@ -59,6 +59,18 @@ class AttachmentScannerTests(unittest.TestCase):
         runner=Mock(return_value=subprocess.CompletedProcess([],0,b'False\r\n',b''))
         self.assertEqual(defender_product_status(runner),'disabled')
         defender_product_status.cache_clear()
+    def test_clean_clamav_survives_defender_timeout_and_failure(self):
+        clam_runner=Mock(return_value=self.result(0,b'clean'))
+        timeout=scan_attachment(self.file,executable=self.tool,
+                                runner=Mock(side_effect=subprocess.TimeoutExpired([],1)),
+                                clamav_executable=self.tool,clamav_runner=clam_runner,timeout=1)
+        failed=scan_attachment(self.file,executable=self.tool,
+                               runner=Mock(return_value=self.result(2,b'scan failed')),
+                               clamav_executable=self.tool,clamav_runner=clam_runner)
+        for result in (timeout,failed):
+            self.assertEqual(result['status'],'clean')
+            self.assertTrue(result['safe'])
+            self.assertEqual(result['clamav']['status'],'clean')
     def test_missing_scanner_and_timeout_are_not_clean(self):
         missing=self.scan(self.file,executable=self.root/'none.exe')
         runner=Mock(side_effect=subprocess.TimeoutExpired([],1))

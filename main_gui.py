@@ -299,6 +299,8 @@ class AnalysisThread(QThread):
                         'Defender reported a threat': 'Defender가 위협을 탐지함',
                         'ClamAV reported a threat': 'ClamAV가 위협을 탐지함',
                         'ClamAV scan completed; Defender unavailable': 'ClamAV 검사 완료 · Defender 사용 불가',
+                        'ClamAV scan completed; Defender timed out': 'ClamAV 검사 완료 · Defender 시간 초과',
+                        'ClamAV scan completed; Defender failed': 'ClamAV 검사 완료 · Defender 실행 실패',
                         'ClamAV scan completed; defender_product_disabled': 'ClamAV 검사 완료 · 다른 백신 사용으로 Defender 비활성화',
                         'attachment_missing': '저장된 첨부파일을 찾을 수 없음',
                     }
