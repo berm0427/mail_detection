@@ -40,6 +40,43 @@ EMOJI = {
     "error": "❌ 오류"
 }
 
+
+def build_analysis_summary(result):
+    """Return the compact user-facing result; diagnostics stay in other tabs."""
+    verdict = result.get('verdict', 'no_signal')
+    summary = f"[분석 결과]\n\n[최종 판정] {EMOJI.get(verdict, EMOJI['no_signal'])}\n"
+    decision = result.get('decision') or {}
+    reflected_signals = [item for item in decision.get('signals', []) if item.get('reflected')]
+    if reflected_signals:
+        summary += "\n[판정 근거]\n"
+        for item in reflected_signals:
+            summary += f" • {item.get('summary')}\n"
+    else:
+        summary += "\n판정에 반영된 위험 신호가 없습니다.\n"
+
+    attachments = result.get('attachments') or []
+    if attachments:
+        summary += f"\n[첨부파일 검사] {len(attachments)}개\n"
+        status_labels = {
+            'clean': '위험 신호 없음',
+            'clean_static': '정적 구조 검사 완료 · 백신 검사 미완료',
+            'suspicious_structure': '의심 구조 발견',
+            'threat_detected': '악성코드 탐지',
+            'timeout': '검사 시간 초과',
+            'error': '검사 오류',
+            'disabled': '검사 비활성화',
+            'unavailable': '검사 엔진 없음',
+        }
+        for attachment in attachments:
+            scan = attachment.get('malware_scan') or {}
+            status = scan.get('status', 'unavailable')
+            summary += f" • {attachment.get('filename', '이름 없음')}: {status_labels.get(status, status)}\n"
+            if scan.get('threat_name'):
+                summary += f"   탐지명: {scan['threat_name']}\n"
+            if scan.get('static_findings'):
+                summary += f"   구조 근거: {', '.join(scan['static_findings'])}\n"
+    return summary + f"\n세션 경로: analysis_result/{result['session_path']}"
+
 class LogSignals(QObject):
     """로그 이벤트 신호를 전달하는 클래스"""
     log_message = pyqtSignal(str)
@@ -143,312 +180,9 @@ class AnalysisThread(QThread):
         import re
         from pathlib import Path
         
-        # 요약 결과 생성
-        summary = "[분석 결과]\n\n"
-        risk_score = result.get('risk_score', 0)
-        risk_threshold = result.get('risk_threshold', 70)
-        header = result.get('header') or {}
-        body = result.get('body') or {'total_matches': 0, 'categories': {}}
-        
-        # 도메인 평판 조정 정보 확인
-        domain_reputation_adjusted = result.get('domain_reputation_adjusted', False)
-        domain_age_days = result.get('domain_age_days', None)
-        
-        # 도메인 나이 정보가 없는 경우 헤더에서 가져오기
-        if not domain_age_days and header.get('details') and header['details'].get('domain_info'):
-            domain_info = header['details']['domain_info']
-            domain_age_days = domain_info.get('domain_age_days')
-        
-       
-        # 판정 결과 확인 (analyze_email 함수 결과 그대로 사용)
-        verdict = result.get('verdict', 'legitimate')
-        
-        # 판정 결과 표시
-        summary += f"[최종 판정] {EMOJI.get(verdict, EMOJI['legitimate'])}\n"
-        if verdict == 'dangerous':
-            summary += " - 이 이메일은 높은 위험성으로 판단됩니다. 즉시 삭제를 권장합니다.\n"
-        elif verdict == 'suspicious':
-            summary += " - URL·본문·HTML·인증·첨부파일 검사에서 위험 근거가 발견되었습니다. 아래 근거를 확인하세요.\n"
-        elif verdict == 'no_signal':
-            summary += " - 검사한 규칙과 HTML에서 위험 신호가 발견되지 않았습니다.\n"
-        elif verdict == 'inconclusive':
-            from email_analyzer.engine_view import inconclusive_explanation
-            summary += " - 분석 오류: " + inconclusive_explanation(result) + "\n"
-        else:
-            summary += " - 현재 분석에서 위험 신호가 낮게 나타났습니다.\n"
-        
-        from email_analyzer.engine_view import decision_text
-        summary += '\n[판정 근거]\n' + decision_text(result) + '\n'
-        decision = result.get('decision') or {}
-        reflected_signals = [item for item in decision.get('signals', []) if item.get('reflected')]
-        advisory_signals = [item for item in decision.get('signals', []) if not item.get('reflected')]
-        summary += f"\n[통합 판정 신호] 판정 반영 {len(reflected_signals)}건"
-        if advisory_signals:
-            summary += f" · 참고 {len(advisory_signals)}건"
-        summary += "\n"
-        for item in reflected_signals:
-            summary += f" • [{item.get('source')}] {item.get('summary')}\n"
-        for item in advisory_signals:
-            summary += f" ℹ️ [참고·미반영/{item.get('source')}] {item.get('summary')}\n"
-        if not decision.get('signals'):
-            summary += " • 판정에 반영된 위험 신호 없음\n"
-
-        # 도메인 평판 정보 추가
-        if header.get('sender_domain'):
-            sender_domain = header.get('sender_domain', '알 수 없음')
-            
-            summary += f"\n[도메인 등록·관측 정보] {sender_domain}\n"
-        
-        # 도메인 나이 정보 가져오기
-        creation_date = None
-        if header.get('details') and header['details'].get('domain_info'):
-            domain_info = header['details']['domain_info']
-            # domain_age_days는 이미 위에서 가져옴
-            creation_date = domain_info.get('creation_date')
-        
-        # 도메인 평판 상태 확인
-        domain_reputation = header.get('domain_reputation', 'unknown')
-        
-        # 도메인 나이에 따른 평판 표시 - 재조정 여부와 실제 평판 상태 모두 고려
-        if domain_reputation_adjusted:
-            # 조정된 경우 - 나이에 따라 신뢰 표시
-            summary += f" ℹ️ 도메인 등록 정보: {domain_age_days}일 전에 등록된 도메인입니다. 등록 기간은 참고 정보로 표시하며 판정 점수에서 제외합니다.\n"
-        elif domain_reputation == "suspicious":
-            # 의심스러운 도메인 (조정되지 않음)
-            if domain_age_days:
-                summary += f" ⚠️ 의심스러운 도메인: {domain_age_days}일 전에 등록되었으나 도메인 형식으로 인해 의심스럽습니다.\n"
-            else:
-                summary += f" ⚠️ 의심스러운 도메인: 평판 분석에서 의심 요소가 감지되었습니다.\n"
-        elif domain_reputation == "established":
-            # 확립된 도메인
-            if domain_age_days:
-                summary += f" ℹ️ 도메인 등록 정보: {domain_age_days}일 전에 등록된 도메인입니다. 등록 기간은 참고 정보로 표시하며 판정 점수에서 제외합니다.\n"
-            else:
-                summary += f" ℹ️ 도메인 등록 정보: 오랜 기간 등록되어 있는 도메인입니다. 등록 기간은 참고 정보로 표시하며 판정 점수에서 제외합니다.\n"
-        else:
-            # 기타 상태
-            if domain_age_days:
-                if domain_age_days < 30:
-                    summary += f" ⚠️ 최근({domain_age_days}일 전)에 생성된 도메인입니다.\n"
-                else:
-                    summary += f" ℹ️ {domain_age_days}일 전에 등록된 도메인입니다. 등록 기간은 참고 정보로 표시하며 판정 점수에서 제외합니다.\n"
-            elif creation_date and str(creation_date).lower() not in ("unknown", "none", "null"):
-                summary += f" ℹ️ {creation_date}에 등록된 도메인입니다.\n"
-            else:
-                summary += f" ℹ️ 도메인 정보를 확인할 수 없습니다.\n"
-                
-        # 첨부 파일 정보
-        if result.get('attachments'):
-            summary += f"\n[첨부 파일: {len(result['attachments'])}개]\n"
-            has_unsafe_attachment = False
-            
-            for i, att in enumerate(result['attachments'], 1):
-                is_safe = att.get('safe')
-                status_emoji = "ℹ️" if is_safe is None else "✅" if is_safe else "⚠️"
-                
-                # 안전하지 않은 첨부 파일이 있는지 확인
-                if is_safe is False:
-                    has_unsafe_attachment = True
-                    
-                # 파일 크기 형식화 (KB/MB 단위로)
-                size = att.get('size', 0)
-                if size > 1048576:  # 1MB
-                    formatted_size = f"{size/1048576:.2f} MB"
-                elif size > 1024:  # 1KB
-                    formatted_size = f"{size/1024:.1f} KB"
-                else:
-                    formatted_size = f"{size} 바이트"
-                    
-                # 파일 유형에 따른 아이콘 추가
-                file_type = att.get('type', '').lower()
-                file_icon = "📄"  # 기본 문서
-                if 'image' in file_type:
-                    file_icon = "🖼️"
-                elif 'pdf' in file_type:
-                    file_icon = "📑"
-                elif 'excel' in file_type or 'spreadsheet' in file_type:
-                    file_icon = "📊"
-                elif 'word' in file_type or 'document' in file_type:
-                    file_icon = "📝"
-                elif 'zip' in file_type or 'compressed' in file_type:
-                    file_icon = "🗜️"
-                elif 'executable' in file_type or 'application' in file_type:
-                    file_icon = "⚙️"
-                    
-                summary += f" {i}. {status_emoji} {file_icon} {att['filename']} ({formatted_size})\n"
-                scan = att.get('malware_scan') or {}
-                scan_status = scan.get('status')
-                if scan_status:
-                    labels = {
-                        'clean': '자체 정적 검사 및 백신 검사에서 위험 신호 없음',
-                        'clean_static': '자체 정적 검사에서 위험 신호 없음',
-                        'suspicious_structure': '자체 정적 검사에서 의심 구조 발견',
-                        'threat_detected': '악성코드 탐지', 'alert': '백신 경고',
-                        'timeout': '검사 시간 초과', 'error': '백신 검사 오류',
-                        'disabled': '검사 비활성화', 'unavailable': '검사 엔진 없음',
-                    }
-                    summary += f"    악성코드 검사: {labels.get(scan_status, scan_status)}\n"
-                    if scan.get('static_findings'):
-                        summary += f"    탐지 근거: {', '.join(scan['static_findings'])}\n"
-                if att.get('reason'):
-                    reason_labels = {
-                        'internal_static_scan_clean': '자체 정적 검사에서 위험 구조 없음',
-                        'internal_static_scan_clean; defender_scan_unavailable_or_failed': '자체 정적 검사에서 위험 구조 없음 · Defender 검사는 완료되지 않음',
-                        'internal_static_scan_clean; defender_product_disabled': '자체 정적 검사에서 위험 구조 없음 · 다른 백신 사용으로 Defender가 비활성화됨',
-                        'internal_static_scan_clean; defender_scan_failed': '자체 정적 검사에서 위험 구조 없음 · Defender 검사 시작 실패',
-                        'Defender reported a threat': 'Defender가 위협을 탐지함',
-                        'ClamAV reported a threat': 'ClamAV가 위협을 탐지함',
-                        'ClamAV scan completed; Defender unavailable': 'ClamAV 검사 완료 · Defender 사용 불가',
-                        'ClamAV scan completed; Defender timed out': 'ClamAV 검사 완료 · Defender 시간 초과',
-                        'ClamAV scan completed; Defender failed': 'ClamAV 검사 완료 · Defender 실행 실패',
-                        'ClamAV scan completed; defender_product_disabled': 'ClamAV 검사 완료 · 다른 백신 사용으로 Defender 비활성화',
-                        'attachment_missing': '저장된 첨부파일을 찾을 수 없음',
-                    }
-                    reason_text = reason_labels.get(att['reason'], att['reason'])
-                    summary += f"    - 검사 근거: {reason_text}\n"
-                if scan.get('external_error_code'):
-                    summary += f"    - 외부 백신 오류 코드: {scan['external_error_code']}\n"
-                clamav = scan.get('clamav') or {}
-                clamav_labels = {'clean':'위험 신호 없음','threat_detected':'위협 탐지',
-                                  'unavailable':'설치되지 않음','error':'검사 오류','timeout':'검사 시간 초과'}
-                if clamav:
-                    summary += f"    - ClamAV: {clamav_labels.get(clamav.get('status'),clamav.get('status'))}\n"
-                    if clamav.get('threat_name'):
-                        summary += f"      탐지명: {clamav['threat_name']}\n"
-            
-            # 첨부 파일 안전성에 대한 추가 설명
-            if has_unsafe_attachment:
-                summary += " ⚠️ 첨부파일 위험 신호가 발견되었습니다. 파일별 검사 결과를 확인하세요.\n"
-            else:
-                summary += " 첨부파일 검사 상태는 파일별 결과에 표시합니다.\n"
-
-        # 기관 유형 정보 출력
-        if header.get('organization_type'):
-            org_type = header['organization_type']
-            org_subtype = header.get('organization_subtype', 'unknown')
-            
-            # 기관 유형별 이모지 추가
-            org_emoji = "🏢"
-            if org_type == "public":
-                org_emoji = "🏛️"
-            elif org_type == "financial":
-                org_emoji = "🏦"
-            elif org_type == "education":
-                org_emoji = "🎓"
-            elif org_type == "technology":
-                org_emoji = "💻"
-            elif org_type == "user":
-                org_emoji = "👤"
-            
-            summary += f"\n[발신자 기관 유형] {org_emoji} {org_type}/{org_subtype}\n"
-            
-            # 사칭 가능성 경고 추가
-            if header.get('impersonation') == 'suspected':
-                summary += f" ⚠️ 사칭 가능성 있음: {header.get('impersonation_reason', '')}\n"
-        
-        # 헤더 검증 정보 요약
-        if header:
-            summary += "\n[헤더 검증 결과]\n"
-            header_checks = {
-                'spf_check': 'SPF 검증',
-                'dkim_check': 'DKIM 검증',
-                'dmarc_check': 'DMARC 검증',
-                'dnssec_status': 'DNSSEC'
-            }
-            
-            for check, desc in header_checks.items():
-                if check in header:
-                    status = header[check]
-                    if check == 'dnssec_status':
-                        status_emoji = "✅" if status == "signed" else "ℹ️"
-                    else:
-                        from email_analyzer.legacy_rules import classify_auth_status
-                        category = classify_auth_status(status)
-                        status_emoji = {"pass": "✅", "fail": "❌", "error": "⚠️", "missing": "ℹ️"}[category]
-                        if category == "missing":
-                            status = {'spf_check':'판정 제외 · 송신 IP 또는 SPF 판정 자료 없음', 'dkim_check':'판정 제외 · 검증 가능한 DKIM 서명 자료 없음', 'dmarc_check':'판정 제외 · SPF/DKIM 정렬 결과 없음'}.get(check,'판정 제외 · 원본 자료 없음')
-                    summary += f" {status_emoji} {desc}: {status}\n"
-
-        from email_analyzer.legacy_rules import auth_observation_lines
-        for line in auth_observation_lines(header.get('auth_evidence') or {}):
-            summary += " ℹ️ " + line + "\n"
-
-        dns_queries = (header.get('details') or {}).get('dns_queries') or []
-        if dns_queries:
-            summary += "\n[DNS 조회 상태]\n"
-            dns_labels = {'ok': '조회 성공', 'nxdomain': '도메인 없음', 'no_record': '해당 레코드 없음', 'timeout': '조회 시간 초과', 'error': '조회 오류', 'reserved_test_domain': '예약된 테스트 도메인 · 공개 조회 제외'}
-            for query in dns_queries:
-                summary += f" ℹ️ {query['domain']} {query['type']}: {dns_labels.get(query['status'], query['status'])}\n"
-            summary += " DNS 레코드 조회 성공은 메일 발신자 인증 성공과 다릅니다.\n"
-
-        # 위험 요소 및 조정 설명 - 분석기에서 제공한 이유 목록 사용
-        summary += "\n[위험 요소 분석]\n"
-        
-        # 분석기에서 제공한 이유 목록 사용 (중복 방지)
-        if 'reasons' in result:
-            for reason in result['reasons']:
-                # 도메인 평판 관련 이유는 평판이 조정된 경우 조정 메시지로 대체
-                if "도메인 평판 의심" in reason and not "취소됨" in reason and domain_reputation_adjusted:
-                    domain_reputation_score = 25
-                    summary += f" • <취소됨> 도메인 평판 의심: +{domain_reputation_score} (도메인 나이 {domain_age_days}일로 인해 차감)\n"
-                else:
-                    summary += f" • {reason}\n"
-        
-        # 위험도 점수
-        summary += f"\n[기존 규칙 진단 점수] {risk_score}/100 · 규칙 위험 기준 {risk_threshold}\n"
-        summary += "이 숫자는 규칙 엔진의 진단값이며 ML 확률·도메인·HTML 결과를 더한 최종 위험도가 아닙니다. 최종 결과는 위 통합 판정 신호로 결정합니다.\n"
-        
-        # 위험도에 따른 시각적 표현
-        if verdict == 'dangerous':
-            summary += "🔴 높은 위험 - 즉시 확인이 필요합니다.\n"
-        elif verdict == 'suspicious':
-            summary += "🟠 중간 위험 - 주의가 필요합니다.\n"
-        elif verdict == 'inconclusive':
-            summary += "❌ 분석 오류 - 상세 로그에서 실패 항목을 확인하세요.\n"
-        elif verdict == 'no_signal':
-            summary += "ℹ️ 최종 판정에 반영된 위험 신호 0건\n"
-        else:  # legitimate
-            summary += "🟢 안전 - 위험 요소가 발견되지 않았습니다.\n"
-            
-        # AI 분석 결과 표시
-        if 'ai_analysis' in result:
-            ai_result = result['ai_analysis']
-            ai_verdict = ai_result.get('verdict', '알 수 없음')
-            
-            # AI 판정 이모지 결정
-            ai_emoji = "🤖"
-            if ai_verdict == "안전":
-                ai_emoji = "🟢"
-            elif ai_verdict == "의심":
-                ai_emoji = "🟠"
-            elif ai_verdict == "위험":
-                ai_emoji = "🔴"
-            
-            summary += f"\n\n[AI 분석 결과] {ai_emoji} {ai_verdict}\n"
-            
-            # AI 위험도 점수
-            ai_risk_score = ai_result.get('risk_score', 0)
-            summary += f"AI 위험도 평가: {ai_risk_score}/100\n"
-            
-            # 위험도 조정 정보
-            if result.get('ai_adjusted'):
-                summary += f" ℹ️ AI 분석 결과가 최종 위험도 점수에 반영되었습니다.\n"
-            
-            # 의심스러운 요소
-            if 'suspicious_elements' in ai_result and ai_result['suspicious_elements']:
-                summary += "\n의심스러운 요소:\n"
-                for element in ai_result['suspicious_elements']:
-                    summary += f" • {element}\n"
-            
-            # AI 설명
-            if 'explanation' in ai_result and ai_result['explanation']:
-                summary += f"\n분석 설명:\n{ai_result['explanation']}\n"
-            
-            # AI 권장사항
-            if 'recommendation' in ai_result and ai_result['recommendation']:
-                summary += f"\n권장 조치:\n{ai_result['recommendation']}\n"
-        
-        summary += f"\n세션 경로: analysis_result/{result['session_path']}"
+        # 요약 탭에는 최종 판정에 실제 반영된 근거만 표시합니다.
+        # 전체 DNS, 인증 관측값과 엔진 진단은 상세 로그/엔진별 근거 탭에 남습니다.
+        summary = build_analysis_summary(result)
         
         # 요약 텍스트 업데이트
         self.signals.summary_message.emit(summary)
