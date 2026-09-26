@@ -79,6 +79,28 @@ def main():
     splitter = StratifiedGroupKFold(n_splits=args.folds, shuffle=True, random_state=42)
     report = {"rows": len(rows), "groups": len(set(groups)), "folds": args.folds,
               "feature_names": list(FEATURE_NAMES), "models": {}}
+    split_values = {row["split"] for row in rows}
+    if {"validation", "test"}.issubset(split_values):
+        fit_index = np.asarray([i for i, row in enumerate(rows) if row["split"] == "validation"])
+        test_index = np.asarray([i for i, row in enumerate(rows) if row["split"] == "test"])
+        report.update({
+            "protocol": "fit_on_validation_evaluate_on_independent_test",
+            "fit_rows": int(len(fit_index)), "test_rows": int(len(test_index)),
+            "fit_groups": sorted(set(groups[fit_index].tolist())),
+            "test_groups": sorted(set(groups[test_index].tolist())),
+            "note": "Training split is excluded because upstream semantic scores are in-sample there.",
+        })
+        for name, model in models().items():
+            model.fit(x[fit_index], y[fit_index])
+            probability = model.predict_proba(x[test_index])[:, 1]
+            report["models"][name] = {"independent_test": metrics(y[test_index], probability)}
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(report, ensure_ascii=False, indent=2), encoding="utf-8")
+        print(json.dumps({"output": str(args.output), "protocol": report["protocol"],
+                          "fit_rows": len(fit_index), "test_rows": len(test_index)}, ensure_ascii=False))
+        return
+
+    report["protocol"] = "exploratory_group_cross_validation"
     for name, prototype in models().items():
         probabilities = np.zeros(len(rows), dtype=float); fold_rows = []
         for fold, (train, holdout) in enumerate(splitter.split(x, y, groups)):

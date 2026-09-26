@@ -1,0 +1,86 @@
+{
+  "experiment_id": "fusion-meta-holdout-v1",
+  "created": "2026-09-27",
+  "dataset": "Korean Synthetic Phishing Email Dataset v1",
+  "manifest_sha256": "03c73bf1f7d7fefb90373da4858f0efab6fe27015ccfeffdef1cb4c5d4357a47",
+  "protocol": "fit_on_validation_evaluate_on_independent_test",
+  "fit_rows": 1000,
+  "test_rows": 1000,
+  "fit_groups": [
+    "executive_request",
+    "password_reset",
+    "travel_reservation"
+  ],
+  "test_groups": [
+    "benefits_enrollment",
+    "legal_notice"
+  ],
+  "structure_only": {
+    "logistic_regression": {
+      "independent_test": {
+        "n": 1000,
+        "auc": 0.818392,
+        "accuracy": 0.823,
+        "tn": 484,
+        "fp": 16,
+        "fn": 161,
+        "tp": 339,
+        "fpr": 0.032,
+        "recall": 0.678
+      }
+    },
+    "random_forest": {
+      "independent_test": {
+        "n": 1000,
+        "auc": 0.827608,
+        "accuracy": 0.823,
+        "tn": 484,
+        "fp": 16,
+        "fn": 161,
+        "tp": 339,
+        "fpr": 0.032,
+        "recall": 0.678
+      }
+    }
+  },
+  "structure_plus_semantic": {
+    "logistic_regression": {
+      "independent_test": {
+        "n": 1000,
+        "auc": 0.99878,
+        "accuracy": 0.994,
+        "tn": 494,
+        "fp": 6,
+        "fn": 0,
+        "tp": 500,
+        "fpr": 0.012,
+        "recall": 1.0
+      }
+    },
+    "random_forest": {
+      "independent_test": {
+        "n": 1000,
+        "auc": 0.998,
+        "accuracy": 0.986,
+        "tn": 486,
+        "fp": 14,
+        "fn": 0,
+        "tp": 500,
+        "fpr": 0.028,
+        "recall": 1.0
+      }
+    }
+  },
+  "upstream_semantic_test": {
+    "accuracy": 0.993,
+    "fpr": 0.014,
+    "recall": 1.0,
+    "auc": 1.0
+  },
+  "limitations": [
+    "Synthetic data does not establish real-world performance.",
+    "The semantic model selected hyperparameters using the validation split; the fusion model is fitted on that validation split and evaluated only on the untouched test split.",
+    "Only three validation scenario groups and two test scenario groups are available.",
+    "No learned fusion model is promoted to the GUI."
+  ]
+}
