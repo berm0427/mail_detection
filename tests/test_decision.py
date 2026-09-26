@@ -80,16 +80,15 @@ class DecisionTests(unittest.TestCase):
         self.assertEqual(d['signals'][0]['severity'],'advisory')
         self.assertFalse(d['signals'][0]['reflected'])
 
-    def test_semantic_ml_with_objective_url_signal_is_used(self):
+    def test_semantic_ml_with_url_observation_remains_advisory(self):
         r=self.result();r['engine_results']['semantic_ml']={
             'status':'ok','score':.98,'details':{'predicted_label':1}}
-        r['url_analysis']={'analyzed_urls':[{'risk_score':25}]}
+        r['url_analysis']={'analyzed_urls':[{'structural_features':{'host_is_ip':True}}]}
         d=combine_evidence(r)
-        self.assertEqual(d['verdict'],'suspicious')
-        self.assertTrue(d['semantic_ml_corroborated'])
-        self.assertIn('url_rule',d['semantic_ml_objective_signals'])
-        self.assertEqual(d['reflected_signal_count'],1)
-        self.assertEqual(d['highest_severity'],'suspicious')
+        self.assertEqual(d['verdict'],'legitimate')
+        self.assertFalse(d['semantic_ml_corroborated'])
+        self.assertNotIn('url_rule',d['semantic_ml_objective_signals'])
+        self.assertEqual(d['reflected_signal_count'],0)
 
     def test_live_official_domain_mismatch_is_named_in_fusion_output(self):
         r=self.result();r['homepage_comparison']={'official_domain_mismatches':[{

@@ -138,9 +138,6 @@ def score_rules(header, body, url, brand, reference=None):
         reasons.append(f"{failure['method']} 명시적 인증 실패({failure['status']}): +{failure['points']}")
     if header.get('domain_reputation') == 'suspicious':
         score += 25; reasons.append('도메인 평판 의심: +25')
-    if url.get('risk_score',0) > 0:
-        points=min(url['risk_score'],30)
-        score += points; reasons.append(f'의심스러운 URL: +{points}')
     claim_mismatches = int((reference or {}).get('official_claim_mismatch_count', 0) or 0)
     if claim_mismatches:
         points = min(claim_mismatches * 30, 30)

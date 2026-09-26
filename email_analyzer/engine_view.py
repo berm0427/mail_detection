@@ -77,16 +77,15 @@ def engine_rows(result):
         for item in urls['analyzed_urls']:
             host = hostname(item.get('url', '')) or '호스트 없음'
             sources = tuple(sorted(item.get('sources') or ()))
-            score = item.get('risk_score', 0)
-            key = (host, sources, score)
+            key = (host, sources)
             url_groups[key] = url_groups.get(key, 0) + 1
         url_lines = [
-            f"{host} · {', '.join(sources) or '출처 없음'} · 규칙 점수 {score} · URL {count}개"
-            for (host, sources, score), count in url_groups.items()
+            f"{host} · {', '.join(sources) or '출처 없음'} · URL {count}개"
+            for (host, sources), count in url_groups.items()
         ]
-        rows.append(('URL 규칙 검사', '완료',
+        rows.append(('URL 구조 관측', '완료',
                      f"주소 {urls.get('total_urls', 0)}개 · 표시 그룹 {len(url_groups)}개",
-                     '본문 표시 주소와 HTML href 목적지에 기존 URL 규칙을 적용합니다. 페이지 수집 결과는 목적지 HTML 구조 항목에서 확인합니다.\n' +
+                     '본문 표시 주소와 HTML href 목적지의 구조 특징을 수집합니다. 이 항목은 수동 위험 점수를 계산하지 않습니다.\n' +
                      '\n'.join(url_lines)))
     page = result.get('page_analysis')
     if page is not None:

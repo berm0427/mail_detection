@@ -2,16 +2,17 @@ import random,unittest
 from email.message import EmailMessage
 from email_analyzer.features.extractor import EmailFeatureExtractor
 from email_analyzer.engine_view import engine_rows
-from email_analyzer.body_analyzer import PhishingURLDetector
+from email_analyzer.url_features import URLFeatureExtractor
 from email_analyzer.legacy_rules import annotate_auth_evidence, score_rules
 
 
 class EvidenceTests(unittest.TestCase):
-    def test_long_tracking_url_is_observed_but_not_scored_by_length_alone(self):
-        detector = PhishingURLDetector()
+    def test_url_structure_is_observed_without_risk_score(self):
+        extractor = URLFeatureExtractor()
         url = 'https://mg.mail.notion.so/c/' + ('a' * 180)
-        self.assertTrue(detector.detect_phishing_features(url)['long_url'])
-        self.assertEqual(detector.calculate_risk_score(url), 0)
+        features = extractor.extract(url)
+        self.assertEqual(features['url_length'], len(url))
+        self.assertEqual(features['hostname_label_count'], 4)
 
     def test_url_rule_display_groups_same_host_source_and_score(self):
         result = {
@@ -19,16 +20,16 @@ class EvidenceTests(unittest.TestCase):
             'url_analysis': {
                 'total_urls': 3,
                 'analyzed_urls': [
-                    {'url': 'https://mg.mail.notion.so/a', 'sources': ['html_href'], 'risk_score': 5},
-                    {'url': 'https://mg.mail.notion.so/b', 'sources': ['html_href'], 'risk_score': 5},
-                    {'url': 'https://notion.so', 'sources': ['body_text'], 'risk_score': 0},
+                    {'url': 'https://mg.mail.notion.so/a', 'sources': ['html_href'], 'structural_features': {}},
+                    {'url': 'https://mg.mail.notion.so/b', 'sources': ['html_href'], 'structural_features': {}},
+                    {'url': 'https://notion.so', 'sources': ['body_text'], 'structural_features': {}},
                 ],
             },
         }
-        row = next(item for item in engine_rows(result) if item[0] == 'URL 규칙 검사')
+        row = next(item for item in engine_rows(result) if item[0] == 'URL 구조 관측')
         self.assertEqual(row[2], '주소 3개 · 표시 그룹 2개')
         self.assertEqual(row[3].count('mg.mail.notion.so'), 1)
-        self.assertIn('mg.mail.notion.so · html_href · 규칙 점수 5 · URL 2개', row[3])
+        self.assertIn('mg.mail.notion.so · html_href · URL 2개', row[3])
 
     def test_mime_attachment_and_auth_observations(self):
         msg=EmailMessage();msg['From']='sender@example.org';msg['To']='user@example.net'
@@ -67,9 +68,9 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(missing['verdict'],'inconclusive')
         header={'spf_check':'pass','dkim_check':'pass','dmarc_check':'pass'}
         self.assertEqual(score_rules(header,body,{}, {})['verdict'],'legitimate')
-        self.assertEqual(score_rules({},body,{'risk_score':100},{'typosquatting_detected':True})['verdict'],'suspicious')
+        self.assertEqual(score_rules({},body,{'risk_score':100},{'typosquatting_detected':True})['verdict'],'inconclusive')
         explicit_fail={'spf_check':'fail','dkim_check':'fail','dmarc_check':'fail'}
-        self.assertEqual(score_rules(explicit_fail,body,{'risk_score':100},{'typosquatting_detected':True})['verdict'],'suspicious')
+        self.assertEqual(score_rules(explicit_fail,body,{}, {})['verdict'],'suspicious')
 
     def test_official_link_claim_mismatch_is_a_rule_signal(self):
         body={'total_matches':0,'categories':{}}
@@ -103,8 +104,8 @@ class EvidenceTests(unittest.TestCase):
         self.assertEqual(result['risk_score'],0)
         self.assertEqual(result['verdict'],'inconclusive')
         result=score_rules({},body,{'risk_score':30},{})
-        self.assertEqual(result['risk_score'],30)
-        self.assertEqual(result['verdict'],'suspicious')
+        self.assertEqual(result['risk_score'],0)
+        self.assertEqual(result['verdict'],'inconclusive')
 
     def test_content_word_list_signal_does_not_change_rule_score(self):
         body = {'action_signals': [{'kind': 'urgent_payment_request'}]}

@@ -16,12 +16,11 @@ class HrefTests(unittest.TestCase):
         links=collect_href_urls(m)
         self.assertEqual(links[0]['url'],'https://other.example/login?a=1&b=2')
         a=BodyAnalyzer.__new__(BodyAnalyzer)
-        a.url_detector=Mock()
-        a.url_detector.detect_phishing_features.return_value={}
-        a.url_detector.calculate_risk_score.return_value=0
+        a.url_feature_extractor=Mock()
+        a.url_feature_extractor.extract.return_value={}
         r=a.analyze_urls('https://bank.example/login',links+links)
         self.assertEqual(r['total_urls'],2)
-        self.assertEqual(a.url_detector.calculate_risk_score.call_count,2)
+        self.assertEqual(a.url_feature_extractor.extract.call_count,2)
         self.assertEqual(r['analyzed_urls'][1]['sources'],['html_href'])
     def test_relative_nonweb_attachment(self):
         m=self.msg('<a href="/unresolved">x</a><a href="javascript:alert(1)">x</a><a href="//target.example/a">x</a>')
@@ -30,8 +29,8 @@ class HrefTests(unittest.TestCase):
     def test_base_and_shared_origins(self):
         links=collect_href_urls(self.msg('<base href="https://base.example/"><a href="login">x</a>'))
         self.assertTrue(links[0]['base_from_message'])
-        a=BodyAnalyzer.__new__(BodyAnalyzer);a.url_detector=Mock()
-        a.url_detector.detect_phishing_features.return_value={};a.url_detector.calculate_risk_score.return_value=0
+        a=BodyAnalyzer.__new__(BodyAnalyzer);a.url_feature_extractor=Mock()
+        a.url_feature_extractor.extract.return_value={}
         r=a.analyze_urls('https://base.example/login',links)
         self.assertEqual(r['total_urls'],1)
         self.assertEqual(r['analyzed_urls'][0]['sources'],['body_text','html_href'])

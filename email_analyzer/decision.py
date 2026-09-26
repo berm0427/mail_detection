@@ -7,12 +7,9 @@ POLICY_VERSION = 'evidence-review-v7'
 def _semantic_objective_signals(result, html, attachment_threats, attachment_alerts):
     """Return independently observable signals that can corroborate semantic ML."""
     signals=[]
-    urls=result.get('url_analysis') or {}
     links=result.get('link_evidence') or {}
     reference=result.get('reference_evidence') or {}
     auth=((result.get('rule_result') or result).get('auth_summary') or {})
-    if any((item.get('risk_score') or 0)>=10 for item in urls.get('analyzed_urls',[])):
-        signals.append('url_rule')
     if (links.get('different_host_count') or 0)>0:
         signals.append('display_target_mismatch')
     if (reference.get('official_claim_mismatch_count') or 0)>0:
