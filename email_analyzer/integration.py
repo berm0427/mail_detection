@@ -1087,14 +1087,6 @@ class IntegratedAnalyzer:
                 'brand_analysis': brand_analysis  # 브랜드 분석 결과 추가
             }
 
-            from email_analyzer.evidence_features import EvidenceFeatureExtractor
-            from email_analyzer.pipeline import analyze_evidence_engine
-            result['evidence_features'] = {
-                'schema_version': EvidenceFeatureExtractor.SCHEMA_VERSION,
-                'features': EvidenceFeatureExtractor().extract(result),
-            }
-            result['engine_results']['evidence_ml'] = analyze_evidence_engine(
-                msg, result, self.runtime_options.get('engine_config_override'))
             from email_analyzer.pipeline import analyze_semantic_engine
             result['engine_results']['semantic_ml'] = analyze_semantic_engine(
                 msg, self.runtime_options.get('engine_config_override'))

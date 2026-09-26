@@ -158,51 +158,34 @@ def main() -> None:
     parser.add_argument("dataset_dir", type=Path)
     parser.add_argument("candidate", type=Path)
     parser.add_argument("--model-id", default="dise-user-retrain-candidate")
-    parser.add_argument("--regularization-c", type=float, default=.1)
-    parser.add_argument("--text-bins", type=int, default=2048)
     parser.add_argument("--independent-manifest", type=Path)
     parser.add_argument("--independent-report", type=Path)
     parser.add_argument("--min-independent-rows", type=int, default=100)
-    parser.add_argument("--semantic-model", type=Path,
-                        help="use semantic embeddings plus scenario-group CV instead of character hashing")
+    parser.add_argument("--semantic-model", type=Path, required=True,
+                        help="local sentence-transformer used for semantic training")
     parser.add_argument("--semantic-folds", type=int, default=5)
-    parser.add_argument("--include-synthetic-evidence", action="store_true",
-                        help="experimental: use reserved-domain/auth/placeholder metadata as evidence")
     args = parser.parse_args()
     if not args.zip.is_file():
         parser.error(f"ZIP not found: {args.zip}")
-    if args.regularization_c <= 0 or args.text_bins <= 0:
-        parser.error("regularization and text bins must be positive")
-
-    manifest, prepared = prepare(args.zip.resolve(), args.dataset_dir.resolve(), args.include_synthetic_evidence)
+    manifest, prepared = prepare(args.zip.resolve(), args.dataset_dir.resolve(), False)
     args.candidate.parent.mkdir(parents=True, exist_ok=True)
-    if args.semantic_model:
-        if not args.semantic_model.is_dir():
-            parser.error(f"semantic model not found: {args.semantic_model}")
-        print("[4/6] 의미 임베딩 생성/캐시 확인 (첫 실행은 수분 소요)", flush=True)
-        cache=args.dataset_dir.resolve()/"minilm_embeddings.npz"
-        initial=args.candidate.with_name(args.candidate.stem+"-split-selection.json")
-        embedding=run([sys.executable,"-m","email_analyzer.train_semantic_ml",str(manifest),
-                       str(args.semantic_model.resolve()),str(initial),"--cache",str(cache),
-                       "--model-id",args.model_id+"-split-selection"])
-        if embedding.returncode==0:
-            print("[5/6] 시나리오 그룹 교차검증 및 최종 후보 학습", flush=True)
-            training=run([sys.executable,"-m","email_analyzer.train_semantic_group_cv",str(manifest),
-                          str(cache),str(args.semantic_model.resolve()),str(args.candidate),
-                          "--model-id",args.model_id,"--folds",str(args.semantic_folds)])
-        else:
-            training=embedding
-        evaluation_module="email_analyzer.evaluate_semantic_ml"
-        training_mode="semantic_group_cv"
+    if not args.semantic_model.is_dir():
+        parser.error(f"semantic model not found: {args.semantic_model}")
+    print("[4/6] 의미 임베딩 생성/캐시 확인 (첫 실행은 수분 소요)", flush=True)
+    cache=args.dataset_dir.resolve()/"minilm_embeddings.npz"
+    initial=args.candidate.with_name(args.candidate.stem+"-split-selection.json")
+    embedding=run([sys.executable,"-m","email_analyzer.train_semantic_ml",str(manifest),
+                   str(args.semantic_model.resolve()),str(initial),"--cache",str(cache),
+                   "--model-id",args.model_id+"-split-selection"])
+    if embedding.returncode==0:
+        print("[5/6] 시나리오 그룹 교차검증 및 최종 후보 학습", flush=True)
+        training=run([sys.executable,"-m","email_analyzer.train_semantic_group_cv",str(manifest),
+                      str(cache),str(args.semantic_model.resolve()),str(args.candidate),
+                      "--model-id",args.model_id,"--folds",str(args.semantic_folds)])
     else:
-        print("[4/5] 문자 해싱 후보 모델 학습 시작 (보통 30~90초)", flush=True)
-        training = run([
-            sys.executable, "-m", "email_analyzer.train_evidence_ml", str(manifest), str(args.candidate),
-            "--model-id", args.model_id, "--regularization-c", str(args.regularization_c),
-            "--text-bins", str(args.text_bins),
-        ])
-        evaluation_module="email_analyzer.evaluate_evidence_ml"
-        training_mode="character_hashing"
+        training=embedding
+    evaluation_module="email_analyzer.evaluate_semantic_ml"
+    training_mode="semantic_group_cv"
     report = {"preparation": prepared, "training_exit_code": training.returncode,
               "candidate_written": args.candidate.is_file(), "promoted": False,
               "training_mode":training_mode}
@@ -211,7 +194,7 @@ def main() -> None:
     elif training.returncode == 2:
         report["status"] = "synthetic_validation_gate_failed"
     elif args.independent_manifest:
-        print("[6/6] 독립 평가 시작" if args.semantic_model else "[5/5] 독립 평가 시작", flush=True)
+        print("[6/6] 독립 평가 시작", flush=True)
         independent_report = args.independent_report or args.candidate.with_suffix(".independent.json")
         evaluation = run([
             sys.executable, "-m", evaluation_module, str(args.candidate),

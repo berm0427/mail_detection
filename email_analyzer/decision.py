@@ -2,7 +2,6 @@
 import math
 
 POLICY_VERSION = 'evidence-review-v7'
-ML_REVIEW_THRESHOLD = 0.9
 
 
 def _semantic_objective_signals(result, html, attachment_threats, attachment_alerts):
@@ -48,14 +47,6 @@ def combine_evidence(result):
             'summary': summary,
             'details': details or {},
         })
-    # Retained as a compatibility field for older saved results. The retired
-    # baseline engine never contributes to the current decision.
-    ml_review=False
-    evidence_ml=engines.get('evidence_ml') or {};evidence_score=evidence_ml.get('score')
-    evidence_details=evidence_ml.get('details') or {};gate=evidence_details.get('validation_gate') or {}
-    evidence_valid=(evidence_ml.get('status')=='ok' and isinstance(evidence_score,(int,float)) and not isinstance(evidence_score,bool)
-                    and math.isfinite(evidence_score) and 0<=evidence_score<=1 and gate.get('passed') is True)
-    evidence_positive=evidence_valid and evidence_details.get('predicted_label')==1
     razor=engines.get('razor') or {}
     razor_match=razor.get('status')=='ok' and (razor.get('details') or {}).get('catalogue_match') is True
     if razor.get('status')=='ok' and type((razor.get('details') or {}).get('catalogue_match')) is not bool:
@@ -72,14 +63,6 @@ def combine_evidence(result):
             verdict='suspicious'
     rule_result=result.get('rule_result') or result
     auth_summary=rule_result.get('auth_summary') or {}
-    # A legacy baseline may exist in old saved results. It is deliberately
-    # ignored and omitted from the current explanation.
-    if evidence_positive:
-        add_signal('evidence_ml_positive','evidence_ml','suspicious',f'구조 증거 ML 위험 점수 {evidence_score:.3f}')
-        reasons.append('검증 기준을 통과한 본문·객관 증거 결합 ML이 위험 신호를 탐지했습니다.')
-        if verdict in ('legitimate','inconclusive','no_signal'):verdict='suspicious'
-    elif evidence_ml.get('status')=='ok' and not evidence_valid:
-        reasons.append('결합 ML의 검증 기준을 확인할 수 없어 최종 판정에서 제외했습니다.')
     if razor_match:
         add_signal('razor_catalogue_match','razor','suspicious','공유 스팸 서명 카탈로그 일치')
         reasons.append('Razor 스팸 서명 일치: 주의 판정에 반영했습니다.')
@@ -146,11 +129,11 @@ def combine_evidence(result):
     corroborated_benign=(complete_safe_html or
                          (established and reference.get('official_claim_mismatch_count',0)==0 and (page_ok or registered_official)))
     weak_only=(isinstance(rule_score,(int,float)) and rule_score<10 and corroborated_benign and not auth_summary.get('failures')
-               and not razor_match and not evidence_positive and not attachment_threats
+               and not razor_match and not attachment_threats
                and not attachment_alerts and not attachment_failures and not html['signals'] and not semantic_corroborated and not html_pair_positive
                and not official_domain_mismatches)
     no_observed_risk=(isinstance(rule_score,(int,float)) and rule_score<10 and not auth_summary.get('failures')
-                      and not razor_match and not evidence_positive and not attachment_threats and not attachment_alerts
+                      and not razor_match and not attachment_threats and not attachment_alerts
                       and not html['signals'] and not semantic_corroborated and not html_pair_positive and not official_domain_mismatches)
     if verdict=='inconclusive' and (weak_only or no_observed_risk):
         verdict='no_signal'
@@ -168,14 +151,13 @@ def combine_evidence(result):
     severity_order={'none':0,'advisory':1,'suspicious':2,'dangerous':3}
     highest_severity=max((item['severity'] for item in reflected_signals),
                          key=lambda value:severity_order.get(value,0),default='none')
-    review_required=bool(ml_review or evidence_positive or semantic_corroborated or razor_match or attachment_threats or attachment_alerts or verdict in ('suspicious','dangerous','error'))
+    review_required=bool(semantic_corroborated or razor_match or attachment_threats or attachment_alerts or verdict in ('suspicious','dangerous','error'))
     return {'policy_version':POLICY_VERSION,'verdict':verdict,'original_verdict':original,
             'review_required':review_required,
             'html_review':html,
             'authentication_status':'failed' if auth_summary.get('failures') else 'unverified' if auth_summary.get('incomplete') else 'see_header_evidence',
-            'ml_review_threshold':ML_REVIEW_THRESHOLD,'ml_advisory_only':True,
-            'ml_review_signal':ml_review,'razor_match':razor_match,'unavailable_engines':unavailable,
-            'evidence_ml_signal':evidence_positive,
+            'ml_advisory_only':True,
+            'razor_match':razor_match,'unavailable_engines':unavailable,
             'semantic_ml_integrated':True,
             'semantic_ml_signal':semantic_positive,'semantic_ml_corroborated':semantic_corroborated,
             'semantic_ml_objective_signals':objective_signals,

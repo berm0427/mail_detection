@@ -19,9 +19,6 @@ class DecisionTests(unittest.TestCase):
     def test_error_and_danger_not_downgraded(self):
         for verdict in ['error','dangerous']:
             self.assertEqual(combine_evidence({'verdict':verdict})['verdict'],verdict)
-    def test_threshold(self):
-        self.assertFalse(combine_evidence(self.result(.8999))['ml_review_signal'])
-        self.assertFalse(combine_evidence(self.result(.9))['ml_review_signal'])
     def test_malformed_success_is_incomplete(self):
         for score in [float('nan'), float('inf'), -1, 2, None, True]:
             self.assertEqual(combine_evidence(self.result(score))['verdict'],'legitimate')

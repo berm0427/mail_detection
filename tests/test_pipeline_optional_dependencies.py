@@ -22,7 +22,7 @@ class UnavailableSemanticDependencies(importlib.abc.MetaPathFinder):
 sys.meta_path.insert(0, UnavailableSemanticDependencies())
 
 from email_analyzer.pipeline import (
-    analyze_engines, analyze_evidence_engine, analyze_semantic_engine,
+    analyze_engines, analyze_semantic_engine,
 )
 message = EmailMessage()
 message.set_content('Synthetic offline regression message')
@@ -47,29 +47,6 @@ class PipelineOptionalDependencyTests(unittest.TestCase):
             results = analyze_engines(message, {'razor_command': []})
             assert set(results) == {'razor'}, results
             assert results['razor']['status'] == 'skipped', results
-            assert attempts == [], attempts
-        """)
-
-    def test_evidence_engine_works_without_semantic_dependencies(self):
-        self.run_isolated("""
-            import json
-            import tempfile
-            from pathlib import Path
-            from email_analyzer.evidence_features import EvidenceFeatureExtractor
-            names = list(EvidenceFeatureExtractor.FEATURE_NAMES)
-            with tempfile.TemporaryDirectory() as folder:
-                model = Path(folder) / 'evidence.json'
-                model.write_text(json.dumps({
-                    'model_id': 'offline-fixture',
-                    'schema_version': EvidenceFeatureExtractor.SCHEMA_VERSION,
-                    'feature_names': names, 'positive_class': 'label_1',
-                    'mean': [0] * len(names), 'scale': [1] * len(names),
-                    'evidence_coef': [0] * len(names), 'intercept': 0,
-                    'text_bins': 0, 'text_coef': [],
-                }), encoding='utf-8')
-                result = analyze_evidence_engine(message, {}, {'evidence_ml_model': str(model)})
-            assert result['status'] == 'ok', result
-            assert result['score'] == 0.5, result
             assert attempts == [], attempts
         """)
 

@@ -41,16 +41,6 @@ def engine_rows(result):
     razor = engines.get('razor') or {}
     if razor.get('status') == 'ok' and (razor.get('details') or {}).get('catalogue_match') is True:
         rows.append(('Razor 스팸 서명', '탐지', '카탈로그 일치', '공유 스팸 서명과 일치하여 최종 판정에 반영됨'))
-    evidence_ml=engines.get('evidence_ml') or {}
-    if evidence_ml:
-        status=evidence_ml.get('status','missing');details=evidence_ml.get('details') or {};score=evidence_ml.get('score')
-        valid=isinstance(score,(int,float)) and not isinstance(score,bool) and math.isfinite(score) and 0<=score<=1
-        gate_passed=(details.get('validation_gate') or {}).get('passed') is True
-        if status=='ok' and valid and gate_passed:
-            used=(result.get('decision') or {}).get('evidence_ml_signal') is True
-            rows.append(('구조 증거 ML','정상',f"위험 점수 {score:.3f}",
-                         f"모델: {details.get('model_id','설치되지 않음')} · 검증 통과\n"+
-                         ('위험 신호를 최종 판정에 반영함' if used else '위험 기준 미만')))
     semantic=engines.get('semantic_ml') or {}
     if semantic:
         status=semantic.get('status','missing');details=semantic.get('details') or {};score=semantic.get('score')
