@@ -22,11 +22,11 @@ if not exist "%PYTHON%" (
 echo ============================================================
 echo DISE candidate model training
 echo Dataset: %DATASET_ZIP%
-echo Expected time: 1 to 3 minutes.
+echo Expected time: several minutes on CPU.
 echo ============================================================
 echo.
 
-"%PYTHON%" -u -m tools.retrain_from_dataset_zip "%DATASET_ZIP%" "mail_body\training_data\korean_synthetic_v1" "models\candidates\dise-semantic-user-v1-groupcv.json" --model-id dise-semantic-user-v1-groupcv --semantic-model "C:\Users\berm0\Documents\Codex\2026-09-11\x20\work\minilm" --semantic-folds 5 --independent-manifest "mail_body\test_data\user_real8_manifest.jsonl" --independent-report "models\candidates\dise-semantic-user-v1-groupcv.report.json"
+"%PYTHON%" -u -m tools.retrain_from_dataset_zip "%DATASET_ZIP%" "mail_body\training_data\korean_synthetic_v1" "models\candidates\dise-multilingual-user-candidate.json" --model-id dise-multilingual-user-candidate --semantic-model "C:\Users\berm0\Documents\Codex\2026-09-11\x20\work\models\multilingual-minilm-l12-v2" --semantic-folds 5 --independent-manifest "mail_body\test_data\user_real8_manifest.jsonl" --independent-report "models\candidates\dise-multilingual-user-candidate.report.json"
 set "RESULT=%ERRORLEVEL%"
 
 echo.
