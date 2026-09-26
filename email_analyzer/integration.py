@@ -1181,6 +1181,12 @@ class IntegratedAnalyzer:
             result['decision'] = combine_evidence(result)
             result['verdict'] = result['decision']['verdict']
 
+            # Record the research fusion result in parallel.  It is deliberately
+            # excluded from the production verdict until comparative evaluation
+            # establishes that it improves on the existing evidence policy.
+            from email_analyzer.evidence_fusion import experimental_fusion
+            result['experimental_fusion'] = experimental_fusion(result)
+
             # 최종 결과 저장 (AI 분석 포함)
             final_result_path = self.result_dir / "final_analysis_result.json"
             with open(final_result_path, 'w', encoding='utf-8') as f:
