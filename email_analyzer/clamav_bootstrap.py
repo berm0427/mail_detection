@@ -28,7 +28,12 @@ def runtime_ready(root: Path) -> bool:
 
 def database_ready(root: Path) -> bool:
     database = root / "database"
-    return all((database / name).is_file() for name in ("main.cvd", "daily.cvd", "bytecode.cvd"))
+    # freshclam may install an incrementally updated database as ``.cld``
+    # instead of ``.cvd``.  Both are valid ClamAV database formats.
+    return all(
+        any((database / f"{stem}.{suffix}").is_file() for suffix in ("cvd", "cld"))
+        for stem in ("main", "daily", "bytecode")
+    )
 
 
 def _sha256(path: Path) -> str:
@@ -109,7 +114,6 @@ def download_runtime(destination: Path, *, opener=urllib.request.urlopen, progre
 def install_runtime(root: Path | None = None, *, progress=None) -> Path:
     root = (root or default_install_dir()).resolve()
     if runtime_ready(root):
-        _write_freshclam_config(root)
         return root
     root.parent.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="dise-clamav-") as temporary:
@@ -134,13 +138,24 @@ def update_signatures(root: Path, *, timeout: int = 900) -> None:
         capture_output=True, text=True, timeout=timeout, shell=False,
         creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0,
     )
-    if completed.returncode not in (0, 1) or not database_ready(root):
+    # The usable database state is authoritative. freshclam can return a
+    # non-zero status when one database is already current even though all
+    # required databases are present and ready for clamscan.
+    if not database_ready(root):
         message = (completed.stderr or completed.stdout or "freshclam_failed").strip().splitlines()[-1]
         raise RuntimeError(message)
 
 
 def ensure_clamav(*, update: bool = True, progress=None) -> Path:
     root = install_runtime(progress=progress)
-    if update or not database_ready(root):
-        update_signatures(root)
+    ready_before_update = database_ready(root)
+    if update or not ready_before_update:
+        try:
+            update_signatures(root)
+        except (OSError, subprocess.SubprocessError):
+            # A locked config/database or a temporary updater failure must not
+            # disable scanning when a complete signed database is already on
+            # disk. First-time preparation still fails until all DBs exist.
+            if not ready_before_update or not database_ready(root):
+                raise
     return root

@@ -1,10 +1,11 @@
 import hashlib
 import tempfile
 import unittest
+from unittest.mock import patch
 from pathlib import Path
 import zipfile
 
-from email_analyzer.clamav_bootstrap import extract_runtime, runtime_ready
+from email_analyzer.clamav_bootstrap import database_ready, ensure_clamav, extract_runtime, runtime_ready
 
 
 class ClamAVBootstrapTests(unittest.TestCase):
@@ -41,6 +42,29 @@ class ClamAVBootstrapTests(unittest.TestCase):
         destination.mkdir()
         with self.assertRaises(ValueError):
             extract_runtime(archive, destination)
+
+    def make_ready_install(self, *, database=True):
+        (self.root / "clamscan.exe").write_bytes(b"scan")
+        (self.root / "freshclam.exe").write_bytes(b"update")
+        if database:
+            folder = self.root / "database"
+            folder.mkdir()
+            for name in ("main.cvd", "daily.cld", "bytecode.cvd"):
+                (folder / name).write_bytes(b"database")
+
+    def test_existing_database_survives_locked_update_files(self):
+        self.make_ready_install()
+        self.assertTrue(database_ready(self.root))
+        with patch("email_analyzer.clamav_bootstrap.default_install_dir", return_value=self.root), \
+             patch("email_analyzer.clamav_bootstrap.update_signatures", side_effect=PermissionError("locked")):
+            self.assertEqual(ensure_clamav(), self.root.resolve())
+
+    def test_first_install_still_fails_when_database_update_fails(self):
+        self.make_ready_install(database=False)
+        with patch("email_analyzer.clamav_bootstrap.default_install_dir", return_value=self.root), \
+             patch("email_analyzer.clamav_bootstrap.update_signatures", side_effect=PermissionError("locked")):
+            with self.assertRaises(PermissionError):
+                ensure_clamav()
 
 
 if __name__ == "__main__":
