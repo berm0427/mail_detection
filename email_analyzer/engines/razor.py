@@ -1,4 +1,5 @@
 """Read-only Razor catalogue checks; never reports or revokes messages."""
+import os
 import subprocess
 import tempfile
 from pathlib import Path
@@ -23,9 +24,17 @@ class RazorEngine(BaseEngine):
             with tempfile.TemporaryDirectory(prefix='email-razor-') as folder:
                 path = Path(folder) / 'message.eml'
                 path.write_bytes(email.as_bytes(policy=policy.SMTP))
+                environment = os.environ.copy()
+                if os.name == 'nt':
+                    # C.UTF-8 is a Unix locale name. Strawberry Perl warns and
+                    # falls back to CP949 when it is inherited on Windows.
+                    for name in ('LC_ALL', 'LC_CTYPE', 'LANG'):
+                        if environment.get(name) == 'C.UTF-8':
+                            environment.pop(name, None)
                 result = subprocess.run(self.command + [str(path)],
                                         capture_output=True, timeout=self.timeout, shell=False,
-                                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0))
+                                        creationflags=getattr(subprocess, 'CREATE_NO_WINDOW', 0),
+                                        env=environment)
         except subprocess.TimeoutExpired:
             return EngineResult(self.name, 'error', error='Razor check timed out')
         except OSError as exc:
