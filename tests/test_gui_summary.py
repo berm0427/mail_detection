@@ -16,8 +16,22 @@ class GuiSummaryTests(unittest.TestCase):
         }
         summary = build_analysis_summary(result)
         self.assertIn('유사 사칭 도메인', summary)
+        self.assertIn('[발신자 기관 유형] ℹ️ 확인되지 않음', summary)
         for diagnostic in ('SPF', 'DNSSEC', 'DNS 조회', '참고 ML 신호', '규칙 진단 점수'):
             self.assertNotIn(diagnostic, summary)
+
+    def test_summary_includes_sender_organization_type(self):
+        result = {
+            'verdict': 'no_signal',
+            'session_path': 'notion_test',
+            'header': {
+                'organization_type': 'technology',
+                'organization_subtype': 'it_software',
+            },
+            'decision': {'signals': []},
+        }
+        summary = build_analysis_summary(result)
+        self.assertIn('[발신자 기관 유형] 💻 technology/it_software', summary)
 
     def test_attachment_summary_distinguishes_clean_and_threat(self):
         result = {'verdict': 'dangerous', 'session_path': 'attachment_test',

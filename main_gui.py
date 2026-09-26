@@ -54,6 +54,25 @@ def build_analysis_summary(result):
     else:
         summary += "\n판정에 반영된 위험 신호가 없습니다.\n"
 
+    header = result.get('header') or {}
+    organization_type = header.get('organization_type') or 'unknown'
+    organization_subtype = header.get('organization_subtype') or 'unknown'
+    if organization_type == 'unknown' and organization_subtype == 'unknown':
+        organization_label = '확인되지 않음'
+    elif organization_subtype in ('unknown', organization_type):
+        organization_label = organization_type
+    else:
+        organization_label = f'{organization_type}/{organization_subtype}'
+    organization_emoji = {
+        'public': '🏛️',
+        'financial': '🏦',
+        'education': '🎓',
+        'technology': '💻',
+        'user': '👤',
+        'unknown': 'ℹ️',
+    }.get(organization_type, '🏢')
+    summary += f"\n[발신자 기관 유형] {organization_emoji} {organization_label}\n"
+
     attachments = result.get('attachments') or []
     if attachments:
         summary += f"\n[첨부파일 검사] {len(attachments)}개\n"

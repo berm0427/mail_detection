@@ -135,7 +135,6 @@ $RazorTunnelPython = 'C:\Python314\python.exe'
 $PythonWrapper = Join-Path $ProjectRoot 'tools\run_user_test_gui.py'
 $MainGui = Join-Path $ProjectRoot 'main_gui.py'
 $EngineConfig = Join-Path $ProjectRoot 'engine_config.json'
-$SyntheticEmlDir = Join-Path $ProjectRoot 'tests\synthetic_eml'
 $ClamSetup = Join-Path $ProjectRoot 'tools\setup_clamav.py'
 
 Write-Host '=== User acceptance GUI launcher preflight ==='
@@ -146,7 +145,6 @@ $allRequired = (Test-RequiredPath 'Python 3.11 analysis environment' $PythonExe)
 $allRequired = (Test-RequiredPath 'GUI entrypoint' $MainGui) -and $allRequired
 $allRequired = (Test-RequiredPath 'Python GUI wrapper' $PythonWrapper) -and $allRequired
 $allRequired = (Test-RequiredPath 'Engine configuration' $EngineConfig) -and $allRequired
-$allRequired = (Test-RequiredPath 'Synthetic EML test directory' $SyntheticEmlDir) -and $allRequired
 $allRequired = (Test-RequiredPath 'ClamAV bootstrap' $ClamSetup) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor Perl runtime' $PerlExe) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor check command' $RazorCheck) -and $allRequired

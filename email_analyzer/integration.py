@@ -34,6 +34,38 @@ import zipfile
 
 logger = logging.getLogger(__name__)
 
+
+def log_attachment_scan_result(filename, scan):
+    """Write the completed attachment scan layers to the detailed log."""
+    status_labels = {
+        'clean': '위험 신호 없음',
+        'clean_static': '정적 구조 검사 완료 · 백신 검사 미완료',
+        'suspicious_structure': '의심 구조 발견',
+        'threat_detected': '악성코드 탐지',
+        'timeout': '검사 시간 초과',
+        'error': '검사 오류',
+        'disabled': '비활성',
+        'unavailable': '검사 엔진 없음',
+        'failed': '검사 실패',
+    }
+    findings = scan.get('static_findings') or []
+    logger.info(f"악성코드 검사: {filename}")
+    logger.info(f"  - 내부 정적 검사: {', '.join(findings) if findings else '이상 없음'}")
+
+    clamav = scan.get('clamav') or {}
+    clamav_status = clamav.get('status', 'unavailable')
+    logger.info(f"  - ClamAV: {status_labels.get(clamav_status, clamav_status)}")
+    if clamav.get('threat_name'):
+        logger.info(f"    탐지명: {clamav['threat_name']}")
+
+    defender_status = scan.get('external_scan_status', 'unavailable')
+    logger.info(f"  - Microsoft Defender: {status_labels.get(defender_status, defender_status)}")
+    if scan.get('threat_name') and not clamav.get('threat_name'):
+        logger.info(f"    탐지명: {scan['threat_name']}")
+
+    final_status = scan.get('status', 'unavailable')
+    logger.info(f"  - 최종 결과: {status_labels.get(final_status, final_status)}")
+
 # 프로젝트 루트 경로 추가
 import sys
 project_root = Path(__file__).parent.parent
@@ -819,6 +851,7 @@ class IntegratedAnalyzer:
                             executable=self.runtime_options.get('attachment_scanner_executable'),
                             timeout=int(self.runtime_options.get('attachment_scan_timeout', 90)),
                         )
+                    log_attachment_scan_result(filename, scan)
 
                     # 첨부 파일 정보 저장
                     attachments.append({
