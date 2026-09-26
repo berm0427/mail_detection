@@ -95,10 +95,20 @@ def combine_evidence(result):
     objective_signals=_semantic_objective_signals(result,html,attachment_threats,attachment_alerts)
     semantic_corroborated=bool(semantic_positive and objective_signals)
     if semantic_corroborated:
+        objective_labels={
+            'display_target_mismatch':'표시 주소와 실제 연결 주소 불일치',
+            'official_claim_mismatch':'발신 기관 주장과 공식 도메인 불일치',
+            'from_reply_mismatch':'발신 주소와 회신 주소 불일치',
+            'password_submission_route':'외부 비밀번호 전송 경로',
+            'authentication_failure':'이메일 인증 실패',
+            'attachment_threat':'첨부파일 악성코드 탐지',
+            'attachment_structure_alert':'첨부파일 의심 구조',
+        }
+        readable_signals=[objective_labels.get(item,item) for item in objective_signals]
         add_signal('semantic_ml_corroborated','semantic_ml','suspicious',
-                   f"본문 위험 문맥과 구조 증거 일치: {', '.join(objective_signals)}",
+                   f"위험한 유도 문맥과 구조 증거가 함께 발견됨: {', '.join(readable_signals)}",
                    details={'score':semantic_score,'objective_signals':objective_signals})
-        reasons.append('본문 문맥 ML의 위험 신호가 구조 증거와 일치하여 최종 판정에 반영했습니다: '+', '.join(objective_signals)+'.')
+        reasons.append('본문의 위험한 유도 문맥과 구조 증거가 함께 발견되었습니다: '+', '.join(readable_signals)+'.')
         if verdict in ('legitimate','inconclusive','no_signal'):verdict='suspicious'
     elif semantic_positive:
         add_signal('semantic_ml_advisory','semantic_ml','advisory',f'본문 위험 문맥 점수 {semantic_score:.3f}',False)

@@ -25,6 +25,22 @@ class GuiSummaryTests(unittest.TestCase):
         for diagnostic in ('SPF', 'DNSSEC', 'DNS 조회', '참고 ML 신호', '규칙 진단 점수'):
             self.assertNotIn(diagnostic, summary)
 
+    def test_summary_does_not_repeat_semantic_score_details(self):
+        result = {
+            'verdict': 'suspicious', 'session_path': 'translated_test',
+            'header': {},
+            'decision': {'semantic_ml_corroborated': True, 'signals': [
+                {'reflected': True, 'summary': '위험한 유도 문맥과 구조 증거가 함께 발견됨: 표시 주소와 실제 연결 주소 불일치'},
+            ]},
+            'engine_results': {'semantic_ml': {'status': 'ok', 'score': .981, 'details': {
+                'predicted_label': 1, 'source_language': 'ja', 'translation_status': 'translated'}}},
+        }
+        summary = build_analysis_summary(result)
+        self.assertIn('표시 주소와 실제 연결 주소 불일치', summary)
+        self.assertNotIn('[본문 문맥 ML]', summary)
+        self.assertNotIn('0.981', summary)
+        self.assertNotIn('ja →', summary)
+
     def test_summary_includes_sender_organization_type(self):
         result = {
             'verdict': 'no_signal',

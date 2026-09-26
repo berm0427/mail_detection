@@ -84,15 +84,6 @@ def build_analysis_summary(result):
     else:
         summary += "\n판정에 반영된 위험 신호가 없습니다.\n"
 
-    semantic = (result.get('engine_results') or {}).get('semantic_ml') or {}
-    semantic_details = semantic.get('details') or {}
-    if semantic.get('status') == 'ok' and semantic_details.get('predicted_label') == 1:
-        language = semantic_details.get('source_language', 'unknown')
-        input_label = f'{language} → 한국어 번역' if semantic_details.get('translation_status') == 'translated' else f'{language} 원문'
-        reflected = bool((result.get('decision') or {}).get('semantic_ml_corroborated'))
-        use_label = '구조 증거와 일치하여 판정 반영' if reflected else '문맥 참고 신호'
-        summary += f"\n[본문 문맥 ML] 위험 문맥 {semantic.get('score', 0):.3f} · {input_label} · {use_label}\n"
-
     header = result.get('header') or {}
     organization_type = header.get('organization_type') or 'unknown'
     organization_subtype = header.get('organization_subtype') or 'unknown'

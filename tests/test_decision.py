@@ -90,6 +90,16 @@ class DecisionTests(unittest.TestCase):
         self.assertNotIn('url_rule',d['semantic_ml_objective_signals'])
         self.assertEqual(d['reflected_signal_count'],0)
 
+    def test_semantic_corroboration_uses_readable_korean_summary(self):
+        r=self.result();r['engine_results']['semantic_ml']={
+            'status':'ok','score':.98,'details':{'predicted_label':1}}
+        r['link_evidence']={'different_host_count':1}
+        d=combine_evidence(r)
+        self.assertTrue(d['semantic_ml_corroborated'])
+        summary=d['signals'][0]['summary']
+        self.assertIn('표시 주소와 실제 연결 주소 불일치',summary)
+        self.assertNotIn('display_target_mismatch',summary)
+
     def test_live_official_domain_mismatch_is_named_in_fusion_output(self):
         r=self.result();r['homepage_comparison']={'official_domain_mismatches':[{
             'observed_site':'p0lice.kr','official_site':'police.go.kr',
