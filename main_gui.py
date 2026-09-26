@@ -187,6 +187,19 @@ class AnalysisThread(QThread):
         
         from email_analyzer.engine_view import decision_text
         summary += '\n[판정 근거]\n' + decision_text(result) + '\n'
+        decision = result.get('decision') or {}
+        reflected_signals = [item for item in decision.get('signals', []) if item.get('reflected')]
+        advisory_signals = [item for item in decision.get('signals', []) if not item.get('reflected')]
+        summary += f"\n[통합 판정 신호] 판정 반영 {len(reflected_signals)}건"
+        if advisory_signals:
+            summary += f" · 참고 {len(advisory_signals)}건"
+        summary += "\n"
+        for item in reflected_signals:
+            summary += f" • [{item.get('source')}] {item.get('summary')}\n"
+        for item in advisory_signals:
+            summary += f" ℹ️ [참고·미반영/{item.get('source')}] {item.get('summary')}\n"
+        if not decision.get('signals'):
+            summary += " • 판정에 반영된 위험 신호 없음\n"
 
         # 제목 위험 키워드 정보 추가 - 로그 및 간접 추출
         subject_keywords_count = 0
@@ -454,7 +467,8 @@ class AnalysisThread(QThread):
                     summary += f" • {reason}\n"
         
         # 위험도 점수
-        summary += f"\n[기존 규칙 점수] {risk_score}/100 · 규칙 위험 기준 {risk_threshold}\n"
+        summary += f"\n[기존 규칙 진단 점수] {risk_score}/100 · 규칙 위험 기준 {risk_threshold}\n"
+        summary += "이 숫자는 규칙 엔진의 진단값이며 ML 확률·도메인·HTML 결과를 더한 최종 위험도가 아닙니다. 최종 결과는 위 통합 판정 신호로 결정합니다.\n"
         
         # 위험도에 따른 시각적 표현
         if verdict == 'dangerous':

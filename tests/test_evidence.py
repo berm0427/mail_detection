@@ -135,5 +135,16 @@ class EvidenceTests(unittest.TestCase):
         self.assertIn('SPF 판정 제외 · 검증 자료 없음', rows[0][3])
         self.assertIn('DMARC 조회 오류', rows[0][3])
 
+    def test_engine_rows_put_unified_decision_before_diagnostic_score(self):
+        result={'risk_score':0,'risk_threshold':70,'decision':{
+            'verdict':'suspicious','signals':[{
+                'source':'official_site_discovery','summary':'유사 사칭 도메인 탐지',
+                'reflected':True}]}}
+        rows=engine_rows(result)
+        self.assertEqual(rows[0][0],'통합 판정')
+        self.assertIn('반영 신호 1건',rows[0][2])
+        self.assertEqual(rows[1][0],'기존 규칙')
+        self.assertIn('최종 판정과 별도',rows[1][3])
+
 
 if __name__=='__main__':unittest.main()

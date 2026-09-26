@@ -38,7 +38,7 @@ class DecisionTests(unittest.TestCase):
     def test_inconclusive_requires_review_after_auth_upgrade(self):
         r=self.result();r['rule_result']={'auth_summary':{'incomplete':True}}
         d=combine_evidence(r)
-        self.assertEqual(d['policy_version'],'evidence-review-v6')
+        self.assertEqual(d['policy_version'],'evidence-review-v7')
         self.assertEqual(d['verdict'],'legitimate')
         self.assertFalse(d['review_required'])
     def test_razor_match_raises_inconclusive_to_suspicious_preserving_auth_reason(self):
@@ -79,6 +79,9 @@ class DecisionTests(unittest.TestCase):
         self.assertTrue(d['semantic_ml_signal'])
         self.assertFalse(d['semantic_ml_corroborated'])
         self.assertTrue(d['semantic_ml_integrated'])
+        self.assertEqual(d['reflected_signal_count'],0)
+        self.assertEqual(d['signals'][0]['severity'],'advisory')
+        self.assertFalse(d['signals'][0]['reflected'])
 
     def test_semantic_ml_with_objective_url_signal_is_used(self):
         r=self.result();r['engine_results']['semantic_ml']={
@@ -88,6 +91,25 @@ class DecisionTests(unittest.TestCase):
         self.assertEqual(d['verdict'],'suspicious')
         self.assertTrue(d['semantic_ml_corroborated'])
         self.assertIn('url_rule',d['semantic_ml_objective_signals'])
+        self.assertEqual(d['reflected_signal_count'],1)
+        self.assertEqual(d['highest_severity'],'suspicious')
+
+    def test_live_official_domain_mismatch_is_named_in_fusion_output(self):
+        r=self.result();r['homepage_comparison']={'official_domain_mismatches':[{
+            'observed_site':'p0lice.kr','official_site':'police.go.kr',
+            'organization':'대한민국 경찰청','brand_similarity':.91}]}
+        d=combine_evidence(r)
+        self.assertEqual(d['verdict'],'suspicious')
+        self.assertEqual(d['reflected_signal_count'],1)
+        self.assertEqual(d['signals'][0]['id'],'official_domain_confusable')
+        self.assertIn('p0lice.kr',d['signals'][0]['summary'])
+
+    def test_no_signal_result_has_no_reflected_findings(self):
+        r=self.result();r['verdict']='inconclusive';r['rule_result']={'risk_score':0,'auth_summary':{'incomplete':True}}
+        d=combine_evidence(r)
+        self.assertEqual(d['verdict'],'no_signal')
+        self.assertEqual(d['signals'],[])
+        self.assertEqual(d['highest_severity'],'none')
 
 
 if __name__=='__main__':unittest.main()

@@ -1054,7 +1054,7 @@ class IntegratedAnalyzer:
             verdict = rule_result['verdict']
             reasons = rule_result['reasons']
 
-            logger.info(f"최종 위험도 점수: {risk_score}/100 (위험 기준 {risk_threshold}), 판정: {verdict}")
+            logger.info(f"기존 규칙 진단 점수: {risk_score}/100 (규칙 위험 기준 {risk_threshold}), 규칙 판정: {verdict}")
             
             # 메타데이터 정보 추가
             metadata = {}
@@ -1122,7 +1122,8 @@ class IntegratedAnalyzer:
             
             logger.info("=== 이메일 분석 완료 ===")
             logger.info(f"최종 판정: {result['verdict']}")
-            logger.info(f"최종 위험도: {result['risk_score']}/100")
+            logger.info(f"통합 판정 반영 신호: {result['decision']['reflected_signal_count']}건")
+            logger.info(f"기존 규칙 진단 점수: {result['risk_score']}/100")
             if brand_analysis.get('extracted_brands'):
                 logger.info(f"추출된 브랜드: {', '.join(brand_analysis['extracted_brands'])}")
             

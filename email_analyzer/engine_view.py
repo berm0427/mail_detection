@@ -27,7 +27,17 @@ def engine_rows(result):
         rule_evidence += '\n[인증 상태]\n' + '\n'.join(auth_lines)
     rows = [('기존 규칙', '판정 불가' if failed else '정상',
              '점수 없음' if failed else f"{rules['risk_score']}/100 · 위험 기준 {rules.get('risk_threshold',70)}",
-             rule_evidence)]
+             '최종 판정과 별도로 표시하는 규칙 진단 점수입니다.\n'+rule_evidence)]
+    decision=result.get('decision') or {}
+    if decision:
+        verdict_labels={'dangerous':'위험','suspicious':'주의','no_signal':'탐지 신호 없음','legitimate':'탐지 신호 없음','error':'판정 오류'}
+        reflected=[item for item in decision.get('signals',[]) if item.get('reflected')]
+        advisory=[item for item in decision.get('signals',[]) if not item.get('reflected')]
+        detail=['판정 반영 · '+item.get('summary','') for item in reflected]
+        detail.extend('참고 · '+item.get('summary','') for item in advisory)
+        rows.insert(0,('통합 판정','완료' if decision.get('verdict')!='error' else '오류',
+                       f"{verdict_labels.get(decision.get('verdict'),decision.get('verdict'))} · 반영 신호 {len(reflected)}건",
+                       '\n'.join(detail) or '판정에 반영된 위험 신호 없음'))
     razor = engines.get('razor') or {}
     if razor.get('status') == 'ok' and (razor.get('details') or {}).get('catalogue_match') is True:
         rows.append(('Razor 스팸 서명', '탐지', '카탈로그 일치', '공유 스팸 서명과 일치하여 최종 판정에 반영됨'))
