@@ -136,6 +136,7 @@ $PythonWrapper = Join-Path $ProjectRoot 'tools\run_user_test_gui.py'
 $MainGui = Join-Path $ProjectRoot 'main_gui.py'
 $EngineConfig = Join-Path $ProjectRoot 'engine_config.json'
 $SyntheticEmlDir = Join-Path $ProjectRoot 'tests\synthetic_eml'
+$ClamSetup = Join-Path $ProjectRoot 'tools\setup_clamav.py'
 
 Write-Host '=== User acceptance GUI launcher preflight ==='
 
@@ -146,6 +147,7 @@ $allRequired = (Test-RequiredPath 'GUI entrypoint' $MainGui) -and $allRequired
 $allRequired = (Test-RequiredPath 'Python GUI wrapper' $PythonWrapper) -and $allRequired
 $allRequired = (Test-RequiredPath 'Engine configuration' $EngineConfig) -and $allRequired
 $allRequired = (Test-RequiredPath 'Synthetic EML test directory' $SyntheticEmlDir) -and $allRequired
+$allRequired = (Test-RequiredPath 'ClamAV bootstrap' $ClamSetup) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor Perl runtime' $PerlExe) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor check command' $RazorCheck) -and $allRequired
 $allRequired = (Test-RequiredPath 'Razor home directory' $RazorHome) -and $allRequired
@@ -186,6 +188,9 @@ else {
 $env:PYTHONIOENCODING = 'utf-8'
 
 if ($CheckOnly) {
+    & $PythonExe -B $ClamSetup --check
+    if ($LASTEXITCODE -eq 0) { Write-Ok 'ClamAV portable runtime and signatures are ready' }
+    else { Write-WarnLine 'ClamAV is not ready. A normal launch will download it.' }
     Write-Host '=== Check-only mode: GUI was not launched ==='
     if (-not $allRequired) {
         exit 3
@@ -202,6 +207,14 @@ if ($CheckOnly) {
 if (-not $allRequired) {
     Write-ErrorLine 'Required paths are missing. Fix the reported paths and run Start-User-Test.bat again.'
     exit 3
+}
+
+& $PythonExe -B $ClamSetup
+if ($LASTEXITCODE -eq 0) {
+    Write-Ok 'ClamAV portable runtime and signatures are ready'
+}
+else {
+    Write-WarnLine 'ClamAV preparation failed. The GUI will continue with internal scanning and other available antivirus layers.'
 }
 
 $relayPrepared = Start-RazorRelayIfNeeded $RazorTunnelPython $RazorTunnel 10

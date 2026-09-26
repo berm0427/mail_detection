@@ -85,6 +85,11 @@ def find_defender() -> Path | None:
 def find_clamav() -> Path | None:
     """Find an official ClamAV clamscan binary without requiring PATH changes."""
     candidates=[]
+    try:
+        from .clamav_bootstrap import default_install_dir
+        candidates.append(default_install_dir()/'clamscan.exe')
+    except (ImportError, OSError):
+        pass
     command=shutil.which('clamscan.exe' if sys.platform=='win32' else 'clamscan')
     if command:
         candidates.append(Path(command))
