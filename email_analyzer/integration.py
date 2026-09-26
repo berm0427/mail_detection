@@ -972,6 +972,34 @@ class IntegratedAnalyzer:
             
             # 2. 헤더 분석
             header_result = self.header_analyzer.analyze_email(parsed_data['raw_email'])
+            from email_analyzer.email_auth_verifier import verify_email_authentication
+            try:
+                authentication = verify_email_authentication(
+                    parsed_data['raw_email'],
+                    allow_dns=not self.runtime_options.get('disable_network', False),
+                )
+            except Exception as exc:
+                authentication = {'status': 'error', 'error_type': type(exc).__name__}
+            header_result.setdefault('details', {})['independent_authentication'] = authentication
+            auth_source = dict((header_result.get('auth_evidence') or {}).get('source') or {})
+            dkim_status = (authentication.get('dkim') or {}).get('status')
+            if dkim_status == 'pass':
+                header_result['dkim_check'] = 'verified_pass'
+                auth_source['dkim_check'] = 'local_verification'
+            elif dkim_status == 'fail':
+                header_result['dkim_check'] = 'fail'
+                auth_source['dkim_check'] = 'local_verification'
+            elif dkim_status == 'error':
+                header_result['dkim_check'] = 'error'
+                auth_source['dkim_check'] = 'local_verification'
+            if (authentication.get('dmarc') or {}).get('status_result') == 'pass':
+                header_result['dmarc_check'] = 'verified_pass'
+                auth_source['dmarc_check'] = 'local_verification'
+            spf_status = (authentication.get('spf') or {}).get('status')
+            if spf_status not in (None, 'not_evaluated'):
+                header_result['spf_check'] = f'recomputed_{spf_status}_untrusted_input'
+                auth_source['spf_check'] = 'reconstructed_untrusted_smtp_input'
+            header_result['auth_evidence'] = {'source': auth_source}
             
             # 3. 헤더 직접 검사
             msg = parsed_data['msg']

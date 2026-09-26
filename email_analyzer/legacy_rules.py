@@ -21,6 +21,9 @@ MISSING_STATUSES = {
     'no_ip', 'not_applicable', 'unverified_pass', 'observed',
     'observed_signature', 'arc_pass', 'arc_none', 'arc_missing',
     'arc_observed',
+    'recomputed_pass_untrusted_input', 'recomputed_fail_untrusted_input',
+    'recomputed_softfail_untrusted_input', 'recomputed_neutral_untrusted_input',
+    'recomputed_none_untrusted_input', 'recomputed_error_untrusted_input',
 }
 ERROR_STATUSES = {'error', 'temperror', 'permerror', 'timeout', 'lookup_error', 'dns_error'}
 
