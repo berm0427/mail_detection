@@ -17,6 +17,7 @@ if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
 from email_analyzer.evidence_fusion import experimental_fusion
+from email_analyzer.fusion_baselines import all_baselines
 
 
 def _metrics(labels, predictions):
@@ -41,7 +42,7 @@ def main():
     args = parser.parse_args()
     manifest = args.manifest.resolve()
     rows = [json.loads(line) for line in manifest.read_text(encoding="utf-8").splitlines() if line.strip()]
-    legacy_labels, legacy_predictions = [], []
+    method_values = {}
     fusion_labels, fusion_predictions = [], []
     details, missing = [], []
     for row in rows:
@@ -51,22 +52,25 @@ def main():
             missing.append(str(path)); continue
         result = json.loads(path.read_text(encoding="utf-8"))
         label = int(row["label"])
-        legacy = (result.get("decision") or {}).get("verdict", result.get("verdict"))
-        legacy_prediction = int(legacy in {"suspicious", "dangerous"})
+        baselines = all_baselines(result)
+        legacy = baselines["production_policy"]["verdict"]
         fusion = result.get("experimental_fusion") or experimental_fusion(result)
         fusion_decisive = fusion["verdict"] in {"high_risk", "benign_supported"}
-        legacy_labels.append(label); legacy_predictions.append(legacy_prediction)
+        for method, value in baselines.items():
+            labels, predictions = method_values.setdefault(method, ([], []))
+            labels.append(label); predictions.append(value["prediction"])
         if fusion_decisive:
             fusion_labels.append(label)
             fusion_predictions.append(int(fusion["verdict"] == "high_risk"))
         details.append({
             "id": row.get("id", path.stem), "label": label,
-            "legacy_verdict": legacy, "fusion": fusion,
+            "legacy_verdict": legacy, "baselines": baselines, "fusion": fusion,
             "fusion_decisive": fusion_decisive,
         })
     report = {
         "manifest": str(manifest), "available": len(details), "missing": missing,
-        "production": _metrics(legacy_labels, legacy_predictions),
+        "baselines": {name: _metrics(labels, predictions)
+                      for name, (labels, predictions) in method_values.items()},
         "experimental_decisive_only": _metrics(fusion_labels, fusion_predictions),
         "experimental_coverage": len(fusion_labels) / len(details) if details else 0.0,
         "details": details,

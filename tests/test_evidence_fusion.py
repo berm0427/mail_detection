@@ -2,6 +2,7 @@ from itertools import permutations
 import unittest
 
 from email_analyzer.evidence_fusion import EvidenceMass, experimental_fusion, fuse_masses
+from email_analyzer.fusion_baselines import all_baselines
 
 
 class EvidenceFusionTests(unittest.TestCase):
@@ -54,6 +55,17 @@ class EvidenceFusionTests(unittest.TestCase):
         self.assertEqual({item["source"] for item in result["sources"]}, {
             "attachment_scan_incomplete", "unavailable:semantic_ml"
         })
+
+    def test_baselines_use_the_same_normalised_sources(self):
+        result = {"decision": {"verdict": "suspicious", "signals": [{
+            "id": "official_domain_confusable", "reflected": True,
+            "summary": "lookalike",
+        }]}}
+        values = all_baselines(result)
+        self.assertEqual(values["production_policy"]["prediction"], 1)
+        self.assertEqual(values["simple_mean"]["sources"], 1)
+        self.assertEqual(values["reliability_weighted_mean"]["sources"], 1)
+        self.assertEqual(values["majority_vote"]["prediction"], 1)
 
 
 if __name__ == "__main__":
