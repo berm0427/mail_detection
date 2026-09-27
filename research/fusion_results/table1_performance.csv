@@ -1,0 +1,5 @@
+﻿method,display_name,n,auc,accuracy,tn,fp,fn,tp,fpr,recall
+semantic_only,문맥 ML 단독,10000,0.9988718000000001,0.9885,4991,9,106,4894,0.0018,0.9788
+structure_logistic,구조 Logistic,10000,0.8035589999999999,0.8248,4798,202,1550,3450,0.0404,0.69
+fusion_logistic,문맥+구조 Logistic,10000,0.9985284799999999,0.9903,4990,10,87,4913,0.002,0.9826
+fusion_random_forest,문맥+구조 Random Forest,10000,0.99800816,0.9918,4971,29,53,4947,0.0058,0.9894
