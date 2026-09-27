@@ -57,6 +57,8 @@ def load_real8(manifest):
         result = json.loads(Path(item["analysis_result"]).read_text(encoding="utf-8"))
         semantic = (result.get("engine_results") or {}).get("semantic_ml") or {}
         learned = result.get("experimental_learned_fusion") or {}
+        reflected = [signal.get("id") for signal in (result.get("decision") or {}).get("signals") or []
+                     if signal.get("reflected")]
         production = int(result.get("verdict") in {"suspicious", "dangerous"})
         label = int(item["label"])
         rows.append({
@@ -68,6 +70,7 @@ def load_real8(manifest):
             "fusion_score": round(float(learned.get("score") or 0), 6),
             "fusion_prediction": int(learned.get("prediction") or 0),
             "fusion_correct": int(int(learned.get("prediction") or 0) == label),
+            "reflected_signals": ";".join(filter(None, reflected)),
         })
     return rows
 
@@ -149,6 +152,56 @@ def main():
 현재 결과는 시나리오 그룹을 분리한 합성 데이터에서 Logistic 결합이 문맥 단독보다 작지만 일관된 개선을 보였다는 점을 지지한다. 실제 환경 일반화, 첨부파일·HTML 엔진의 독립 기여, 기관·언어별 성능은 입증되지 않았다. 따라서 논문의 기여는 완성된 상용 탐지기의 우월성이 아니라 불확실성과 엔진 가용성을 기록하는 다중 증거 결합 구조 및 누수 통제 평가 절차로 한정한다.
 """
     (output / "RESULTS_KO.md").write_text(report, encoding="utf-8")
+    by_id = {row["id"]: row for row in real8}
+    cases = f"""# 실제 이메일 사례 분석
+
+실제 이메일 8건은 모델 학습, 임계값 선택, 특징 선택에 사용하지 않았다. 표본 수가 작으므로 정확도 추정치보다 오류 발생 원인을 확인하는 감사 자료로 사용한다.
+
+## 사례 5: 운영 정책의 오탐을 결합 모델이 교정
+
+- 정답: 정상
+- 운영 판정: 피싱
+- 문맥 점수: {by_id['email5']['semantic_score']:.6f}
+- 결합 점수: {by_id['email5']['fusion_score']:.6f}
+- 운영 반영 신호: {by_id['email5']['reflected_signals'] or '없음'}
+
+운영 정책은 인증 실패와 기존 규칙 신호를 위험 근거로 반영했지만 문맥 모델은 정상에 가까운 값을 냈다. 학습 결합은 이 충돌을 정상으로 분류했다. 구조 신호가 존재한다는 이유만으로 위험을 확정하면 정상 메일을 오탐할 수 있음을 보여준다.
+
+## 사례 6: 모든 주요 입력이 놓친 공통 미탐
+
+- 정답: 피싱
+- 운영 판정: 정상
+- 문맥 점수: {by_id['email6']['semantic_score']:.6f}
+- 결합 점수: {by_id['email6']['fusion_score']:.6f}
+- 운영 반영 신호: {by_id['email6']['reflected_signals'] or '없음'}
+
+문맥 점수가 거의 0이고 반영 가능한 구조 증거도 없었다. 결합 계층은 입력 엔진이 생성하지 않은 정보를 복구할 수 없으므로 함께 미탐했다. 이 사례의 개선에는 결합 가중치 조정이 아니라 해당 공격 유형을 포함한 문맥 학습 자료 또는 새로운 객관 증거가 필요하다.
+
+## 사례 7: 문맥 모델의 강한 오탐
+
+- 정답: 정상
+- 운영 판정: 정상
+- 문맥 점수: {by_id['email7']['semantic_score']:.6f}
+- 결합 점수: {by_id['email7']['fusion_score']:.6f}
+- 운영 반영 신호: {by_id['email7']['reflected_signals'] or '없음'}
+
+문맥 모델은 위험 확률을 매우 높게 냈고 학습 결합도 이를 따라 오탐했다. 운영 정책은 독립 구조 증거가 없다는 이유로 문맥 결과를 참고 신호로만 유지하여 정상 판정을 보존했다. 합성 자료로 학습된 결합 모델의 실제 환경 승격을 보류해야 하는 직접적인 근거다.
+
+## 사례 8: 객관적 도메인 증거로 탐지
+
+- 정답: 피싱
+- 운영 판정: 피싱
+- 문맥 점수: {by_id['email8']['semantic_score']:.6f}
+- 결합 점수: {by_id['email8']['fusion_score']:.6f}
+- 운영 반영 신호: {by_id['email8']['reflected_signals'] or '없음'}
+
+문맥 위험과 유사 사칭 도메인 증거가 함께 관측됐다. 운영 정책과 결합 모델 모두 올바르게 탐지했다. 단순 문맥 유사성보다 독립적으로 관측 가능한 도메인 관계가 판정 설명력을 높이는 사례다.
+
+## 사례 분석 결론
+
+결합 계층은 상위 엔진의 오류를 항상 고치지 않는다. 구조 증거가 잘못 해석된 경우에는 문맥과의 충돌을 이용해 오탐을 줄일 수 있지만, 문맥과 구조가 동시에 실패하면 결합도 실패한다. 실제 배치에서는 고위험 확정, 정상 확정, 증거 부족을 구분하고 문맥 단독 양성은 별도 검토 대상으로 유지하는 방식이 현재 자료에 더 적합하다.
+"""
+    (output / "CASE_STUDIES_KO.md").write_text(cases, encoding="utf-8")
     print(json.dumps({"output": str(output.resolve()), "files": sorted(p.name for p in output.iterdir())},
                      ensure_ascii=False, indent=2))
 
