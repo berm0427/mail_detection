@@ -19,6 +19,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import accuracy_score, confusion_matrix, roc_auc_score
 from sklearn.model_selection import GroupKFold, StratifiedGroupKFold
 from sklearn.preprocessing import StandardScaler
+from scipy.stats import binomtest
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -27,6 +28,19 @@ if str(PROJECT_ROOT) not in sys.path:
 from email_analyzer.fusion_features import FEATURE_NAMES, fusion_feature_vector
 
 C_GRID = (0.001, 0.003, 0.01, 0.03, 0.1, 0.3, 1.0, 3.0, 10.0)
+
+ABLATIONS = {
+    "without_semantic": ("semantic_score", "semantic_available", "signal:semantic_ml_corroborated"),
+    "without_authentication": ("authentication_failure_count", "signal:authentication_failure"),
+    "without_url_domain": ("display_target_mismatch_count", "official_claim_mismatch_count",
+                            "signal:official_domain_confusable", "signal:unsafe_password_route"),
+    "without_attachments": ("attachment_threat_count", "attachment_alert_count",
+                            "attachment_failure_count", "signal:attachment_malware",
+                            "signal:attachment_structure_alert"),
+    "without_html_page": ("html_pair_score", "html_pair_available", "page_success_count",
+                          "html_structure_signal_count", "signal:html_pair_ml_positive"),
+    "without_legacy_rule": ("rule_score", "signal:legacy_rule_threshold"),
+}
 
 
 def read_jsonl(path: Path):
@@ -39,7 +53,8 @@ def measure(labels, probabilities):
     predictions = probabilities >= 0.5
     tn, fp, fn, tp = confusion_matrix(labels, predictions, labels=[0, 1]).ravel()
     return {
-        "n": int(len(labels)), "auc": float(roc_auc_score(labels, probabilities)),
+        "n": int(len(labels)),
+        "auc": float(roc_auc_score(labels, probabilities)) if len(set(labels.tolist())) == 2 else None,
         "accuracy": float(accuracy_score(labels, predictions)),
         "tn": int(tn), "fp": int(fp), "fn": int(fn), "tp": int(tp),
         "fpr": float(fp / max(fp + tn, 1)), "recall": float(tp / max(tp + fn, 1)),
@@ -93,6 +108,43 @@ def classifier_set():
     }
 
 
+def zero_columns(matrix, names):
+    result = matrix.copy()
+    for name in names:
+        result[:, FEATURE_NAMES.index(name)] = 0.0
+    return result
+
+
+def paired_error_test(labels, baseline, candidate):
+    baseline_wrong = (np.asarray(baseline) >= 0.5) != labels
+    candidate_wrong = (np.asarray(candidate) >= 0.5) != labels
+    baseline_only_wrong = int(np.sum(baseline_wrong & ~candidate_wrong))
+    candidate_only_wrong = int(np.sum(~baseline_wrong & candidate_wrong))
+    discordant = baseline_only_wrong + candidate_only_wrong
+    p_value = float(binomtest(min(baseline_only_wrong, candidate_only_wrong), discordant,
+                              p=0.5).pvalue) if discordant else 1.0
+    return {"baseline_only_wrong": baseline_only_wrong,
+            "candidate_only_wrong": candidate_only_wrong,
+            "discordant": discordant, "exact_mcnemar_p": p_value}
+
+
+def group_bootstrap_delta(labels, groups, baseline, candidate, iterations=5000):
+    rng = np.random.default_rng(42)
+    unique = np.asarray(sorted(set(groups.tolist())))
+    deltas = []
+    for _ in range(iterations):
+        sampled = rng.choice(unique, size=len(unique), replace=True)
+        indices = np.concatenate([np.flatnonzero(groups == group) for group in sampled])
+        baseline_accuracy = np.mean((baseline[indices] >= 0.5) == labels[indices])
+        candidate_accuracy = np.mean((candidate[indices] >= 0.5) == labels[indices])
+        deltas.append(candidate_accuracy - baseline_accuracy)
+    low, high = np.quantile(deltas, [0.025, 0.975])
+    return {"iterations": iterations, "unit": "scenario_group",
+            "accuracy_delta": float(np.mean((candidate >= 0.5) == labels) -
+                                    np.mean((baseline >= 0.5) == labels)),
+            "ci95": [float(low), float(high)]}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("training_manifest", type=Path)
@@ -125,6 +177,9 @@ def main():
     semantic_probability = np.zeros(len(labels), dtype=float)
     model_probability = {name: np.zeros(len(labels), dtype=float)
                          for name in ("structure_logistic", "fusion_logistic", "fusion_random_forest")}
+    ablation_probability = {name: np.zeros(len(labels), dtype=float) for name in ABLATIONS}
+    dropout_probability = {name: np.zeros(len(labels), dtype=float)
+                           for name in ("semantic_engine_unavailable", "structure_engines_unavailable")}
     fold_reports = []
     for fold, (outer_train, outer_test) in enumerate(splitter.split(embeddings, labels, groups), 1):
         selected_c, inner_splits, trials = choose_c(
@@ -158,6 +213,19 @@ def main():
             model_probability[f"fusion_{name.split('_')[0]}" if name == "logistic_regression"
                               else "fusion_random_forest"][outer_test] = \
                 model.predict_proba(test_fusion)[:, 1]
+        for name, removed in ABLATIONS.items():
+            model = classifier_set()["logistic_regression"].fit(
+                zero_columns(train_fusion, removed), labels[outer_train])
+            ablation_probability[name][outer_test] = model.predict_proba(
+                zero_columns(test_fusion, removed))[:, 1]
+        full_model = classifier_set()["logistic_regression"].fit(
+            train_fusion, labels[outer_train])
+        dropout_probability["semantic_engine_unavailable"][outer_test] = full_model.predict_proba(
+            zero_columns(test_fusion, ABLATIONS["without_semantic"]))[:, 1]
+        structure_columns = tuple(name for name in FEATURE_NAMES
+                                  if name not in {"semantic_score", "semantic_available"})
+        dropout_probability["structure_engines_unavailable"][outer_test] = full_model.predict_proba(
+            zero_columns(test_fusion, structure_columns))[:, 1]
         fold_reports.append({
             "fold": fold, "test_rows": int(len(outer_test)),
             "test_groups": sorted(set(groups[outer_test].tolist())),
@@ -168,6 +236,9 @@ def main():
         })
         print(f"[{fold}/{args.outer_folds}] groups={fold_reports[-1]['test_groups']} C={selected_c}", flush=True)
 
+    semantic_prediction = semantic_probability >= 0.5
+    structure_prediction = model_probability["structure_logistic"] >= 0.5
+    disagreement = semantic_prediction != structure_prediction
     report = {
         "protocol": "nested_stratified_group_cv_with_oof_stacking",
         "rows": len(labels), "groups": len(set(groups)),
@@ -176,6 +247,29 @@ def main():
         "semantic_only": measure(labels, semantic_probability),
         "models": {name: measure(labels, probability)
                    for name, probability in model_probability.items()},
+        "ablations": {name: measure(labels, probability)
+                      for name, probability in ablation_probability.items()},
+        "engine_dropout": {name: measure(labels, probability)
+                           for name, probability in dropout_probability.items()},
+        "natural_conflict_subset": {
+            "n": int(disagreement.sum()),
+            "semantic_only": measure(labels[disagreement], semantic_probability[disagreement])
+                if disagreement.any() else None,
+            "structure_logistic": measure(labels[disagreement],
+                                            model_probability["structure_logistic"][disagreement])
+                if disagreement.any() else None,
+            "fusion_logistic": measure(labels[disagreement],
+                                         model_probability["fusion_logistic"][disagreement])
+                if disagreement.any() else None,
+        },
+        "paired_tests": {
+            name: {
+                "mcnemar": paired_error_test(labels, semantic_probability, probability),
+                "group_bootstrap": group_bootstrap_delta(
+                    labels, groups, semantic_probability, probability),
+            }
+            for name, probability in model_probability.items() if name.startswith("fusion_")
+        },
         "folds": fold_reports,
         "limitations": [
             "All rows are synthetic; this does not establish real-world performance.",
