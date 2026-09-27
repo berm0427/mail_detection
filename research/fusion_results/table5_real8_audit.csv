@@ -1,9 +1,0 @@
-﻿id,label,production_prediction,production_correct,semantic_score,semantic_prediction,fusion_score,fusion_prediction,fusion_correct,reflected_signals
-email1,0,0,1,0.000179,0,0.084336,0,1,
-email2,0,0,1,0.420715,0,0.349047,0,1,
-email3,1,1,1,0.997682,1,0.936812,1,1,authentication_failure;semantic_ml_corroborated;legacy_rule_threshold
-email4,0,0,1,0.0,0,0.084279,0,1,
-email5,0,1,0,0.095635,0,0.253077,0,1,authentication_failure;legacy_rule_threshold
-email6,1,0,0,7.6e-05,0,0.084303,0,0,
-email7,0,0,1,0.997976,1,0.857526,1,0,
-email8,1,1,1,0.997672,1,0.85737,1,1,official_domain_confusable
