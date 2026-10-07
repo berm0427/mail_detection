@@ -1107,6 +1107,21 @@ class IntegratedAnalyzer:
                     'semantic_ml_model', self.runtime_options.get('engine_config_override'))
                 homepage_comparison = compare_homepages(msg, page_analysis, link_evidence, brand_analysis,
                     self.runtime_options.get('disable_network', False), semantic_model_path)
+                # Preserve official-claim/link relationships in the common
+                # structural evidence consumed by rules and learned fusion.
+                external_routes = homepage_comparison.get('official_external_action_routes') or []
+                confusable = homepage_comparison.get('official_domain_mismatches') or []
+                reference_evidence['claimed_official_links'] = [
+                    {
+                        'organization': row.get('organization'),
+                        'target_host': row.get('target_host') or row.get('observed_host'),
+                        'official_host': row.get('official_host'),
+                        'relationship': 'external_action_route' if row in external_routes else 'confusable_domain',
+                        'basis': row.get('basis'),
+                    }
+                    for row in [*external_routes, *confusable]
+                ]
+                reference_evidence['official_claim_mismatch_count'] = len(external_routes) + len(confusable)
             except Exception as exc:
                 homepage_comparison = {'status': 'basic_only', 'references': [], 'comparisons': [], 'reason': type(exc).__name__}
             rule_result = score_rules(header_result, body_result, url_analysis, brand_analysis, reference_evidence)

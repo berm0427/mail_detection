@@ -5,9 +5,96 @@ from email_analyzer.evidence_fusion import EvidenceMass, experimental_fusion, fu
 from email_analyzer.fusion_baselines import all_baselines
 from email_analyzer.fusion_features import FEATURE_NAMES, fusion_feature_dict, fusion_feature_vector
 from email_analyzer.learned_fusion import analyze_learned_fusion
+from email_analyzer.page_structure import _cookie_header, _meta_refresh_target, _store_response_cookies
+from email_analyzer.homepage_comparison import (
+    _official_external_action_routes, _official_reference_links_to_target,
+)
+from email.message import EmailMessage
 
 
 class EvidenceFusionTests(unittest.TestCase):
+    def test_redirect_cookie_is_reused_only_for_the_same_host(self):
+        class Headers(dict):
+            def getlist(self, name):
+                return ['TMOSHCooKie=token123; Path=/; HttpOnly'] if name == 'Set-Cookie' else []
+        class Response:
+            headers = Headers()
+        cookies = {}
+        _store_response_cookies(Response(), 'www.police.go.kr', cookies)
+        self.assertEqual(_cookie_header('www.police.go.kr', cookies), 'TMOSHCooKie=token123')
+        self.assertEqual(_cookie_header('example.org', cookies), '')
+
+    def test_static_meta_refresh_target_is_resolved(self):
+        html = b'<meta http-equiv="refresh" content="0;url=/index.do" />'
+        self.assertEqual(
+            _meta_refresh_target(html, 'https://www.police.go.kr/'),
+            'https://www.police.go.kr/index.do')
+
+    def test_official_claim_external_click_route_is_observed_without_page_fetch(self):
+        message = EmailMessage()
+        message.set_content('alternative text')
+        message.add_alternative(
+            '<p>대한민국 경찰청입니다.</p>'
+            '<a href="https://unrelated.example/pay">과태료 조회 및 납부하기</a>',
+            subtype='html')
+        candidates = [{
+            'organization': '대한민국 경찰청', 'entity_id': 'Q482878',
+            'host': 'www.police.go.kr', 'ranking_score': .8, 'label_match': 1,
+        }]
+        rows = _official_external_action_routes(message, candidates)
+        self.assertEqual(len(rows), 1)
+        self.assertEqual(rows[0]['target_site'], 'example')
+        self.assertEqual(rows[0]['basis'], 'explicit_official_claim_external_click_route')
+
+    def test_official_claim_link_to_official_site_is_not_mismatch(self):
+        message = EmailMessage()
+        message.set_content('alternative text')
+        message.add_alternative(
+            '<a href="https://www.police.go.kr/pay">공식 홈페이지</a>', subtype='html')
+        candidates = [{
+            'organization': '대한민국 경찰청', 'entity_id': 'Q482878',
+            'host': 'www.police.go.kr', 'ranking_score': .8, 'label_match': 1,
+        }]
+        self.assertEqual(_official_external_action_routes(message, candidates), [])
+
+    def test_separate_service_linking_back_to_official_site_is_not_mismatch(self):
+        message = EmailMessage()
+        message.set_content('alternative text')
+        message.add_alternative(
+            '<a href="https://service.example.net/pay">공식 안내</a>', subtype='html')
+        candidates = [{
+            'organization': 'Example Agency', 'entity_id': 'Q1',
+            'host': 'agency.example.org', 'ranking_score': .8, 'label_match': 1,
+        }]
+        pages = {'pages': [{
+            'status': 'ok', 'requested_host': 'service.example.net',
+            'structure': {'link_hosts': ['agency.example.org']},
+        }]}
+        self.assertEqual(_official_external_action_routes(message, candidates, pages), [])
+
+    def test_service_linked_by_collected_official_site_is_not_mismatch(self):
+        message = EmailMessage()
+        message.set_content('alternative text')
+        message.add_alternative(
+            '<a href="https://service.example.net/pay">공식 안내</a>', subtype='html')
+        candidates = [{
+            'organization': 'Example Agency', 'entity_id': 'Q1',
+            'host': 'agency.example.org', 'ranking_score': .8, 'label_match': 1,
+        }]
+        references = [{
+            **candidates[0], 'verified': True,
+            'fetch': {'status': 'ok', 'structure': {'link_hosts': ['service.example.net']}},
+        }]
+        self.assertEqual(
+            _official_external_action_routes(message, candidates, {'pages': []}, references), [])
+
+    def test_officially_linked_service_is_excluded_from_impersonation_pair(self):
+        reference = {
+            'fetch': {'structure': {'link_hosts': ['service.example.net']}},
+        }
+        self.assertTrue(_official_reference_links_to_target(reference, 'service.example.net'))
+        self.assertFalse(_official_reference_links_to_target(reference, 'unrelated.example.com'))
+
     def test_no_evidence_is_complete_uncertainty(self):
         result = fuse_masses([])
         self.assertEqual(result["phishing_support"], 0)

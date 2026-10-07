@@ -1,6 +1,8 @@
 """Website comparison using dynamically discovered official-site candidates."""
 from difflib import SequenceMatcher
 from email.utils import getaddresses
+from bs4 import BeautifulSoup
+from urllib.parse import urljoin, urlsplit
 import tldextract
 from .page_structure import analyze_pages
 from .html_pair_features import SCHEMA_VERSION, pair_features
@@ -32,6 +34,106 @@ def _observed_hosts(message, pages, links):
         if item.get('target_host'):
             hosts.append(('html_link', str(item['target_host']).casefold().rstrip('.')))
     return list(dict.fromkeys(hosts))
+
+
+def _message_action_links(message):
+    """Return clickable HTTP(S) routes embedded in the EML itself.
+
+    Link text is preserved as an observation.  It is not classified with a
+    keyword list and page collection is not required.
+    """
+    rows=[]
+    for part in message.walk():
+        if part.get_content_disposition() == 'attachment' or part.get_filename():
+            continue
+        if part.get_content_type() != 'text/html':
+            continue
+        try:
+            soup=BeautifulSoup(part.get_content(), 'html.parser')
+        except (LookupError, UnicodeError, ValueError):
+            continue
+        base_tag=soup.find('base',href=True)
+        base=base_tag.get('href') if base_tag else ''
+        for anchor in soup.find_all('a',href=True):
+            target=urljoin(base,anchor.get('href',''))
+            parsed=urlsplit(target)
+            if parsed.scheme not in ('http','https') or not parsed.hostname:
+                continue
+            rows.append({'target_url':target,'target_host':parsed.hostname.casefold().rstrip('.'),
+                         'visible_text':' '.join(anchor.stripped_strings)[:240]})
+    unique={}
+    for row in rows:
+        unique.setdefault((row['target_url'],row['visible_text']),row)
+    return list(unique.values())
+
+
+def _official_external_action_routes(message, candidates, pages=None, references=None):
+    """Observe official-entity claims routing clicks to unrelated domains.
+
+    This is a compound relationship: a confidently resolved official entity,
+    an EML-embedded clickable route, and a destination outside the entity's
+    official registrable domain.  It does not depend on the destination page
+    remaining online.
+    """
+    findings=[]
+    links=_message_action_links(message)
+    collected_by_site={}
+    for page in (pages or {}).get('pages', []):
+        if page.get('status') != 'ok':
+            continue
+        site=_site(page.get('requested_host'))
+        linked_sites={_site(host) for host in (page.get('structure') or {}).get('link_hosts', [])}
+        if site:
+            collected_by_site.setdefault(site,set()).update(linked_sites-{''})
+    official_links_by_site={}
+    for reference in references or []:
+        if not reference.get('verified') or (reference.get('fetch') or {}).get('status') != 'ok':
+            continue
+        official_site=_site(reference.get('host'))
+        linked_sites={_site(host) for host in
+                      ((reference.get('fetch') or {}).get('structure') or {}).get('link_hosts', [])}
+        if official_site:
+            official_links_by_site.setdefault(official_site,set()).update(linked_sites-{''})
+    for candidate in candidates:
+        score=float(candidate.get('ranking_score') or 0)
+        official_site=_site(candidate.get('host'))
+        if score < .50 or not official_site or float(candidate.get('label_match') or 0) < 1:
+            continue
+        for link in links:
+            target_site=_site(link['target_host'])
+            if not target_site or target_site == official_site:
+                continue
+            # A separately hosted service can still have an observable first-
+            # party relationship with the institution.  A link from the
+            # collected destination back to the discovered official site is
+            # evidence of that relationship, so it is retained as structure
+            # but must not be called an unrelated-domain mismatch.
+            if (official_site in collected_by_site.get(target_site,set())
+                    or target_site in official_links_by_site.get(official_site,set())):
+                continue
+            findings.append({
+                'organization':candidate.get('organization'),
+                'entity_id':candidate.get('entity_id'),
+                'official_host':candidate.get('host'),
+                'official_site':official_site,
+                'target_host':link['target_host'],
+                'target_site':target_site,
+                'target_url':link['target_url'],
+                'visible_text':link['visible_text'],
+                'discovery_score':score,
+                'basis':'explicit_official_claim_external_click_route',
+            })
+    unique={}
+    for row in findings:
+        unique.setdefault((row['entity_id'],row['target_site']),row)
+    return list(unique.values())
+
+
+def _official_reference_links_to_target(reference, target_host):
+    """Whether collected official HTML directly links the target site."""
+    official_links={_site(host) for host in
+                    ((reference.get('fetch') or {}).get('structure') or {}).get('link_hosts', [])}
+    return bool(_site(target_host) and _site(target_host) in official_links)
 
 
 def _official_domain_mismatches(message, pages, links, candidates):
@@ -78,7 +180,7 @@ def compare_homepages(message, pages, links, brands=None, disabled=False,
     discovery = discover_official_sites(message, semantic_model_path, disabled=disabled)
     candidates=[{'host':row['host'],'url':row['url'],'verified':True,'source':row['source'],
                  'organization':row['label'],'entity_id':row['entity_id'],'ml_score':row['ml_score'],
-                 'ranking_score':row.get('ranking_score'),
+                 'ranking_score':row.get('ranking_score'),'label_match':row.get('label_match',0),
                  'basis':'live_entity_search_ml_ranked'} for row in discovery.get('candidates',[])]
     domain_mismatches=_official_domain_mismatches(message,pages,links,candidates)
     refs=[];comparisons=[]
@@ -95,6 +197,7 @@ def compare_homepages(message, pages, links, brands=None, disabled=False,
             structure = page.get('structure') or {}
             target_host = page.get('requested_host')
             same_official_site = _site(target_host) == _site(candidate['host'])
+            affiliated_service = _official_reference_links_to_target(ref, target_host)
             interactive_target = bool(
                 structure.get('password_fields') or structure.get('forms')
                 or structure.get('input_count')
@@ -102,6 +205,8 @@ def compare_homepages(message, pages, links, brands=None, disabled=False,
             # Comparing every resource or unrelated external link to the sender's
             # homepage creates false positives. Compare registered organization
             # pages, or an unregistered page that actually solicits user input.
+            if affiliated_service:
+                continue
             if not same_official_site and not interactive_target:
                 continue
             features=pair_features(
@@ -113,9 +218,12 @@ def compare_homepages(message, pages, links, brands=None, disabled=False,
                 'tag_count_similarity':features['tag_histogram_similarity'],
                 'structure_similarity':features['structure_similarity'],
                 'password_fields_target':page['structure']['password_fields'],'password_fields_reference':fetched['structure']['password_fields']})
+    external_action_routes=_official_external_action_routes(message,candidates,pages,refs)
     return {'status':'compared' if comparisons else 'basic_only','references':refs,'comparisons':comparisons,
             'omitted':max(0,len(candidates)-2),'discovery':discovery,
             'official_domain_mismatches':domain_mismatches,
             'official_domain_mismatch_count':len(domain_mismatches),
+            'official_external_action_routes':external_action_routes,
+            'official_external_action_route_count':len(external_action_routes),
             'reason':'실시간 공식 사이트 후보를 로컬 문맥 ML로 선택하고 수집 성공 시 비교합니다. 기본 구조 결과는 항상 유지합니다.',
             'note':'두 페이지의 DOM·폼·입력·링크·외부 리소스 구조를 비교한 관측값입니다. 유사도는 화면·동작의 동일성이나 안전 확률이 아닙니다.'}

@@ -4,7 +4,9 @@ import ipaddress
 from urllib.parse import urlsplit, urljoin, urldefrag
 from collections import Counter
 import urllib3
+from http.cookies import SimpleCookie
 from bs4 import BeautifulSoup
+import re
 
 
 def _depth(node):
@@ -34,6 +36,11 @@ def inspect_structure(html, final_url, csp_header=None):
         target = urlsplit(urljoin(base, str(value))).hostname
         return bool(target and host and target.casefold().rstrip('.') != host.casefold().rstrip('.'))
     resource_hosts = set()
+    link_hosts = set()
+    for anchor in anchors:
+        target = urlsplit(urljoin(base, str(anchor.get('href', '')))).hostname
+        if target:
+            link_hosts.add(target.casefold().rstrip('.'))
     for tag, attribute in [(x, 'src') for x in images + [x for x in scripts if x.get('src')]] + [(x, 'href') for x in stylesheets]:
         target = urlsplit(urljoin(base, str(tag.get(attribute, '')))).hostname
         if target:
@@ -45,6 +52,9 @@ def inspect_structure(html, final_url, csp_header=None):
             'mean_depth': (sum(depths) / len(depths)) if depths else 0.0,
             'visible_text_length': len(visible_text),
             'link_count': len(anchors),
+            # Host identities are structural observations used to establish
+            # relationships between separately hosted official services.
+            'link_hosts': sorted(link_hosts),
             'external_link_count': sum(external(tag['href']) for tag in anchors),
             'image_count': len(images),
             'external_image_count': sum(external(tag['src']) for tag in images),
@@ -60,8 +70,42 @@ def inspect_structure(html, final_url, csp_header=None):
             'meta_refresh_count': len(soup.select('meta[http-equiv="refresh" i]'))}
 
 
+def _store_response_cookies(response, host, cookies_by_host):
+    """Retain simple same-host cookies needed to complete static redirects."""
+    values = response.headers.getlist('Set-Cookie') if hasattr(response.headers, 'getlist') else []
+    if not values and response.headers.get('Set-Cookie'):
+        values = [response.headers.get('Set-Cookie')]
+    jar = cookies_by_host.setdefault(host.casefold().rstrip('.'), {})
+    for value in values:
+        parsed = SimpleCookie()
+        try:
+            parsed.load(value)
+        except Exception:
+            continue
+        for name, morsel in parsed.items():
+            jar[name] = morsel.value
+
+
+def _cookie_header(host, cookies_by_host):
+    jar = cookies_by_host.get(host.casefold().rstrip('.'), {})
+    return '; '.join(f'{name}={value}' for name, value in sorted(jar.items()))
+
+
+def _meta_refresh_target(data, current_url):
+    """Return a bounded static meta-refresh target, if the HTML declares one."""
+    try:
+        soup = BeautifulSoup(data, 'html.parser')
+        tag = soup.find('meta', attrs={'http-equiv': re.compile(r'^refresh$', re.I)})
+        content = str(tag.get('content', '')) if tag else ''
+        match = re.match(r'^\s*\d+(?:\.\d+)?\s*;\s*url\s*=\s*[\'\"]?([^\'\"]+)', content, re.I)
+        return urljoin(current_url, match.group(1).strip()) if match else None
+    except (TypeError, ValueError, UnicodeError):
+        return None
+
+
 def fetch_page(url, max_bytes=524288, max_redirects=6):
     history=[]
+    cookies_by_host={}
     for hop in range(max_redirects+1):
         url=urldefrag(url)[0]
         p=urlsplit(url)
@@ -79,8 +123,14 @@ def fetch_page(url, max_bytes=524288, max_redirects=6):
         response=None
         try:
             path=(p.path or '/')+('?' + p.query if p.query else '')
-            response=pool.urlopen('GET',path,headers={'Host':p.netloc,'User-Agent':'EmailStructureInspector/1.0','Accept':'text/html','Accept-Encoding':'identity'},redirect=False,retries=False,preload_content=False)
+            headers={'Host':p.netloc,'User-Agent':'EmailStructureInspector/1.0',
+                     'Accept':'text/html','Accept-Encoding':'identity'}
+            cookie = _cookie_header(p.hostname, cookies_by_host)
+            if cookie:
+                headers['Cookie'] = cookie
+            response=pool.urlopen('GET',path,headers=headers,redirect=False,retries=False,preload_content=False)
             history.append({'host':p.hostname,'http_status':response.status})
+            _store_response_cookies(response, p.hostname, cookies_by_host)
             if response.status in (301,302,303,307,308):
                 if hop==max_redirects:return {'status':'limited','reason':'redirect_limit','hops':history}
                 location=response.headers.get('Location')
@@ -93,7 +143,17 @@ def fetch_page(url, max_bytes=524288, max_redirects=6):
             if len(data)>max_bytes:return {'status':'limited','reason':'size_limit','hops':history}
             if response.headers.get('Content-Encoding','identity').lower() not in ('','identity'):
                 return {'status':'limited','reason':'encoded_response','hops':history}
-            final_url = str(response.url)
+            meta_target = _meta_refresh_target(data, url)
+            if meta_target:
+                history[-1]['redirect_type'] = 'meta_refresh'
+                if hop==max_redirects:
+                    return {'status':'limited','reason':'redirect_limit','hops':history}
+                url=meta_target
+                continue
+            # urllib3 connects to the already-resolved IP, so response.url is
+            # commonly only a path.  Preserve the public URL used for this hop
+            # so relative links and same/external-host observations are valid.
+            final_url = url
             return {
                 'status': 'ok', 'hops': history, 'bytes': len(data),
                 'final_url': final_url,
