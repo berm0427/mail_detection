@@ -25,13 +25,26 @@ class DecisionPolicyTests(unittest.TestCase):
     def test_ml_positive_alone_is_suspicious(self):
         self.assertEqual(combine_evidence(result(semantic=0.99))["verdict"], "suspicious")
 
-    def test_external_detection_with_ml_negative_is_suspicious(self):
-        self.assertEqual(combine_evidence(result(semantic=0.0, threat=True))["verdict"], "suspicious")
-        self.assertEqual(combine_evidence(result(semantic=0.0, razor=True))["verdict"], "suspicious")
+    def test_external_observations_do_not_override_ml_negative(self):
+        for decision in (combine_evidence(result(semantic=0.0, threat=True)),
+                         combine_evidence(result(semantic=0.0, razor=True))):
+            self.assertEqual(decision["verdict"], "no_signal")
+            self.assertFalse(any(item["reflected"] for item in decision["signals"]))
 
-    def test_external_detection_with_ml_positive_is_dangerous(self):
-        self.assertEqual(combine_evidence(result(semantic=0.99, threat=True))["verdict"], "dangerous")
-        self.assertEqual(combine_evidence(result(semantic=0.99, razor=True))["verdict"], "dangerous")
+    def test_external_observations_do_not_escalate_ml_positive(self):
+        for decision in (combine_evidence(result(semantic=0.99, threat=True)),
+                         combine_evidence(result(semantic=0.99, razor=True))):
+            self.assertEqual(decision["verdict"], "suspicious")
+            reflected = [item for item in decision["signals"] if item["reflected"]]
+            self.assertEqual([item["id"] for item in reflected], ["ml_verdict"])
+
+    def test_antivirus_report_is_observation_not_ground_truth(self):
+        decision = combine_evidence(result(semantic=0.0, threat=True))
+        observation = next(item for item in decision["signals"]
+                           if item["id"] == "attachment_antivirus_report")
+        self.assertFalse(observation["reflected"])
+        self.assertEqual(observation["severity"], "advisory")
+        self.assertIn("백신 엔진 위협 보고", observation["summary"])
 
     def test_missing_semantic_score_is_inconclusive_not_safe(self):
         data = result()
@@ -60,6 +73,27 @@ class DecisionPolicyTests(unittest.TestCase):
         self.assertEqual(reflected, set())
         observed = {item["id"] for item in decision["signals"]}
         self.assertTrue({"authentication_failure", "official_claim_external_route"} <= observed)
+
+    def test_clean_ml_negative_does_not_require_review(self):
+        decision = combine_evidence(result(semantic=0.0))
+        self.assertFalse(decision["review_required"])
+        self.assertEqual(decision["overall_status"], "no_signal")
+        self.assertEqual(decision["review_observations"], [])
+
+    def test_observation_with_ml_negative_requires_review_without_changing_verdict(self):
+        for data in (result(semantic=0.0, threat=True), result(semantic=0.0, razor=True),
+                     result(semantic=0.0, rule_result={"auth_summary": {"failures": [{"method": "DKIM"}]}})):
+            decision = combine_evidence(data)
+            self.assertEqual(decision["verdict"], "no_signal")
+            self.assertEqual(decision["overall_status"], "review_required")
+            self.assertTrue(decision["review_required"])
+            self.assertNotIn("ml_verdict", decision["review_observations"])
+
+    def test_ml_positive_and_unavailable_require_review(self):
+        self.assertTrue(combine_evidence(result(semantic=0.99))["review_required"])
+        data = result()
+        data["engine_results"]["semantic_ml"] = {"status": "error"}
+        self.assertTrue(combine_evidence(data)["review_required"])
 
     def test_parse_error_stays_error(self):
         self.assertEqual(combine_evidence(result(semantic=0.99, verdict="error"))["verdict"], "error")

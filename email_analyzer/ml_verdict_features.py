@@ -11,8 +11,9 @@ from __future__ import annotations
 import math
 
 from email_analyzer.html_review import html_review
+from email_analyzer.observations import razor_match
 
-SCHEMA_VERSION = "ml-verdict-features-v3"
+SCHEMA_VERSION = "ml-verdict-features-v4"
 
 FEATURE_NAMES = (
     "semantic_score",
@@ -28,6 +29,7 @@ FEATURE_NAMES = (
     "html_structure_signal_count",
     "attachment_threat_count",
     "attachment_alert_count",
+    "razor_catalogue_match",
 )
 
 
@@ -67,6 +69,9 @@ def ml_verdict_feature_dict(result: dict) -> dict[str, float]:
         "attachment_threat_count": float(sum(scan.get("status") == "threat_detected" for scan in scans)),
         "attachment_alert_count": float(sum(
             scan.get("status") in ("alert", "suspicious_structure") for scan in scans)),
+        # Antivirus (above) and Razor outputs are inputs whose weight must be
+        # learned from labels; with no variation in training they stay at zero.
+        "razor_catalogue_match": float(razor_match(result)),
     }
 
 

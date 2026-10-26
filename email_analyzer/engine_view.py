@@ -31,17 +31,28 @@ def engine_rows(result):
     decision=result.get('decision') or {}
     if decision:
         verdict_labels={'dangerous':'위험','suspicious':'주의','no_signal':'탐지 신호 없음','legitimate':'탐지 신호 없음',
-                        'inconclusive':'판정 불가','error':'판정 오류'}
-        reflected=[item for item in decision.get('signals',[]) if item.get('reflected')]
-        advisory=[item for item in decision.get('signals',[]) if not item.get('reflected')]
-        detail=['판정 반영 · '+item.get('summary','') for item in reflected]
-        detail.extend('참고 · '+item.get('summary','') for item in advisory)
+                        'review_required':'검토 필요','inconclusive':'판정 불가','error':'판정 오류'}
+        status=decision.get('overall_status') or decision.get('verdict')
+        ml=decision.get('ml_verdict') or {}
+        ml_label=('기준 이상' if ml.get('prediction')==1 else '기준 미만') if ml.get('status')=='ok' else '계산 불가'
+        # The ML verdict line and its semantic input are not review observations.
+        ml_ids=('ml_verdict','semantic_ml_score')
+        detail=[]
+        for item in decision.get('signals',[]):
+            if item.get('id')=='ml_verdict':
+                detail.append(('판정 반영 · ' if item.get('reflected') else 'ML 판정 · ')+item.get('summary',''))
+            elif item.get('id')=='semantic_ml_score':
+                detail.append('ML 입력 · '+item.get('summary',''))
+        detail.extend('검토 관측 · '+item.get('summary','') for item in decision.get('signals',[])
+                      if item.get('id') not in ml_ids)
+        observations=sum(item.get('id') not in ml_ids for item in decision.get('signals',[]))
         rows.insert(0,('통합 판정','완료' if decision.get('verdict')!='error' else '오류',
-                       f"{verdict_labels.get(decision.get('verdict'),decision.get('verdict'))} · 반영 신호 {len(reflected)}건",
+                       f"{verdict_labels.get(status,status)} · ML 판정 {ml_label} · 검토 관측 {observations}건",
                        '\n'.join(detail) or '판정에 반영된 위험 신호 없음'))
     razor = engines.get('razor') or {}
     if razor.get('status') == 'ok' and (razor.get('details') or {}).get('catalogue_match') is True:
-        rows.append(('Razor 스팸 서명', '탐지', '카탈로그 일치', '공유 스팸 서명과 일치하여 최종 판정에 반영됨'))
+        rows.append(('Razor 스팸 서명', '관측', '카탈로그 일치',
+                     '공유 스팸 서명과 일치했다는 관측입니다. 정·오탐 라벨이 없어 최종 판정에는 반영하지 않습니다.'))
     semantic=engines.get('semantic_ml') or {}
     if semantic:
         status=semantic.get('status','missing');details=semantic.get('details') or {};score=semantic.get('score')

@@ -1,6 +1,6 @@
 {
-  "model_id": "dise-ml-verdict-v1",
-  "feature_schema": "ml-verdict-features-v3",
+  "model_id": "dise-ml-verdict-v2",
+  "feature_schema": "ml-verdict-features-v4",
   "feature_names": [
     "semantic_score",
     "semantic_available",
@@ -14,7 +14,8 @@
     "html_pair_available",
     "html_structure_signal_count",
     "attachment_threat_count",
-    "attachment_alert_count"
+    "attachment_alert_count",
+    "razor_catalogue_match"
   ],
   "coef": [
     6.203162861764771,
@@ -23,6 +24,7 @@
     1.4659457085016305,
     1.1369719826645168,
     2.7993960573702226,
+    0.0,
     0.0,
     0.0,
     0.0,
@@ -49,7 +51,8 @@
     "html_pair_available",
     "html_structure_signal_count",
     "attachment_threat_count",
-    "attachment_alert_count"
+    "attachment_alert_count",
+    "razor_catalogue_match"
   ],
   "evidence_manifest_sha256": "02461b678249ddcc1a3dd41e39ec908e3f2dbfa966d4dd3b7742004ff28384b1",
   "limitations": [

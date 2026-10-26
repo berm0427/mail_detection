@@ -132,11 +132,8 @@ class EvidenceFusionTests(unittest.TestCase):
 
     def test_failed_attachment_scan_adds_only_uncertainty(self):
         result = experimental_fusion({
-            "decision": {
-                "signals": [],
-                "attachment_scan": {"failures": 1},
-                "unavailable_engines": ["semantic_ml"],
-            }
+            "attachments": [{"malware_scan": {"status": "error"}}],
+            "engine_results": {"semantic_ml": {"status": "error"}},
         })
         self.assertEqual(result["phishing_support"], 0)
         self.assertEqual(result["benign_support"], 0)
@@ -146,10 +143,10 @@ class EvidenceFusionTests(unittest.TestCase):
         })
 
     def test_baselines_use_the_same_normalised_sources(self):
-        result = {"decision": {"verdict": "suspicious", "signals": [{
-            "id": "official_domain_confusable", "reflected": True,
-            "summary": "lookalike",
-        }]}}
+        result = {"decision": {"verdict": "suspicious"},
+                  "homepage_comparison": {"official_domain_mismatches": [{
+                      "observed_site": "p0lice.example", "official_site": "police.example",
+                      "organization": "기관"}]}}
         values = all_baselines(result)
         self.assertEqual(values["production_policy"]["prediction"], 1)
         self.assertEqual(values["simple_mean"]["sources"], 1)
@@ -162,6 +159,20 @@ class EvidenceFusionTests(unittest.TestCase):
         changed = dict(base, verdict="dangerous", label=1)
         self.assertEqual(fusion_feature_vector(base), fusion_feature_vector(changed))
         self.assertEqual(len(fusion_feature_vector(base)), len(FEATURE_NAMES))
+
+    def test_fusion_inputs_ignore_policy_reflected_flags(self):
+        observed = {"attachments": [{"malware_scan": {"status": "threat_detected"}}],
+                    "engine_results": {"razor": {"status": "ok", "details": {"catalogue_match": True}}}}
+        reflected = dict(observed, decision={"signals": [
+            {"id": "attachment_malware", "reflected": True},
+            {"id": "legacy_rule_threshold", "reflected": True}]})
+        self.assertEqual(fusion_feature_vector(observed), fusion_feature_vector(reflected))
+        features = fusion_feature_dict(observed)
+        self.assertEqual(features["signal:attachment_malware"], 1.0)
+        self.assertEqual(features["signal:razor_catalogue_match"], 1.0)
+        self.assertEqual(features["signal:legacy_rule_threshold"], 0.0)
+        sources = {item["source"] for item in experimental_fusion(observed)["sources"]}
+        self.assertTrue({"attachment_antivirus_report", "razor_catalogue_match"} <= sources)
 
     def test_meta_features_preserve_engine_availability(self):
         result = {"decision": {"signals": [], "attachment_scan": {}, "html_review": {}},

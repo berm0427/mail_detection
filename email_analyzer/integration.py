@@ -41,7 +41,7 @@ def log_attachment_scan_result(filename, scan):
         'clean': '위험 신호 없음',
         'clean_static': '정적 구조 검사 완료 · 백신 검사 미완료',
         'suspicious_structure': '의심 구조 발견',
-        'threat_detected': '악성코드 탐지',
+        'threat_detected': '백신 엔진 위협 보고',
         'timeout': '검사 시간 초과',
         'error': '검사 오류',
         'disabled': '비활성',
@@ -49,7 +49,7 @@ def log_attachment_scan_result(filename, scan):
         'failed': '검사 실패',
     }
     findings = scan.get('static_findings') or []
-    logger.info(f"악성코드 검사: {filename}")
+    logger.info(f"첨부파일 위협 검사: {filename}")
     logger.info(f"  - 내부 정적 검사: {', '.join(findings) if findings else '이상 없음'}")
 
     clamav = scan.get('clamav') or {}
@@ -64,7 +64,7 @@ def log_attachment_scan_result(filename, scan):
         logger.info(f"    탐지명: {scan['threat_name']}")
 
     final_status = scan.get('status', 'unavailable')
-    logger.info(f"  - 최종 결과: {status_labels.get(final_status, final_status)}")
+    logger.info(f"  - 종합 관측 상태: {status_labels.get(final_status, final_status)}")
 
 # 프로젝트 루트 경로 추가
 import sys

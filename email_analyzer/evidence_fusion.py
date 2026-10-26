@@ -134,6 +134,7 @@ def fuse_masses(masses: Iterable[EvidenceMass]) -> dict:
         "fusion_version": FUSION_VERSION,
         "experimental": True,
         "affects_production_verdict": False,
+        "mass_source": "hand_set_unvalidated",
         "phishing_support": combined.phishing,
         "benign_support": combined.benign,
         "uncertainty": combined.uncertainty,
@@ -144,39 +145,47 @@ def fuse_masses(masses: Iterable[EvidenceMass]) -> dict:
     }
 
 
+#: Hand-set (support, reliability) per observation.  These are NOT learned from
+#: labelled data; this module is an experimental illustration of conflict-
+#: preserving combination and never affects the production verdict.
+HAND_SET_PROFILES = {
+    "attachment_antivirus_report": (0.99, 0.98),
+    "official_domain_confusable": (0.95, 0.90),
+    "unsafe_password_route": (0.92, 0.90),
+    "authentication_failure": (0.85, 0.80),
+    "html_pair_ml_positive": (0.82, 0.70),
+    "razor_catalogue_match": (0.75, 0.65),
+    "attachment_structure_alert": (0.70, 0.65),
+}
+
+
 def masses_from_result(result: dict) -> list[EvidenceMass]:
-    """Translate existing DISE observations without re-running any engine."""
-    decision = result.get("decision") or {}
+    """Translate raw DISE observations without re-running any engine.
+
+    Observations are read directly (``email_analyzer.observations``), not from
+    the production decision, so the policy's ``reflected`` flags cannot change
+    the experimental input.  Observations without a profile are not used.
+    """
+    from email_analyzer.observations import attachment_scan_counts, collect_observations, unavailable_engines
     masses: list[EvidenceMass] = []
-    profiles = {
-        "attachment_malware": (0.99, 0.98),
-        "official_domain_confusable": (0.95, 0.90),
-        "unsafe_password_route": (0.92, 0.90),
-        "authentication_failure": (0.85, 0.80),
-        "semantic_ml_corroborated": (0.82, 0.60),
-        "html_pair_ml_positive": (0.82, 0.70),
-        "razor_catalogue_match": (0.75, 0.65),
-        "attachment_structure_alert": (0.70, 0.65),
-        "legacy_rule_threshold": (0.65, 0.55),
-    }
-    for signal in decision.get("signals") or []:
-        if not signal.get("reflected") or signal.get("id") not in profiles:
+    for item in collect_observations(result):
+        if item["id"] not in HAND_SET_PROFILES:
             continue
-        support, reliability = profiles[signal["id"]]
+        support, reliability = HAND_SET_PROFILES[item["id"]]
         masses.append(EvidenceMass(
-            source=signal["id"],
+            source=item["id"],
             phishing=support,
             benign=0.0,
             uncertainty=1.0 - support,
             reliability=reliability,
-            observation=signal.get("summary", ""),
+            observation=item["summary"],
         ))
 
     # Explicit engine failure is ignorance.  Keeping it as a source documents
     # coverage without moving support toward either class.
-    for name in decision.get("unavailable_engines") or []:
+    for name in unavailable_engines(result):
         masses.append(EvidenceMass(source=f"unavailable:{name}", observation="engine unavailable"))
-    attachment_failures = ((decision.get("attachment_scan") or {}).get("failures") or 0)
+    attachment_failures = attachment_scan_counts(result)["failures"]
     if attachment_failures:
         masses.append(EvidenceMass(
             source="attachment_scan_incomplete",

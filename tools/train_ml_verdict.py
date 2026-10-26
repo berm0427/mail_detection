@@ -122,7 +122,7 @@ def main():
     variance = final_x.std(axis=0)
     evidence_sha = hashlib.sha256(args.evidence_manifest.read_bytes()).hexdigest()
     artifact = {
-        "model_id": "dise-ml-verdict-v1",
+        "model_id": "dise-ml-verdict-v2",
         "feature_schema": SCHEMA_VERSION,
         "feature_names": list(FEATURE_NAMES),
         "coef": final.coef_[0].tolist(),

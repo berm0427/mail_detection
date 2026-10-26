@@ -39,8 +39,12 @@ EMOJI = {
     "legitimate": "✅ 안전",
     "inconclusive": "❔ 판정 불가 (엔진 미가용)",
     "no_signal": "ℹ️ 탐지된 위험 신호 없음",
+    "review_required": "🔎 검토 필요",
     "error": "❌ 오류"
 }
+
+# Signals that describe the ML verdict itself rather than a separate observation.
+ML_SIGNAL_IDS = ('ml_verdict', 'semantic_ml_score')
 
 
 def application_icon_path():
@@ -74,23 +78,25 @@ def apply_native_windows_icon(window, icon_path):
 def build_analysis_summary(result):
     """Return the compact user-facing result; diagnostics stay in other tabs."""
     verdict = result.get('verdict', 'no_signal')
-    summary = f"[분석 결과]\n\n[최종 판정] {EMOJI.get(verdict, EMOJI['no_signal'])}\n"
     decision = result.get('decision') or {}
-    reflected_signals = [item for item in decision.get('signals', []) if item.get('reflected')]
-    if reflected_signals:
-        summary += "\n[판정 근거]\n"
-        for item in reflected_signals:
-            summary += f" • {item.get('summary')}\n"
-    else:
-        summary += "\n판정에 반영된 위험 신호가 없습니다.\n"
-    # Reference observations do not change the verdict, but the user should see
-    # them without opening the engine table.  The semantic score is already an
-    # input of the ML verdict line, so it is not repeated here.
-    reference_signals = [item for item in decision.get('signals', [])
-                         if not item.get('reflected') and item.get('id') != 'semantic_ml_score']
-    if reference_signals:
-        summary += "\n[참고 신호 · 판정에 반영되지 않음]\n"
-        for item in reference_signals:
+    # The overall status separates "ML below threshold" from "nothing observed":
+    # an engine report that is not a verified label still needs user review.
+    observations = [item for item in decision.get('signals', [])
+                    if not item.get('reflected') and item.get('id') not in ML_SIGNAL_IDS]
+    status = decision.get('overall_status') or verdict
+    if status == 'no_signal' and observations:
+        status = 'review_required'
+    summary = f"[분석 결과]\n\n[종합 상태] {EMOJI.get(status, EMOJI['no_signal'])}\n"
+    ml = decision.get('ml_verdict') or {}
+    if ml.get('status') == 'ok':
+        position = '기준 이상' if ml.get('prediction') == 1 else '기준 미만'
+        summary += (f"\n[최종 ML 판정] 위험 문맥 {position} "
+                    f"(위험 확률 {ml['score']:.3f}, 기준 {ml.get('decision_threshold', 0.5):.2f})\n")
+    elif decision:
+        summary += f"\n[최종 ML 판정] 계산 불가 · {ml.get('reason', '결과 없음')}\n"
+    if observations:
+        summary += "\n[검토 필요 관측 · 판정에 자동 반영되지 않음]\n"
+        for item in observations:
             summary += f" • {item.get('summary')}\n"
 
     header = result.get('header') or {}
@@ -119,7 +125,7 @@ def build_analysis_summary(result):
             'clean': '위험 신호 없음',
             'clean_static': '정적 구조 검사 완료 · 백신 검사 미완료',
             'suspicious_structure': '의심 구조 발견',
-            'threat_detected': '악성코드 탐지',
+            'threat_detected': '백신 엔진 위협 보고 · 판정 미반영',
             'timeout': '검사 시간 초과',
             'error': '검사 오류',
             'disabled': '검사 비활성화',
