@@ -25,12 +25,13 @@ def engine_rows(result):
     auth_lines.extend(auth_observation_lines(rules.get('auth_evidence') or (result.get('header') or {}).get('auth_evidence') or {}))
     if auth_lines:
         rule_evidence += '\n[인증 상태]\n' + '\n'.join(auth_lines)
-    rows = [('기존 규칙', '판정 불가' if failed else '정상',
-             '점수 없음' if failed else f"{rules['risk_score']}/100 · 위험 기준 {rules.get('risk_threshold',70)}",
-             '최종 판정과 별도로 표시하는 규칙 진단 점수입니다.\n'+rule_evidence)]
+    rows = [('기존 규칙 (참고)', '판정 불가' if failed else '정상',
+             '점수 없음' if failed else f"{rules['risk_score']}/100",
+             '최종 판정에 사용하지 않는 참고용 규칙 진단 점수입니다.\n'+rule_evidence)]
     decision=result.get('decision') or {}
     if decision:
-        verdict_labels={'dangerous':'위험','suspicious':'주의','no_signal':'탐지 신호 없음','legitimate':'탐지 신호 없음','error':'판정 오류'}
+        verdict_labels={'dangerous':'위험','suspicious':'주의','no_signal':'탐지 신호 없음','legitimate':'탐지 신호 없음',
+                        'inconclusive':'판정 불가','error':'판정 오류'}
         reflected=[item for item in decision.get('signals',[]) if item.get('reflected')]
         advisory=[item for item in decision.get('signals',[]) if not item.get('reflected')]
         detail=['판정 반영 · '+item.get('summary','') for item in reflected]
@@ -45,13 +46,7 @@ def engine_rows(result):
     if semantic:
         status=semantic.get('status','missing');details=semantic.get('details') or {};score=semantic.get('score')
         valid=isinstance(score,(int,float)) and not isinstance(score,bool) and math.isfinite(score) and 0<=score<=1
-        decision=result.get('decision') or {}
-        if decision.get('semantic_ml_corroborated'):
-            semantic_use='문맥 위험 신호가 객관 증거와 일치하여 최종 판정에 반영됨'
-        elif details.get('predicted_label')==1:
-            semantic_use='위험 문맥 탐지 · 구조 증거와 함께 검토'
-        else:
-            semantic_use='위험 문맥 기준 미만'
+        semantic_use='ML 판정 모델의 입력 특징으로 사용됨'
         source_language=details.get('source_language','unknown')
         translation_status=details.get('translation_status','unknown')
         if translation_status=='translated':
@@ -62,7 +57,7 @@ def engine_rows(result):
             context_input=f'문맥 입력: 원문 · 언어 {source_language}'
         rows.append(('본문 문맥 ML',STATUS_LABELS.get(status,'알 수 없는 상태'),
                      f"위험 점수 {score:.3f}" if status=='ok' and valid else '판정에 사용할 결과 없음',
-                     (f"모델: {details.get('model_id','설치되지 않음')} · 학습 데이터 {details.get('training_rows','?')}건\n{context_input}\n역할: 제목·본문의 문맥 위험 신호를 분석하고 구조 증거와 결합\n{semantic_use}") if status=='ok' else semantic.get('error','')))
+                     (f"모델: {details.get('model_id','설치되지 않음')} · 학습 데이터 {details.get('training_rows','?')}건\n{context_input}\n역할: 제목·본문의 문맥 위험 점수 산출\n{semantic_use}") if status=='ok' else semantic.get('error','')))
     html_pair=engines.get('html_pair_ml') or {}
     if html_pair and html_pair.get('status')!='skipped':
         status=html_pair.get('status','missing');details=html_pair.get('details') or {};score=html_pair.get('score')
@@ -169,7 +164,7 @@ def engine_rows(result):
 
 def decision_text(result):
     decision = result.get('decision') or {}
-    return presentation_text('\n'.join(decision.get('reasons') or ['ML·Razor는 참고 근거이며 기존 판정을 자동 변경하지 않습니다.']))
+    return presentation_text('\n'.join(decision.get('reasons') or ['판정 결과가 없습니다.']))
 
 
 def inconclusive_explanation(result):

@@ -37,7 +37,7 @@ EMOJI = {
     "dangerous": "🚨 위험",
     "suspicious": "⚠️ 주의",
     "legitimate": "✅ 안전",
-    "inconclusive": "❌ 분석 오류",
+    "inconclusive": "❔ 판정 불가 (엔진 미가용)",
     "no_signal": "ℹ️ 탐지된 위험 신호 없음",
     "error": "❌ 오류"
 }
@@ -83,6 +83,15 @@ def build_analysis_summary(result):
             summary += f" • {item.get('summary')}\n"
     else:
         summary += "\n판정에 반영된 위험 신호가 없습니다.\n"
+    # Reference observations do not change the verdict, but the user should see
+    # them without opening the engine table.  The semantic score is already an
+    # input of the ML verdict line, so it is not repeated here.
+    reference_signals = [item for item in decision.get('signals', [])
+                         if not item.get('reflected') and item.get('id') != 'semantic_ml_score']
+    if reference_signals:
+        summary += "\n[참고 신호 · 판정에 반영되지 않음]\n"
+        for item in reference_signals:
+            summary += f" • {item.get('summary')}\n"
 
     header = result.get('header') or {}
     organization_type = header.get('organization_type') or 'unknown'

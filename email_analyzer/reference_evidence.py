@@ -52,6 +52,7 @@ def analyze_references(message):
     """Observe sender/link relationships without a local organization registry."""
     sender = sorted({hostname(address.rsplit('@', 1)[1]) for _, address in getaddresses(message.get_all('From', [])) if '@' in address} - {None})
     reply = sorted({hostname(address.rsplit('@', 1)[1]) for _, address in getaddresses(message.get_all('Reply-To', [])) if '@' in address} - {None})
+    return_path = sorted({hostname(address.rsplit('@', 1)[1]) for _, address in getaddresses(message.get_all('Return-Path', [])) if '@' in address} - {None})
     htmls = body_html(message); shape = Shape()
     for html in htmls: shape.feed(html)
     relationships_by_host = {}
@@ -68,6 +69,8 @@ def analyze_references(message):
                    for row in relationships_by_host.values()]
     return {'status': 'dynamic', 'registered_domains': 0, 'from_hosts': sender, 'reply_to_hosts': reply,
             'from_reply_relation': 'not_observed' if not reply else 'same_hosts' if sender == reply else 'different_hosts',
+            'return_path_hosts': return_path,
+            'from_return_path_relation': 'not_observed' if not return_path else 'same_hosts' if sender == return_path else 'different_hosts',
             'sender_organizations_observed': [], 'sender_authenticated': False,
             'domain_relationships': relationships, 'forms': shape.forms,
             'claimed_official_links': [], 'official_claim_mismatch_count': 0,

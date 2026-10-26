@@ -1,0 +1,59 @@
+{
+  "model_id": "dise-ml-verdict-v1",
+  "feature_schema": "ml-verdict-features-v3",
+  "feature_names": [
+    "semantic_score",
+    "semantic_available",
+    "authentication_failure_count",
+    "from_reply_mismatch",
+    "from_return_path_mismatch",
+    "external_link_domain_present",
+    "display_target_mismatch_count",
+    "official_claim_mismatch_count",
+    "html_pair_score",
+    "html_pair_available",
+    "html_structure_signal_count",
+    "attachment_threat_count",
+    "attachment_alert_count"
+  ],
+  "coef": [
+    6.203162861764771,
+    -0.011399441115825651,
+    0.0,
+    1.4659457085016305,
+    1.1369719826645168,
+    2.7993960573702226,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "intercept": -4.5494389968974005,
+  "decision_threshold": 0.5,
+  "promoted_to_gui": false,
+  "training_rows": 10000,
+  "training_groups": 15,
+  "semantic_input": {
+    "source": "group_oof_logistic_on_cached_embeddings",
+    "regularization_c": 0.01
+  },
+  "untrained_features": [
+    "semantic_available",
+    "authentication_failure_count",
+    "display_target_mismatch_count",
+    "official_claim_mismatch_count",
+    "html_pair_score",
+    "html_pair_available",
+    "html_structure_signal_count",
+    "attachment_threat_count",
+    "attachment_alert_count"
+  ],
+  "evidence_manifest_sha256": "02461b678249ddcc1a3dd41e39ec908e3f2dbfa966d4dd3b7742004ff28384b1",
+  "limitations": [
+    "All training rows are synthetic and use reserved .example domains.",
+    "Features listed in untrained_features had no variation and carry no learned weight."
+  ]
+}
