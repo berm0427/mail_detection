@@ -9,6 +9,10 @@ def hostname(value):
         parsed = urlsplit(value if '://' in value or value.startswith('//') else '//' + value)
         if parsed.scheme and parsed.scheme.lower() not in ('http', 'https'):
             return None
+        # Accessing port validates malformed values such as ':bad'.  Such a
+        # target remains an unresolved observation and must not become an ML
+        # external-action input merely because its hostname was parseable.
+        _ = parsed.port
         host = parsed.hostname
         return host.rstrip('.').encode('idna').decode('ascii').lower() if host else None
     except (ValueError, UnicodeError):

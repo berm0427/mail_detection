@@ -1,0 +1,580 @@
+{
+  "protocol": "nested_stratified_group_cv_with_oof_semantic",
+  "feature_schema": "ml-verdict-features-v5",
+  "feature_names": [
+    "semantic_score",
+    "semantic_available",
+    "authentication_failure_count",
+    "from_reply_mismatch",
+    "from_return_path_mismatch",
+    "external_action_domain_present",
+    "display_target_mismatch_count",
+    "official_claim_mismatch_count",
+    "html_pair_score",
+    "html_pair_available",
+    "html_structure_signal_count",
+    "attachment_threat_count",
+    "attachment_alert_count",
+    "razor_catalogue_match"
+  ],
+  "rows": 10000,
+  "groups": 15,
+  "outer_folds": 10,
+  "inner_folds": 5,
+  "evidence_manifest_sha256": "9806ff3ee947c0dbcedfbb0d722e1a32e4fdd21351926373f998cf1591e1533f",
+  "semantic_only": {
+    "n": 10000,
+    "auc": 0.9988718000000001,
+    "accuracy": 0.9885,
+    "tn": 4991,
+    "fp": 9,
+    "fn": 106,
+    "tp": 4894,
+    "fpr": 0.0018,
+    "recall": 0.9788,
+    "pr_auc": 0.9990362740990679
+  },
+  "ml_verdict": {
+    "n": 10000,
+    "auc": 0.99945088,
+    "accuracy": 0.9944,
+    "tn": 4997,
+    "fp": 3,
+    "fn": 53,
+    "tp": 4947,
+    "fpr": 0.0006,
+    "recall": 0.9894,
+    "pr_auc": 0.9995552327044999
+  },
+  "ablations": {
+    "without_semantic": {
+      "n": 10000,
+      "auc": 0.9847673199999999,
+      "accuracy": 0.9603,
+      "tn": 4964,
+      "fp": 36,
+      "fn": 361,
+      "tp": 4639,
+      "fpr": 0.0072,
+      "recall": 0.9278,
+      "pr_auc": 0.988619566779768
+    },
+    "without_sender_relations": {
+      "n": 10000,
+      "auc": 0.9981969599999999,
+      "accuracy": 0.9921,
+      "tn": 4993,
+      "fp": 7,
+      "fn": 72,
+      "tp": 4928,
+      "fpr": 0.0014,
+      "recall": 0.9856,
+      "pr_auc": 0.9989423418630832
+    },
+    "without_link_relations": {
+      "n": 10000,
+      "auc": 0.99858696,
+      "accuracy": 0.9908,
+      "tn": 4990,
+      "fp": 10,
+      "fn": 82,
+      "tp": 4918,
+      "fpr": 0.002,
+      "recall": 0.9836,
+      "pr_auc": 0.9989680036821889
+    }
+  },
+  "paired_vs_semantic": {
+    "mcnemar": {
+      "baseline_only_wrong": 63,
+      "candidate_only_wrong": 4,
+      "discordant": 67,
+      "exact_mcnemar_p": 1.1067861037383775e-14
+    },
+    "group_bootstrap": {
+      "iterations": 5000,
+      "unit": "scenario_group",
+      "accuracy_delta": 0.005899999999999905,
+      "ci95": [
+        0.0008249123530624791,
+        0.014141209236451725
+      ]
+    }
+  },
+  "feature_coverage": {
+    "semantic_score": {
+      "rows_nonzero": 10000,
+      "phishing_nonzero": 5000,
+      "normal_nonzero": 5000
+    },
+    "semantic_available": {
+      "rows_nonzero": 10000,
+      "phishing_nonzero": 5000,
+      "normal_nonzero": 5000
+    },
+    "authentication_failure_count": {
+      "rows_nonzero": 0,
+      "phishing_nonzero": 0,
+      "normal_nonzero": 0
+    },
+    "from_reply_mismatch": {
+      "rows_nonzero": 3303,
+      "phishing_nonzero": 3015,
+      "normal_nonzero": 288
+    },
+    "from_return_path_mismatch": {
+      "rows_nonzero": 3920,
+      "phishing_nonzero": 3268,
+      "normal_nonzero": 652
+    },
+    "external_action_domain_present": {
+      "rows_nonzero": 4405,
+      "phishing_nonzero": 4405,
+      "normal_nonzero": 0
+    },
+    "display_target_mismatch_count": {
+      "rows_nonzero": 0,
+      "phishing_nonzero": 0,
+      "normal_nonzero": 0
+    },
+    "official_claim_mismatch_count": {
+      "rows_nonzero": 0,
+      "phishing_nonzero": 0,
+      "normal_nonzero": 0
+    },
+    "html_pair_score": {
+      "rows_nonzero": 0,
+      "phishing_nonzero": 0,
+      "normal_nonzero": 0
+    },
+    "html_pair_available": {
+      "rows_nonzero": 0,
+      "phishing_nonzero": 0,
+      "normal_nonzero": 0
+    },
+    "html_structure_signal_count": {
+      "rows_nonzero": 0,
+      "phishing_nonzero": 0,
+      "normal_nonzero": 0
+    },
+    "attachment_threat_count": {
+      "rows_nonzero": 0,
+      "phishing_nonzero": 0,
+      "normal_nonzero": 0
+    },
+    "attachment_alert_count": {
+      "rows_nonzero": 0,
+      "phishing_nonzero": 0,
+      "normal_nonzero": 0
+    },
+    "razor_catalogue_match": {
+      "rows_nonzero": 0,
+      "phishing_nonzero": 0,
+      "normal_nonzero": 0
+    }
+  },
+  "final_semantic_artifact": {
+    "model_id": "dise-multilingual-semantic-v4",
+    "regularization_c": 0.01,
+    "manifest_sha256": "03c73bf1f7d7fefb90373da4858f0efab6fe27015ccfeffdef1cb4c5d4357a47",
+    "training_rows": 10000,
+    "selection": "group_oof_selected_full_fit",
+    "promoted_to_gui": false
+  },
+  "final_model": {
+    "model_id": "dise-ml-verdict-v4",
+    "coef": [
+      6.203162861764771,
+      0.0,
+      0.0,
+      1.4659457085016305,
+      1.1369719826645168,
+      2.7993960573702226,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0,
+      0.0
+    ],
+    "intercept": -4.560838438013226,
+    "untrained_features": [
+      "semantic_available",
+      "authentication_failure_count",
+      "display_target_mismatch_count",
+      "official_claim_mismatch_count",
+      "html_pair_score",
+      "html_pair_available",
+      "html_structure_signal_count",
+      "attachment_threat_count",
+      "attachment_alert_count",
+      "razor_catalogue_match"
+    ],
+    "semantic_input": {
+      "source": "group_oof_logistic_on_cached_embeddings",
+      "model_id": "dise-multilingual-semantic-v4",
+      "regularization_c": 0.01,
+      "manifest_sha256": "03c73bf1f7d7fefb90373da4858f0efab6fe27015ccfeffdef1cb4c5d4357a47"
+    },
+    "promoted_to_gui": false
+  },
+  "folds": [
+    {
+      "fold": 1,
+      "test_groups": [
+        "invoice_payment",
+        "parcel_delivery"
+      ],
+      "selected_semantic_c": 0.01,
+      "coef": {
+        "semantic_score": 5.824487,
+        "semantic_available": -0.002125,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.543762,
+        "from_return_path_mismatch": 1.124485,
+        "external_action_domain_present": 2.913691,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 1600,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 800,
+        "fp": 0,
+        "fn": 0,
+        "tp": 800,
+        "fpr": 0.0,
+        "recall": 1.0,
+        "pr_auc": 1.0
+      }
+    },
+    {
+      "fold": 2,
+      "test_groups": [
+        "procurement_quote"
+      ],
+      "selected_semantic_c": 0.03,
+      "coef": {
+        "semantic_score": 5.976381,
+        "semantic_available": 0.004447,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.449403,
+        "from_return_path_mismatch": 1.11109,
+        "external_action_domain_present": 2.837035,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 400,
+        "fp": 0,
+        "fn": 0,
+        "tp": 400,
+        "fpr": 0.0,
+        "recall": 1.0,
+        "pr_auc": 1.0
+      }
+    },
+    {
+      "fold": 3,
+      "test_groups": [
+        "account_security"
+      ],
+      "selected_semantic_c": 0.03,
+      "coef": {
+        "semantic_score": 6.045476,
+        "semantic_available": -0.000891,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.380728,
+        "from_return_path_mismatch": 1.107843,
+        "external_action_domain_present": 2.748158,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 400,
+        "fp": 0,
+        "fn": 0,
+        "tp": 400,
+        "fpr": 0.0,
+        "recall": 1.0,
+        "pr_auc": 1.0
+      }
+    },
+    {
+      "fold": 4,
+      "test_groups": [
+        "tax_notice"
+      ],
+      "selected_semantic_c": 1.0,
+      "coef": {
+        "semantic_score": 6.069369,
+        "semantic_available": 0.014964,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.282257,
+        "from_return_path_mismatch": 1.022675,
+        "external_action_domain_present": 2.645727,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 800,
+        "auc": 0.9982249999999999,
+        "accuracy": 0.94125,
+        "tn": 400,
+        "fp": 0,
+        "fn": 47,
+        "tp": 353,
+        "fpr": 0.0,
+        "recall": 0.8825,
+        "pr_auc": 0.9983834599164096
+      }
+    },
+    {
+      "fold": 5,
+      "test_groups": [
+        "hr_payroll"
+      ],
+      "selected_semantic_c": 0.1,
+      "coef": {
+        "semantic_score": 5.855361,
+        "semantic_available": -0.000484,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.471369,
+        "from_return_path_mismatch": 1.099496,
+        "external_action_domain_present": 2.872367,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 400,
+        "fp": 0,
+        "fn": 0,
+        "tp": 400,
+        "fpr": 0.0,
+        "recall": 1.0,
+        "pr_auc": 1.0
+      }
+    },
+    {
+      "fold": 6,
+      "test_groups": [
+        "meeting_invitation"
+      ],
+      "selected_semantic_c": 0.03,
+      "coef": {
+        "semantic_score": 5.872515,
+        "semantic_available": 0.001464,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.501524,
+        "from_return_path_mismatch": 1.136341,
+        "external_action_domain_present": 2.929686,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 0.99875,
+        "tn": 400,
+        "fp": 0,
+        "fn": 1,
+        "tp": 399,
+        "fpr": 0.0,
+        "recall": 0.9975,
+        "pr_auc": 1.0
+      }
+    },
+    {
+      "fold": 7,
+      "test_groups": [
+        "card_transaction"
+      ],
+      "selected_semantic_c": 0.01,
+      "coef": {
+        "semantic_score": 6.034556,
+        "semantic_available": 0.00164,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.470756,
+        "from_return_path_mismatch": 1.112515,
+        "external_action_domain_present": 2.861961,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 800,
+        "auc": 1.0,
+        "accuracy": 1.0,
+        "tn": 400,
+        "fp": 0,
+        "fn": 0,
+        "tp": 400,
+        "fpr": 0.0,
+        "recall": 1.0,
+        "pr_auc": 1.0
+      }
+    },
+    {
+      "fold": 8,
+      "test_groups": [
+        "benefits_enrollment",
+        "subscription_renewal"
+      ],
+      "selected_semantic_c": 0.1,
+      "coef": {
+        "semantic_score": 5.684679,
+        "semantic_available": -0.001673,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.530747,
+        "from_return_path_mismatch": 1.134314,
+        "external_action_domain_present": 2.956321,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 1300,
+        "auc": 1.0,
+        "accuracy": 0.9976923076923077,
+        "tn": 647,
+        "fp": 3,
+        "fn": 0,
+        "tp": 650,
+        "fpr": 0.004615384615384616,
+        "recall": 1.0,
+        "pr_auc": 1.0
+      }
+    },
+    {
+      "fold": 9,
+      "test_groups": [
+        "legal_notice",
+        "travel_reservation"
+      ],
+      "selected_semantic_c": 0.01,
+      "coef": {
+        "semantic_score": 6.090497,
+        "semantic_available": -0.001647,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.43765,
+        "from_return_path_mismatch": 1.103588,
+        "external_action_domain_present": 2.799955,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 832,
+        "auc": 1.0,
+        "accuracy": 0.9987980769230769,
+        "tn": 416,
+        "fp": 0,
+        "fn": 1,
+        "tp": 415,
+        "fpr": 0.0,
+        "recall": 0.9975961538461539,
+        "pr_auc": 1.0
+      }
+    },
+    {
+      "fold": 10,
+      "test_groups": [
+        "cloud_document",
+        "executive_request",
+        "password_reset"
+      ],
+      "selected_semantic_c": 0.03,
+      "coef": {
+        "semantic_score": 5.957383,
+        "semantic_available": 0.000916,
+        "authentication_failure_count": 0.0,
+        "from_reply_mismatch": 1.295805,
+        "from_return_path_mismatch": 1.095444,
+        "external_action_domain_present": 2.727436,
+        "display_target_mismatch_count": 0.0,
+        "official_claim_mismatch_count": 0.0,
+        "html_pair_score": 0.0,
+        "html_pair_available": 0.0,
+        "html_structure_signal_count": 0.0,
+        "attachment_threat_count": 0.0,
+        "attachment_alert_count": 0.0,
+        "razor_catalogue_match": 0.0
+      },
+      "ml_verdict": {
+        "n": 1468,
+        "auc": 1.0,
+        "accuracy": 0.997275204359673,
+        "tn": 734,
+        "fp": 0,
+        "fn": 4,
+        "tp": 730,
+        "fpr": 0.0,
+        "recall": 0.9945504087193461,
+        "pr_auc": 0.9999999999999999
+      }
+    }
+  ]
+}

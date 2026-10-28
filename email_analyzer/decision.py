@@ -17,7 +17,7 @@ import math
 
 from .observations import attachment_scan_counts, collect_observations, razor_match, unavailable_engines
 
-POLICY_VERSION = 'ml-verdict-v3'
+POLICY_VERSION = 'ml-verdict-v4'
 
 
 def _ml_verdict(result):
@@ -40,7 +40,7 @@ def _ml_verdict(result):
 def combine_evidence(result):
     original = result.get('verdict', 'error')
     engines = result.get('engine_results') or {}
-    reasons = ['판정 근거: 학습된 ML 종합 위험 확률을 사용합니다. 백신·Razor·인증·HTML·첨부파일 구조 결과는 정·오탐 라벨이 확보되기 전까지 판정 미반영 관측으로 표시합니다. URL 구조 관측 자체는 정답으로 직접 반영하지 않으며, 학습된 발신자·링크 도메인 관계 특징은 ML 입력으로 사용합니다.']
+    reasons = ['판정 근거: 학습된 ML 종합 위험 확률을 사용합니다. 백신·Razor·인증·HTML·첨부파일 구조 결과는 정·오탐 라벨이 확보되기 전까지 판정 미반영 관측으로 표시합니다. URL 구조 관측 자체는 정답으로 직접 반영하지 않으며, 학습된 발신자와 클릭·폼 목적지의 도메인 관계 특징은 ML 입력으로 사용합니다. 정적 리소스와 본문 텍스트 URL은 이 특징에서 제외합니다.']
     signals = []
     unavailable = unavailable_engines(result)
 

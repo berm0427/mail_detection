@@ -12,8 +12,9 @@ import math
 
 from email_analyzer.html_review import html_review
 from email_analyzer.observations import razor_match
+from email_analyzer.reference_evidence import ACTION_ROLES
 
-SCHEMA_VERSION = "ml-verdict-features-v4"
+SCHEMA_VERSION = "ml-verdict-features-v5"
 
 FEATURE_NAMES = (
     "semantic_score",
@@ -21,7 +22,7 @@ FEATURE_NAMES = (
     "authentication_failure_count",
     "from_reply_mismatch",
     "from_return_path_mismatch",
-    "external_link_domain_present",
+    "external_action_domain_present",
     "display_target_mismatch_count",
     "official_claim_mismatch_count",
     "html_pair_score",
@@ -56,10 +57,12 @@ def ml_verdict_feature_dict(result: dict) -> dict[str, float]:
         "authentication_failure_count": float(len(auth.get("failures") or [])),
         "from_reply_mismatch": float(reference.get("from_reply_relation") == "different_hosts"),
         "from_return_path_mismatch": float(reference.get("from_return_path_relation") == "different_hosts"),
-        # Presence, not a count: the training corpus has at most one external
-        # link domain per message, so larger counts were never observed.
-        "external_link_domain_present": float(any(
+        # Only explicit user-action destinations are counted. Passive resources
+        # (images, scripts, stylesheets and tracking pixels), relative targets,
+        # and URLs merely written in body text are observations, not this input.
+        "external_action_domain_present": float(any(
             row.get("relationship") == "external_domain"
+            and bool(ACTION_ROLES.intersection(row.get("roles") or ()))
             for row in reference.get("domain_relationships") or [])),
         "display_target_mismatch_count": float(links.get("different_host_count") or 0),
         "official_claim_mismatch_count": float(reference.get("official_claim_mismatch_count") or 0),

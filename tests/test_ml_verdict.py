@@ -8,6 +8,7 @@ from email_analyzer.ml_verdict import analyze_ml_verdict
 from email_analyzer.ml_verdict_features import FEATURE_NAMES, SCHEMA_VERSION, ml_verdict_feature_dict
 from email_analyzer.reference_evidence import analyze_references
 from tools.extract_synthetic_evidence import strip_label_headers
+from tools.train_ml_verdict import validate_evidence_rows
 
 
 def observed_result():
@@ -20,7 +21,7 @@ def observed_result():
         "reference_evidence": {
             "from_reply_relation": "different_hosts",
             "from_return_path_relation": "same_hosts",
-            "domain_relationships": [{"relationship": "external_domain"},
+            "domain_relationships": [{"relationship": "external_domain", "roles": ["click_link"]},
                                      {"relationship": "same_sender_domain"}],
             "official_claim_mismatch_count": 1,
         },
@@ -45,7 +46,7 @@ class MlVerdictTests(unittest.TestCase):
         self.assertEqual(features["authentication_failure_count"], 1.0)
         self.assertEqual(features["from_reply_mismatch"], 1.0)
         self.assertEqual(features["from_return_path_mismatch"], 0.0)
-        self.assertEqual(features["external_link_domain_present"], 1.0)
+        self.assertEqual(features["external_action_domain_present"], 1.0)
         self.assertEqual(features["attachment_threat_count"], 1.0)
 
     def test_failed_semantic_engine_is_unavailable_not_low_risk(self):
@@ -63,6 +64,38 @@ class MlVerdictTests(unittest.TestCase):
         self.assertEqual(evidence["return_path_hosts"], ["other.example"])
         self.assertEqual(evidence["from_return_path_relation"], "different_hosts")
 
+    def _html_reference(self, html):
+        message = EmailMessage()
+        message["From"] = "notice@sender.example"
+        message.set_content("plain body")
+        message.add_alternative(html, subtype="html")
+        return analyze_references(message)
+
+    def _external_action_feature(self, html):
+        result = observed_result()
+        result["reference_evidence"] = self._html_reference(html)
+        return ml_verdict_feature_dict(result)["external_action_domain_present"]
+
+    def test_passive_external_resource_is_not_an_external_action(self):
+        evidence = self._html_reference('<img src="https://cdn.other.example/pixel.png">')
+        self.assertEqual(evidence["domain_relationships"][0]["roles"], ["passive_resource"])
+        self.assertEqual(self._external_action_feature('<img src="https://cdn.other.example/pixel.png">'), 0.0)
+
+    def test_external_anchor_is_an_external_action(self):
+        self.assertEqual(self._external_action_feature('<a href="https://other.example/pay">open</a>'), 1.0)
+
+    def test_external_form_action_is_an_external_action(self):
+        self.assertEqual(self._external_action_feature('<form action="https://other.example/submit"></form>'), 1.0)
+
+    def test_relative_targets_are_not_external_actions(self):
+        self.assertEqual(self._external_action_feature('<a href="/help">help</a><img src="/logo.png">'), 0.0)
+
+    def test_malformed_port_is_not_an_external_action(self):
+        self.assertEqual(self._external_action_feature('<a href="https://other.example:bad/pay">open</a>'), 0.0)
+
+    def test_same_registrable_domain_is_not_external_action(self):
+        self.assertEqual(self._external_action_feature('<a href="https://account.sender.example/help">help</a>'), 0.0)
+
     def test_dataset_label_headers_are_stripped_before_analysis(self):
         raw = (b"Subject: s\r\nX-Dataset-Label: phishing\r\nX-Dataset-Split: train\r\n"
                b"X-Synthetic-Data: true\r\nFrom: a@b.example\r\n\r\nX-Dataset-Label: kept in body\r\n")
@@ -72,6 +105,12 @@ class MlVerdictTests(unittest.TestCase):
         self.assertNotIn(b"X-Dataset", head)
         self.assertIn(b"From: a@b.example", head)
         self.assertEqual(body, b"X-Dataset-Label: kept in body\r\n")
+
+    def test_old_evidence_manifest_schema_is_rejected(self):
+        row = {"feature_schema": "ml-verdict-features-v4", "label": 0,
+               "group_id": "g", "analysis": {"verdict_status": "ok"}}
+        with self.assertRaisesRegex(ValueError, "re-extract evidence"):
+            validate_evidence_rows([row])
 
     def test_artifact_with_wrong_schema_is_rejected(self):
         with tempfile.TemporaryDirectory() as folder:

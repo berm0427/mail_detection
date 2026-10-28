@@ -1,0 +1,40 @@
+{
+  "model_id": "dise-ml-verdict-v4",
+  "semantic_model_id": "dise-multilingual-semantic-v4",
+  "promoted_to_gui": true,
+  "feature_change": {
+    "schema": "ml-verdict-features-v5",
+    "retired": "external_link_domain_present",
+    "replacement": "external_action_domain_present",
+    "scope": "Explicit cross-domain a[href] and form[action] destinations only; passive resources, relative targets and body-text URLs are excluded."
+  },
+  "promotion_basis": {
+    "nested_group_cv": {
+      "rows": 10000,
+      "groups": 15,
+      "outer_folds": 10,
+      "auc": 0.99945088,
+      "accuracy": 0.9944,
+      "false_positives": 3,
+      "false_negatives": 53,
+      "false_positive_rate": 0.0006,
+      "recall": 0.9894
+    },
+    "real_email_audit": {
+      "rows": 8,
+      "correct": 6,
+      "false_positives": ["email7"],
+      "false_negatives": ["email6"],
+      "used_for_model_selection": false,
+      "note": "Small independent audit; recorded for failure analysis only. Email5 changed from ML-positive to ML-negative after passive-resource exclusion."
+    }
+  },
+  "known_limitations": [
+    "All 10,000 training rows are synthetic.",
+    "external_action_domain_present occurs in 4,405 phishing rows and 0 normal rows.",
+    "The model still confuses phishing-warning prose with phishing attempts in email7.",
+    "Email6 remains ML-negative; its official-claim external route is shown as a review observation.",
+    "Authentication, HTML, antivirus, attachment structure and Razor features had no training variation and therefore have zero coefficients.",
+    "Additional labelled real mail is required to estimate real-world false-positive and false-negative rates."
+  ]
+}

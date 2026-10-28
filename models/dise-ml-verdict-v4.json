@@ -1,0 +1,65 @@
+{
+  "model_id": "dise-ml-verdict-v4",
+  "feature_schema": "ml-verdict-features-v5",
+  "feature_names": [
+    "semantic_score",
+    "semantic_available",
+    "authentication_failure_count",
+    "from_reply_mismatch",
+    "from_return_path_mismatch",
+    "external_action_domain_present",
+    "display_target_mismatch_count",
+    "official_claim_mismatch_count",
+    "html_pair_score",
+    "html_pair_available",
+    "html_structure_signal_count",
+    "attachment_threat_count",
+    "attachment_alert_count",
+    "razor_catalogue_match"
+  ],
+  "coef": [
+    6.203162861764771,
+    0.0,
+    0.0,
+    1.4659457085016305,
+    1.1369719826645168,
+    2.7993960573702226,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0,
+    0.0
+  ],
+  "intercept": -4.560838438013226,
+  "decision_threshold": 0.5,
+  "promoted_to_gui": true,
+  "training_rows": 10000,
+  "training_groups": 15,
+  "semantic_input": {
+    "source": "group_oof_logistic_on_cached_embeddings",
+    "model_id": "dise-multilingual-semantic-v4",
+    "regularization_c": 0.01,
+    "manifest_sha256": "03c73bf1f7d7fefb90373da4858f0efab6fe27015ccfeffdef1cb4c5d4357a47"
+  },
+  "untrained_features": [
+    "semantic_available",
+    "authentication_failure_count",
+    "display_target_mismatch_count",
+    "official_claim_mismatch_count",
+    "html_pair_score",
+    "html_pair_available",
+    "html_structure_signal_count",
+    "attachment_threat_count",
+    "attachment_alert_count",
+    "razor_catalogue_match"
+  ],
+  "evidence_manifest_sha256": "9806ff3ee947c0dbcedfbb0d722e1a32e4fdd21351926373f998cf1591e1533f",
+  "limitations": [
+    "All training rows are synthetic and use reserved .example domains.",
+    "Features listed in untrained_features had no variation and carry no learned weight.",
+    "external_action_domain_present has limited normal-mail coverage; its learned weight requires validation on labelled normal mail with legitimate cross-domain click or form destinations. Passive resources and body-text URLs are excluded."
+  ]
+}

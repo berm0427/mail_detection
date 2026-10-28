@@ -31,6 +31,8 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from email_analyzer.ml_verdict_features import SCHEMA_VERSION
+
 LABEL_HEADERS = re.compile(rb"(?im)^(?:X-Dataset-[^:\r\n]*|X-Synthetic-Data):[^\r\n]*(?:\r?\n[ \t][^\r\n]*)*\r?\n")
 RUNTIME_OPTIONS = {
     "disable_network": True,
@@ -79,6 +81,7 @@ def analyze_one(row: dict) -> dict:
         if leaked:
             raise RuntimeError(f"label header survived stripping: {leaked}")
         return {"eml": row["eml"], "label": row["label"], "split": row["split"],
+                "feature_schema": SCHEMA_VERSION,
                 "group_id": row["group_id"], "removed_label_headers": removed, "analysis": slim(result)}
     finally:
         shutil.rmtree(work, ignore_errors=True)

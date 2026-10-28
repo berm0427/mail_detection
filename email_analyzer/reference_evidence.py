@@ -4,6 +4,19 @@ from html.parser import HTMLParser
 from collections import Counter
 from .link_evidence import hostname, inspect_html_links, Links
 
+CLICK_LINK = 'click_link'
+FORM_ACTION = 'form_action'
+PASSIVE_RESOURCE = 'passive_resource'
+ACTION_ROLES = frozenset((CLICK_LINK, FORM_ACTION))
+
+
+def absolute_web_host(value):
+    """Resolve only explicit HTTP(S) or protocol-relative HTML targets."""
+    raw = str(value or '').strip()
+    if not raw.casefold().startswith(('http://', 'https://', '//')):
+        return None
+    return hostname(raw)
+
 try:
     import tldextract
     _TLD_EXTRACT = tldextract.TLDExtract(suffix_list_urls=())
@@ -38,14 +51,25 @@ class Shape(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.tags, self.targets, self.forms = Counter(), [], []
     def handle_starttag(self, tag, attrs):
-        attrs = dict(attrs); self.tags[tag] += 1
+        tag = (tag or '').casefold()
+        attrs = {str(name).casefold(): value for name, value in attrs}
+        self.tags[tag] += 1
         for attr in ('href', 'src', 'action'):
             if attrs.get(attr):
-                self.targets.append({'tag': tag, 'host': hostname(attrs[attr]) if attrs[attr].startswith(('http://', 'https://', '//')) else None})
+                role = (CLICK_LINK if tag == 'a' and attr == 'href'
+                        else FORM_ACTION if tag == 'form' and attr == 'action'
+                        else PASSIVE_RESOURCE)
+                self.targets.append({
+                    'tag': tag,
+                    'attribute': attr,
+                    'role': role,
+                    'host': absolute_web_host(attrs[attr]),
+                })
         if tag == 'form':
             action = attrs.get('action', '')
-            self.forms.append({'host': hostname(action) if action.startswith(('http://', 'https://', '//')) else None,
-                               'status': 'absolute' if action.startswith(('http://', 'https://', '//')) else 'relative_or_unspecified'})
+            action_host = absolute_web_host(action)
+            self.forms.append({'host': action_host,
+                               'status': 'absolute' if action_host else 'relative_or_unspecified'})
 
 
 def analyze_references(message):
@@ -65,6 +89,7 @@ def analyze_references(message):
         current=relationships_by_host.setdefault(key,{'host':target['host'],'tags':set(),
             'relationship':relationship,'registrable_domain':target_root,'roles':set()})
         current['tags'].add(target['tag'])
+        current['roles'].add(target['role'])
     relationships=[{**row,'tags':sorted(row['tags']),'roles':sorted(row['roles'])}
                    for row in relationships_by_host.values()]
     return {'status': 'dynamic', 'registered_domains': 0, 'from_hosts': sender, 'reply_to_hosts': reply,
@@ -76,4 +101,6 @@ def analyze_references(message):
             'claimed_official_links': [], 'official_claim_mismatch_count': 0,
             'template_status': 'retired', 'template_comparisons': [], 'excluded_templates': 0,
             'ml': {'status': 'handled_by_live_discovery'},
-            'note': '발신 주소와 링크의 동일 기본 도메인 여부를 관측합니다. 공식 사이트 판단은 실시간 후보 검색과 ML 순위화가 담당합니다.'}
+            'note': ('발신 주소와 HTML 대상의 동일 기본 도메인 여부를 역할별로 관측합니다. '
+                     'ML 외부 행동 특징은 클릭 링크와 폼 제출 대상만 사용하며 정적 리소스와 본문 텍스트 URL은 제외합니다. '
+                     '공식 사이트 판단은 실시간 후보 검색과 ML 순위화가 담당합니다.')}

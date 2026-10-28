@@ -1,4 +1,4 @@
-"""Nested group CV and matched final fits for the ML verdict model (feature schema v4).
+"""Nested group CV and matched final fits for the ML verdict model (feature schema v5).
 
 Evaluation follows ``nested_fusion_group_cv.py``: outer scenario-group folds
 are untouched until scoring, and the verdict model is trained on inner
@@ -35,7 +35,7 @@ from email_analyzer.ml_verdict_features import FEATURE_NAMES, SCHEMA_VERSION, ml
 from nested_fusion_group_cv import (choose_c, group_bootstrap_delta, measure, paired_error_test,
                                     semantic_fit_predict, with_semantic)
 
-VERDICT_MODEL_ID = "dise-ml-verdict-v3"
+VERDICT_MODEL_ID = "dise-ml-verdict-v4"
 SEMANTIC_SCHEMA_VERSION = 1
 SEMANTIC_SELECTION = "group_oof_selected_full_fit"
 SEMANTIC_SOURCE = "group_oof_logistic_on_cached_embeddings"
@@ -43,7 +43,7 @@ SEMANTIC_SOURCE = "group_oof_logistic_on_cached_embeddings"
 ABLATIONS = {
     "without_semantic": ("semantic_score", "semantic_available"),
     "without_sender_relations": ("from_reply_mismatch", "from_return_path_mismatch"),
-    "without_link_relations": ("external_link_domain_present", "display_target_mismatch_count",
+    "without_link_relations": ("external_action_domain_present", "display_target_mismatch_count",
                                "official_claim_mismatch_count"),
 }
 
@@ -120,6 +120,10 @@ def stem_positions(rows, name):
 
 def validate_evidence_rows(evidence):
     for index, row in enumerate(evidence):
+        if row.get("feature_schema") != SCHEMA_VERSION:
+            raise ValueError(
+                f"evidence row {index}: feature schema {row.get('feature_schema')!r} "
+                f"does not match {SCHEMA_VERSION!r}; re-extract evidence with the current analyzer")
         if not isinstance(row.get("analysis"), dict):
             raise ValueError(f"evidence row {index}: missing analysis object")
         if row["analysis"].get("verdict_status") == "error":
@@ -411,8 +415,9 @@ def main():
         "limitations": [
             "All training rows are synthetic and use reserved .example domains.",
             "Features listed in untrained_features had no variation and carry no learned weight.",
-            "external_link_domain_present has no positive examples among normal training rows; "
-            "its learned weight requires validation on labelled normal mail with external links.",
+            "external_action_domain_present has limited normal-mail coverage; its learned weight "
+            "requires validation on labelled normal mail with legitimate cross-domain click or form destinations. "
+            "Passive resources and body-text URLs are excluded.",
         ],
     }
     report = {
