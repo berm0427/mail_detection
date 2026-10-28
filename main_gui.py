@@ -90,7 +90,7 @@ def build_analysis_summary(result):
     ml = decision.get('ml_verdict') or {}
     if ml.get('status') == 'ok':
         position = '기준 이상' if ml.get('prediction') == 1 else '기준 미만'
-        summary += (f"\n[최종 ML 판정] 위험 문맥 {position} "
+        summary += (f"\n[최종 ML 판정] 종합 위험 {position} "
                     f"(위험 확률 {ml['score']:.3f}, 기준 {ml.get('decision_threshold', 0.5):.2f})\n")
     elif decision:
         summary += f"\n[최종 ML 판정] 계산 불가 · {ml.get('reason', '결과 없음')}\n"

@@ -8,7 +8,10 @@ def analysed(semantic=0.0, threat=False, **extra):
     """Run the real decision policy so the summary is tested against its output."""
     result = {
         "verdict": "suspicious", "session_path": "s",
-        "engine_results": {"semantic_ml": {"status": "ok", "score": semantic},
+        "engine_results": {"semantic_ml": {"status": "ok", "score": semantic, "details": {
+                               "model_id": "dise-multilingual-semantic-v4", "regularization_c": 0.01,
+                               "manifest_sha256": "03c73bf1f7d7fefb90373da4858f0efab6fe27015ccfeffdef1cb4c5d4357a47",
+                           }},
                            "razor": {"status": "ok", "details": {"catalogue_match": False}}},
         "attachments": [{"malware_scan": {"status": "threat_detected" if threat else "clean"}}],
         "rule_result": {"auth_summary": {}}, "reference_evidence": {}, "link_evidence": {},
@@ -24,7 +27,7 @@ class SummaryViewTests(unittest.TestCase):
     def test_ml_negative_with_antivirus_report_is_review_not_no_signal(self):
         summary = build_analysis_summary(analysed(semantic=0.0, threat=True))
         self.assertIn("[종합 상태] 🔎 검토 필요", summary)
-        self.assertIn("[최종 ML 판정] 위험 문맥 기준 미만", summary)
+        self.assertIn("[최종 ML 판정] 종합 위험 기준 미만", summary)
         self.assertIn("[검토 필요 관측 · 판정에 자동 반영되지 않음]", summary)
         self.assertIn("첨부파일 백신 엔진 위협 보고 1건", summary)
         self.assertNotIn("탐지된 위험 신호 없음", summary)
@@ -38,14 +41,14 @@ class SummaryViewTests(unittest.TestCase):
     def test_clean_ml_negative_says_no_signal_without_observation_section(self):
         summary = build_analysis_summary(analysed(semantic=0.0))
         self.assertIn("[종합 상태] ℹ️ 탐지된 위험 신호 없음", summary)
-        self.assertIn("[최종 ML 판정] 위험 문맥 기준 미만", summary)
+        self.assertIn("[최종 ML 판정] 종합 위험 기준 미만", summary)
         self.assertNotIn("[검토 필요 관측", summary)
         self.assertNotIn("본문 문맥 위험 점수", summary)
 
     def test_ml_positive_is_caution(self):
         summary = build_analysis_summary(analysed(semantic=0.99))
         self.assertIn("[종합 상태] ⚠️ 주의", summary)
-        self.assertIn("[최종 ML 판정] 위험 문맥 기준 이상", summary)
+        self.assertIn("[최종 ML 판정] 종합 위험 기준 이상", summary)
 
     def test_unavailable_ml_is_shown_as_not_computable(self):
         result = analysed()

@@ -50,6 +50,7 @@ class SemanticMLEngine:
             score=1/(1+math.exp(-z)) if z>=0 else math.exp(z)/(1+math.exp(z))
             return EngineResult(self.name,'ok',score,{'model_id':artifact['model_id'],'predicted_label':int(score>=float(artifact.get('decision_threshold',.5))),
                 'decision_threshold':float(artifact.get('decision_threshold',.5)),'training_rows':artifact.get('training_rows'),
+                'regularization_c':artifact.get('regularization_c'),'manifest_sha256':artifact.get('manifest_sha256'),
                 'role':'context_evidence','requires_objective_corroboration':True,
                 'selection':artifact.get('selection','unspecified'),'translation_status':translation['status'],
                 'source_language':translation['source_language'],'translated_to':'ko' if translation['translated'] else None})

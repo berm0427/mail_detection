@@ -12,7 +12,10 @@ from tools.extract_synthetic_evidence import strip_label_headers
 
 def observed_result():
     return {
-        "engine_results": {"semantic_ml": {"status": "ok", "score": 0.8}},
+        "engine_results": {"semantic_ml": {"status": "ok", "score": 0.8, "details": {
+            "model_id": "semantic-test", "regularization_c": 0.01,
+            "manifest_sha256": "manifest-test",
+        }}},
         "rule_result": {"auth_summary": {"failures": [{"method": "DKIM"}]}},
         "reference_evidence": {
             "from_reply_relation": "different_hosts",
@@ -75,13 +78,39 @@ class MlVerdictTests(unittest.TestCase):
             path = Path(folder) / "model.json"
             artifact = {"model_id": "m", "feature_schema": SCHEMA_VERSION,
                         "feature_names": list(FEATURE_NAMES), "coef": [0.0] * len(FEATURE_NAMES),
-                        "intercept": 0.0}
+                        "intercept": 0.0, "promoted_to_gui": True,
+                        "semantic_input": {"model_id": "semantic-test", "regularization_c": 0.01,
+                                           "manifest_sha256": "manifest-test"}}
             path.write_text(json.dumps(artifact), encoding="utf-8")
             self.assertEqual(analyze_ml_verdict(observed_result(), path)["score"], 0.5)
             artifact["feature_names"] = list(reversed(FEATURE_NAMES))
             path.write_text(json.dumps(artifact), encoding="utf-8")
             with self.assertRaises(ValueError):
                 analyze_ml_verdict(observed_result(), path)
+
+    def test_unpromoted_artifact_is_rejected_by_production(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "model.json"
+            artifact = {"model_id": "m", "feature_schema": SCHEMA_VERSION,
+                        "feature_names": list(FEATURE_NAMES), "coef": [0.0] * len(FEATURE_NAMES),
+                        "intercept": 0.0, "promoted_to_gui": False,
+                        "semantic_input": {"model_id": "semantic-test", "regularization_c": 0.01,
+                                           "manifest_sha256": "manifest-test"}}
+            path.write_text(json.dumps(artifact), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                analyze_ml_verdict(observed_result(), path, require_promoted=True)
+
+    def test_semantic_provenance_mismatch_is_rejected(self):
+        with tempfile.TemporaryDirectory() as folder:
+            path = Path(folder) / "model.json"
+            artifact = {"model_id": "m", "feature_schema": SCHEMA_VERSION,
+                        "feature_names": list(FEATURE_NAMES), "coef": [0.0] * len(FEATURE_NAMES),
+                        "intercept": 0.0, "promoted_to_gui": True,
+                        "semantic_input": {"model_id": "other-model", "regularization_c": 0.01,
+                                           "manifest_sha256": "manifest-test"}}
+            path.write_text(json.dumps(artifact), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                analyze_ml_verdict(observed_result(), path, require_promoted=True)
 
 
 if __name__ == "__main__":

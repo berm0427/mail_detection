@@ -7,7 +7,10 @@ def result(semantic=0.0, threat=False, razor=False, **extra):
     data = {
         "verdict": "suspicious",
         "engine_results": {
-            "semantic_ml": {"status": "ok", "score": semantic},
+            "semantic_ml": {"status": "ok", "score": semantic, "details": {
+                "model_id": "dise-multilingual-semantic-v4", "regularization_c": 0.01,
+                "manifest_sha256": "03c73bf1f7d7fefb90373da4858f0efab6fe27015ccfeffdef1cb4c5d4357a47",
+            }},
             "razor": {"status": "ok", "details": {"catalogue_match": razor}},
         },
         "attachments": [{"malware_scan": {"status": "threat_detected" if threat else "clean"}}],
