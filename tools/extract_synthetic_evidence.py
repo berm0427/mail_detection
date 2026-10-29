@@ -93,7 +93,11 @@ def main():
     parser.add_argument("output", type=Path)
     parser.add_argument("--workers", type=int, default=max(1, (os.cpu_count() or 2) - 1))
     args = parser.parse_args()
+    manifest_base = args.training_manifest.resolve().parent
     rows = [json.loads(line) for line in args.training_manifest.read_text(encoding="utf-8").splitlines() if line.strip()]
+    for row in rows:
+        eml = Path(row["eml"])
+        row["eml"] = str((eml if eml.is_absolute() else manifest_base / eml).resolve())
     args.output.parent.mkdir(parents=True, exist_ok=True)
     errors = 0
     with ProcessPoolExecutor(max_workers=args.workers) as pool, \

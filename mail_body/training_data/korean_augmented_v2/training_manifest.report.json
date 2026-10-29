@@ -1,0 +1,21 @@
+{
+  "rows": 11000,
+  "labels": {
+    "0": 5500,
+    "1": 5500
+  },
+  "splits": {
+    "test": 1100,
+    "train": 8800,
+    "validation": 1100
+  },
+  "groups": 35,
+  "duplicate_paths": 0,
+  "duplicate_sha256": 0,
+  "group_split_leakage": 0,
+  "mixed_label_groups": 15,
+  "manifest_sha256": "6bc8e2ce51bda6c360cd6492ef37c94a025b516abe7fca9c8f95e0db1f8598e7",
+  "original_rows": 10000,
+  "augmentation_rows": 1000,
+  "path_mode": "manifest_relative_posix"
+}
