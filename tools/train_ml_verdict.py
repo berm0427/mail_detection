@@ -118,6 +118,20 @@ def stem_positions(rows, name):
     return positions
 
 
+def training_data_limitation(evidence):
+    """State how the training evidence was observed instead of assuming it is synthetic."""
+    modes = {}
+    for row in evidence:
+        mode = row.get("extraction_mode") or "offline"
+        modes[mode] = modes.get(mode, 0) + 1
+    if set(modes) <= {"offline"}:
+        return ("All training rows were extracted offline (no network, scanners or Razor); "
+                "the synthetic corpus uses reserved .example domains.")
+    counts = ", ".join(f"{count} {mode}" for mode, count in sorted(modes.items()))
+    return (f"Training evidence by extraction mode: {counts}. Network-dependent features can only "
+            "be learned from the live and saved_live rows.")
+
+
 def validate_evidence_rows(evidence):
     for index, row in enumerate(evidence):
         if row.get("feature_schema") != SCHEMA_VERSION:
@@ -311,6 +325,7 @@ def parse_args():
     parser.add_argument("--semantic-artifact", type=Path, required=True)
     parser.add_argument("--embedding-model", type=Path, required=True)
     parser.add_argument("--semantic-model-id", default="dise-multilingual-semantic-v4")
+    parser.add_argument("--verdict-model-id", default=VERDICT_MODEL_ID)
     args = parser.parse_args()
     if args.outer_folds < 2 or args.inner_folds < 2:
         parser.error("--outer-folds and --inner-folds must be at least 2")
@@ -398,7 +413,7 @@ def main():
         "selection": SEMANTIC_SELECTION,
     }
     artifact = {
-        "model_id": VERDICT_MODEL_ID,
+        "model_id": args.verdict_model_id,
         "feature_schema": SCHEMA_VERSION,
         "feature_names": list(FEATURE_NAMES),
         "coef": final_coef.tolist(),
@@ -412,8 +427,9 @@ def main():
                               for key in ("model_id", "regularization_c", "manifest_sha256")}},
         "untrained_features": [name for name, value in zip(FEATURE_NAMES, untrained) if value],
         "evidence_manifest_sha256": evidence_sha,
+        "training_manifest_sha256": training_sha,
         "limitations": [
-            "All training rows are synthetic and use reserved .example domains.",
+            training_data_limitation(evidence),
             "Features listed in untrained_features had no variation and carry no learned weight.",
             "external_action_domain_present has limited normal-mail coverage; its learned weight "
             "requires validation on labelled normal mail with legitimate cross-domain click or form destinations. "
