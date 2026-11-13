@@ -23,10 +23,17 @@
     "real_email_audit": {
       "rows": 8,
       "correct": 6,
-      "false_positives": ["email7"],
-      "false_negatives": ["email6"],
-      "used_for_model_selection": false,
-      "note": "Small independent audit; recorded for failure analysis only. Email5 changed from ML-positive to ML-negative after passive-resource exclusion."
+      "false_positives": [
+        "email7"
+      ],
+      "false_negatives": [
+        "email6"
+      ],
+      "used_for_model_selection": true,
+      "note": "Not an independent audit. These eight emails were consulted repeatedly while the features and decision policy were designed, so the counts are a development-set observation, not a performance estimate. Email5 changed from ML-positive to ML-negative after passive-resource exclusion. That feature change was made after email5 was recorded as a false positive for v3.",
+      "independent": false,
+      "role": "development_case_set",
+      "record_corrected": "2026-11-13: previously recorded as used_for_model_selection=false / 'independent audit'."
     }
   },
   "known_limitations": [
