@@ -9,15 +9,19 @@ from pathlib import Path
 from email_analyzer.ml_verdict_features import FEATURE_NAMES, SCHEMA_VERSION, ml_verdict_feature_dict
 
 
+class SchemaMismatchError(ValueError):
+    """The artifact was trained for a different feature schema than the current code."""
+
+
 def analyze_ml_verdict(result: dict, artifact_path, require_promoted=False) -> dict:
     artifact = json.loads(Path(artifact_path).read_text(encoding="utf-8"))
     if require_promoted and artifact.get("promoted_to_gui") is not True:
         raise ValueError("ML verdict artifact is not promoted to GUI")
     if artifact.get("feature_schema") != SCHEMA_VERSION or artifact.get("feature_names") != list(FEATURE_NAMES):
-        raise ValueError("ML verdict feature schema mismatch")
+        raise SchemaMismatchError("ML verdict feature schema mismatch")
     coefficients = artifact["coef"]
     if len(coefficients) != len(FEATURE_NAMES):
-        raise ValueError("ML verdict coefficient size mismatch")
+        raise SchemaMismatchError("ML verdict coefficient size mismatch")
     expected = artifact.get("semantic_input") or {}
     actual = ((result.get("engine_results") or {}).get("semantic_ml") or {}).get("details") or {}
     for key in ("model_id", "manifest_sha256"):

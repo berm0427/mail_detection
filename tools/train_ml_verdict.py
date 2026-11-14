@@ -150,6 +150,27 @@ def validate_evidence_rows(evidence):
             raise ValueError(f"evidence row {index}: missing or invalid group_id")
 
 
+def verify_evidence_binding(training, evidence, order, manifest_base):
+    """Every evidence row must describe the mail currently at the manifest path.
+
+    Returns the combined digest of the training mails for the artifact.
+    """
+    from email_analyzer.mail_identity import combined_digest, mail_digest
+    digests = []
+    for evidence_row, cache_index in zip(evidence, order):
+        recorded = evidence_row.get("eml_sha256")
+        if not recorded:
+            raise ValueError("evidence has no eml_sha256; re-extract it with the current extractor")
+        path = Path(training[cache_index]["eml"])
+        path = path if path.is_absolute() else manifest_base / path
+        if mail_digest(path.read_bytes()) != recorded:
+            raise ValueError(f"training EML changed since its evidence was extracted: {path}")
+        digests.append(recorded)
+    if len(set(digests)) != len(digests):
+        raise ValueError("the training manifest contains the same mail more than once")
+    return combined_digest(digests)
+
+
 def evidence_order(training, evidence):
     """Map every evidence row to exactly one cache row and check label agreement."""
     training_positions = stem_positions(training, "training manifest")
@@ -240,6 +261,11 @@ def stage_bytes(destination, content):
         raise
 
 
+def artifact_bytes(payload) -> bytes:
+    """The one serialisation used for every written artifact (so its hash can be recorded)."""
+    return (json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8")
+
+
 def write_json_bundle(items):
     """Stage every JSON first, then replace; roll back ordinary commit failures.
 
@@ -247,8 +273,7 @@ def write_json_bundle(items):
     transaction without a reader-aware pointer protocol.
     """
     # Serialization errors (e.g. NaN) surface here, before any file is touched.
-    encoded = [(path, (json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
-                .encode("utf-8")) for path, payload in items]
+    encoded = [(path, artifact_bytes(payload)) for path, payload in items]
     staged, backups, replaced = {}, {}, []
     preserve_backups = False
     try:
@@ -353,6 +378,7 @@ def main():
     evidence, evidence_sha = read_manifest(evidence_path)
     validate_evidence_rows(evidence)
     order = evidence_order(training, evidence)
+    training_mail_digest = verify_evidence_binding(training, evidence, order, training_path.parent)
     embeddings = load_embeddings(cache_path, len(training))[order]
     labels = np.asarray([int(row["label"]) for row in evidence], dtype=int)
     groups = np.asarray([str(row["group_id"]) for row in evidence])
@@ -424,10 +450,13 @@ def main():
         "training_groups": int(group_count),
         "semantic_input": {"source": SEMANTIC_SOURCE,
                            **{key: semantic_artifact[key]
-                              for key in ("model_id", "regularization_c", "manifest_sha256")}},
+                              for key in ("model_id", "regularization_c", "manifest_sha256")},
+                           # Exact bytes of the semantic artifact written with this verdict model.
+                           "artifact_sha256": hashlib.sha256(artifact_bytes(semantic_artifact)).hexdigest()},
         "untrained_features": [name for name, value in zip(FEATURE_NAMES, untrained) if value],
         "evidence_manifest_sha256": evidence_sha,
         "training_manifest_sha256": training_sha,
+        "training_mail_digest": training_mail_digest,
         "limitations": [
             training_data_limitation(evidence),
             "Features listed in untrained_features had no variation and carry no learned weight.",

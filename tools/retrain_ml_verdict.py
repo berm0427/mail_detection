@@ -56,6 +56,7 @@ def build_embedding_cache(manifest: Path, embedding_model: Path, output: Path, t
     """One L2-normalised embedding per manifest row, in manifest order, of the serving-time text."""
     import numpy as np
     from sentence_transformers import SentenceTransformer
+    from email_analyzer.mail_identity import strip_label_headers
     base = manifest.resolve().parent
     raw = manifest.read_bytes()
     texts = []
@@ -65,8 +66,8 @@ def build_embedding_cache(manifest: Path, embedding_model: Path, output: Path, t
         path = Path(json.loads(line)["eml"])
         path = path if path.is_absolute() else base / path
         try:
-            texts.append(serving_text(BytesParser(policy=policy.default).parsebytes(path.read_bytes()),
-                                      translation_model))
+            cleaned, _ = strip_label_headers(path.read_bytes())
+            texts.append(serving_text(BytesParser(policy=policy.default).parsebytes(cleaned), translation_model))
         except ValueError as error:
             raise SystemExit(f"{path}: {error}. Remove the row or install the translation model.") from error
     encoder = SentenceTransformer(str(embedding_model), device="cpu")

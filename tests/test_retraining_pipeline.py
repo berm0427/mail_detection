@@ -1,19 +1,23 @@
 import hashlib
 import json
+import os
 import tempfile
 import unittest
 from email.message import EmailMessage
 from pathlib import Path
 
-from email_analyzer.ml_verdict_features import SCHEMA_VERSION, ml_verdict_feature_dict
+from email_analyzer.mail_identity import combined_digest, mail_digest, strip_label_headers
+from email_analyzer.ml_verdict import SchemaMismatchError, analyze_ml_verdict
+from email_analyzer.ml_verdict_features import FEATURE_NAMES, SCHEMA_VERSION, ml_verdict_feature_dict
 from tools.extract_synthetic_evidence import (MODES, _engine_observations, check_saved_analysis,
                                               reuse_saved_analysis, slim)
 from tools.label_real_mail import append_row, build_row, parse_observation_labels
-from tools.promote_ml_verdict import (check_disjoint, count_outcomes, holdout_identity, install,
-                                      promotion_decision)
+import tools.promote_ml_verdict as promote_module
+from tools.promote_ml_verdict import (check_disjoint, check_install_targets_free, count_outcomes,
+                                      holdout_identity, install, install_targets, promotion_decision)
 from tools.retrain_ml_verdict import serving_text
-from tools.split_holdout import in_holdout, split_rows
-from tools.train_ml_verdict import training_data_limitation
+from tools.split_holdout import check_no_shared_mail, in_holdout, split_rows
+from tools.train_ml_verdict import training_data_limitation, verify_evidence_binding
 
 
 def live_result():
@@ -38,6 +42,7 @@ MAIL = b"Message-ID: <one@example>\r\nDate: Mon, 1 Jan 2026 00:00:00 +0900\r\nSu
 def saved_result():
     result = live_result()
     result["ml_feature_schema"] = SCHEMA_VERSION
+    result["eml_sha256"] = mail_digest(MAIL)
     result["metadata"] = {"Message-ID": "<one@example>", "Date": "Mon, 1 Jan 2026 00:00:00 +0900", "Subject": "s"}
     return result
 
@@ -73,7 +78,7 @@ class ExtractionTests(unittest.TestCase):
             row = {"eml": str(eml), "label": 1, "split": "train", "group_id": "g", "analysis_result": str(saved)}
             evidence = reuse_saved_analysis(row)
             self.assertEqual(evidence["extraction_mode"], "saved_live")
-            self.assertEqual(evidence["eml_sha256"], hashlib.sha256(MAIL).hexdigest())
+            self.assertEqual(evidence["eml_sha256"], mail_digest(MAIL))
             self.assertEqual(evidence["analysis"]["rule_result"]["auth_summary"]["failures"], [{"method": "DKIM"}])
 
     def test_saved_analysis_is_rejected_when_it_cannot_be_trusted(self):
@@ -81,20 +86,67 @@ class ExtractionTests(unittest.TestCase):
             result = saved_result()
             result.update(updates)
             return result
+        # Same Message-ID and Date but a different body: a campaign sibling, not this mail.
         other_mail = saved_result()
-        other_mail["metadata"]["Message-ID"] = "<other@example>"
+        other_mail["eml_sha256"] = mail_digest(MAIL.replace(b"body", b"another body"))
         leaking = saved_result()
         leaking["metadata"]["X-Dataset-Label"] = "phishing"
         unmatched = saved_result()
-        unmatched["metadata"] = {"Subject": "s"}
+        del unmatched["eml_sha256"]
         for name, result in (("old feature schema", changed(ml_feature_schema="ml-verdict-features-v0")),
                              ("unstamped", changed(ml_feature_schema=None)),
                              ("error result", changed(verdict="error")),
                              ("different mail", other_mail), ("label header", leaking),
-                             ("no identifying header", unmatched)):
+                             ("no content digest", unmatched)):
             with self.assertRaises(RuntimeError, msg=name):
                 check_saved_analysis(result, MAIL, "saved.json")
         check_saved_analysis(saved_result(), MAIL, "saved.json")
+
+    def test_label_header_in_last_position_is_stripped_for_crlf_and_lf(self):
+        for newline in (b"\r\n", b"\n"):
+            plain = newline.join([b"Subject: s", b"From: a@b.example"]) + newline * 2 + b"body"
+            labelled = newline.join([b"Subject: s", b"From: a@b.example", b"X-Dataset-Label: phishing"]) \
+                + newline * 2 + b"body"
+            folded = newline.join([b"Subject: s", b"From: a@b.example", b"X-Dataset-Label: phishing",
+                                   b"\tcontinued"]) + newline * 2 + b"body"
+            for raw in (labelled, folded):
+                cleaned, removed = strip_label_headers(raw)
+                self.assertEqual(removed, 1)
+                self.assertEqual(cleaned, plain)
+                self.assertEqual(mail_digest(raw), mail_digest(plain))
+
+    def test_identity_of_header_only_input_ignores_label_headers(self):
+        plain = b"Subject: s\r\nFrom: a@b.example\r\n"
+        for labelled in (b"Subject: s\r\nX-Dataset-Label: phishing\r\nFrom: a@b.example\r\n",
+                         b"Subject: s\r\nFrom: a@b.example\r\nX-Synthetic-Data: true"):
+            self.assertEqual(mail_digest(labelled), mail_digest(plain))
+        self.assertNotEqual(mail_digest(b"Subject: other\r\n"), mail_digest(plain))
+
+    def test_mail_identity_ignores_only_dataset_label_headers(self):
+        labelled = MAIL.replace(b"Subject: s", b"X-Dataset-Label: phishing\r\nX-Synthetic-Data: true\r\nSubject: s")
+        self.assertEqual(mail_digest(labelled), mail_digest(MAIL))
+        self.assertNotEqual(mail_digest(MAIL.replace(b"body", b"other")), mail_digest(MAIL))
+        self.assertEqual(combined_digest(["b", "a"]), combined_digest(["a", "b"]))
+
+    def test_training_evidence_must_match_the_files_on_disk(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder)
+            (base / "a.eml").write_bytes(MAIL)
+            (base / "b.eml").write_bytes(MAIL.replace(b"body", b"second"))
+            training = [{"eml": "a.eml"}, {"eml": "b.eml"}]
+            evidence = [{"eml": "a.eml", "eml_sha256": mail_digest(MAIL)},
+                        {"eml": "b.eml", "eml_sha256": mail_digest(MAIL.replace(b"body", b"second"))}]
+            digest = verify_evidence_binding(training, evidence, [0, 1], base)
+            self.assertEqual(digest, combined_digest(row["eml_sha256"] for row in evidence))
+            (base / "b.eml").write_bytes(b"Subject: edited\r\n\r\nlater")
+            with self.assertRaises(ValueError):
+                verify_evidence_binding(training, evidence, [0, 1], base)
+            with self.assertRaises(ValueError):
+                verify_evidence_binding(training, [{"eml": "a.eml"}], [0], base)
+            (base / "b.eml").write_bytes(MAIL)
+            duplicated = [evidence[0], {"eml": "b.eml", "eml_sha256": mail_digest(MAIL)}]
+            with self.assertRaises(ValueError):
+                verify_evidence_binding(training, duplicated, [0, 1], base)
 
     def test_training_limitation_describes_how_evidence_was_observed(self):
         self.assertIn("offline", training_data_limitation([{}, {"extraction_mode": "offline"}]))
@@ -122,6 +174,17 @@ class HoldoutSplitTests(unittest.TestCase):
         _, holdout = split_rows(self.rows(first + [f"new{i}" for i in range(20)]), 0.3, "seed")
         held = {r["group_id"] for r in holdout}
         self.assertEqual({g for g in first if g in held}, {g for g, value in before.items() if value})
+
+    def test_same_mail_under_two_groups_cannot_straddle_the_split(self):
+        with tempfile.TemporaryDirectory() as folder:
+            def mail(name, body):
+                path = Path(folder) / name
+                path.write_bytes(body)
+                return {"eml": str(path)}
+            relabelled = MAIL.replace(b"Subject: s", b"X-Dataset-Split: test\r\nSubject: s")
+            check_no_shared_mail([mail("a.eml", MAIL)], [mail("b.eml", MAIL.replace(b"body", b"x"))])
+            with self.assertRaises(ValueError):
+                check_no_shared_mail([mail("c.eml", MAIL)], [mail("d.eml", relabelled)])
 
     def test_rows_without_group_or_label_are_rejected(self):
         with self.assertRaises(ValueError):
@@ -157,9 +220,9 @@ class PromotionRuleTests(unittest.TestCase):
                 path.write_bytes(body)
                 return str(path)
             def held(name, body, group):
-                return {"eml": mail(name, body), "group_id": group, "eml_sha256": hashlib.sha256(body).hexdigest()}
+                return {"eml": mail(name, body), "group_id": group, "eml_sha256": mail_digest(body)}
             training = [{"eml": mail("a.eml", b"one"), "group_id": "g1"}]
-            check_disjoint(training, [held("b.eml", b"two", "g2")])
+            self.assertEqual(check_disjoint(training, [held("b.eml", b"two", "g2")]), {mail_digest(b"one")})
             with self.assertRaises(ValueError):
                 check_disjoint(training, [held("c.eml", b"three", "g1")])
             with self.assertRaises(ValueError):
@@ -199,9 +262,79 @@ class PromotionRuleTests(unittest.TestCase):
             self.assertTrue((models / "ver-new-promotion.json").is_file())
             self.assertFalse(list(models.glob("*.installing")))
             before = config.read_text(encoding="utf-8")
-            with self.assertRaises(ValueError):
+            with self.assertRaises(FileExistsError):
                 install(semantic, verdict, {"model_id": "ver-new"}, models, config)
             self.assertEqual(config.read_text(encoding="utf-8"), before)
+            self.assertTrue((models / "ver-new.json").is_file())  # the earlier install is untouched
+            with self.assertRaises(ValueError):
+                check_install_targets_free(install_targets(semantic, verdict, models))
+
+    def test_failed_install_restores_config_and_removes_new_files(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            models = root / "models"
+            models.mkdir()
+            config = root / "engine_config.json"
+            original = json.dumps({"semantic_ml_model": "models/old-s.json", "ml_verdict_model": "models/old-v.json"})
+            config.write_text(original, encoding="utf-8")
+            semantic, verdict = root / "s.json", root / "v.json"
+            semantic.write_text(json.dumps({"model_id": "sem-new"}), encoding="utf-8")
+            verdict.write_text(json.dumps({"model_id": "ver-new"}), encoding="utf-8")
+            # The promotion record already exists: the third exclusive create fails
+            # after both model files were written.
+            (models / "ver-new-promotion.json").write_text("{}", encoding="utf-8")
+            with self.assertRaises(FileExistsError):
+                install(semantic, verdict, {"model_id": "ver-new"}, models, config)
+            self.assertEqual(config.read_text(encoding="utf-8"), original)
+            self.assertFalse((models / "sem-new.json").exists())
+            self.assertFalse((models / "ver-new.json").exists())
+            self.assertEqual((models / "ver-new-promotion.json").read_text(encoding="utf-8"), "{}")
+            self.assertFalse(list(root.glob("*.installing")))
+            # A failure after the config switch puts the old config back.
+            (models / "ver-new-promotion.json").unlink()
+            real_loads, real_replace = json.loads, os.replace
+            state = {"switched": False}
+            def tracking_replace(source, target):
+                real_replace(source, target)
+                if Path(target) == config and not str(source).endswith(".restore"):
+                    state["switched"] = True
+            def failing_loads(text, *a, **k):
+                if state["switched"]:  # the read-back after the config switch
+                    raise OSError("disk error after switch")
+                return real_loads(text, *a, **k)
+            promote_module.json.loads, promote_module.os.replace = failing_loads, tracking_replace
+            try:
+                with self.assertRaises(OSError):
+                    install(semantic, verdict, {"model_id": "ver-new"}, models, config)
+            finally:
+                promote_module.json.loads, promote_module.os.replace = real_loads, real_replace
+            self.assertTrue(state["switched"])  # the failure really happened after the switch
+            self.assertEqual(config.read_text(encoding="utf-8"), original)
+            self.assertFalse(list(models.iterdir()))
+            self.assertFalse(list(root.glob("engine_config.json.*")))
+
+    def test_semantic_artifact_is_installed_byte_for_byte(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            models = root / "models"
+            models.mkdir()
+            config = root / "engine_config.json"
+            config.write_text(json.dumps({"semantic_ml_model": "a", "ml_verdict_model": "b"}), encoding="utf-8")
+            semantic, verdict = root / "s.json", root / "v.json"
+            semantic.write_bytes(b'{"model_id":   "sem-new",\n "coef": [0.1]}\n')  # unusual formatting on purpose
+            verdict.write_text(json.dumps({"model_id": "ver-new"}), encoding="utf-8")
+            install(semantic, verdict, {"model_id": "ver-new"}, models, config)
+            self.assertEqual((models / "sem-new.json").read_bytes(), semantic.read_bytes())
+
+    def test_schema_mismatch_is_a_distinct_error(self):
+        with tempfile.TemporaryDirectory() as folder:
+            artifact = Path(folder) / "model.json"
+            artifact.write_text(json.dumps({"model_id": "m", "feature_schema": "ml-verdict-features-v0",
+                                            "feature_names": list(FEATURE_NAMES), "coef": [0.0] * len(FEATURE_NAMES),
+                                            "intercept": 0.0}), encoding="utf-8")
+            with self.assertRaises(SchemaMismatchError):
+                analyze_ml_verdict(live_result(), artifact)
+            self.assertTrue(issubclass(SchemaMismatchError, ValueError))  # the GUI still reports 'unavailable'
 
     def test_training_text_is_the_text_the_gui_embeds(self):
         korean = EmailMessage()

@@ -33,13 +33,9 @@ an out-of-fold prediction during training.
 from __future__ import annotations
 
 import argparse
-from email import policy
-from email.parser import BytesParser
-import hashlib
 import json
 import logging
 import os
-import re
 import shutil
 import sys
 import tempfile
@@ -50,9 +46,9 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
     sys.path.insert(0, str(PROJECT_ROOT))
 
+from email_analyzer.mail_identity import mail_digest, strip_label_headers  # noqa: F401  (re-exported)
 from email_analyzer.ml_verdict_features import SCHEMA_VERSION
 
-LABEL_HEADERS = re.compile(rb"(?im)^(?:X-Dataset-[^:\r\n]*|X-Synthetic-Data):[^\r\n]*(?:\r?\n[ \t][^\r\n]*)*\r?\n")
 RUNTIME_OPTIONS = {
     "disable_network": True,
     "disable_attachment_scan": True,
@@ -60,15 +56,6 @@ RUNTIME_OPTIONS = {
 }
 LIVE_RUNTIME_OPTIONS = {"engine_config_override": {"semantic_ml_model": ""}}
 MODES = {"offline": RUNTIME_OPTIONS, "live": LIVE_RUNTIME_OPTIONS}
-
-
-def strip_label_headers(raw: bytes) -> tuple[bytes, int]:
-    match = re.search(rb"\r?\n\r?\n", raw)
-    if not match:
-        raise ValueError("EML has no header/body separator")
-    head, rest = raw[:match.start() + 1], raw[match.start() + 1:]
-    cleaned, removed = LABEL_HEADERS.subn(b"", head)
-    return cleaned + rest, removed
 
 
 def slim(result: dict) -> dict:
@@ -111,8 +98,8 @@ def _leaked_label_headers(result: dict) -> list[str]:
 def _evidence_row(row: dict, result: dict, removed: int, mode: str, raw: bytes) -> dict:
     return {"eml": row["eml"], "label": row["label"], "split": row["split"],
             "feature_schema": SCHEMA_VERSION, "extraction_mode": mode,
-            # Identity of the exact bytes this evidence was observed from.
-            "eml_sha256": hashlib.sha256(raw).hexdigest(),
+            # Identity of the mail this evidence was observed from (label headers excluded).
+            "eml_sha256": mail_digest(raw),
             "group_id": row["group_id"], "removed_label_headers": removed, "analysis": slim(result)}
 
 
@@ -135,25 +122,10 @@ def check_saved_analysis(result: dict, raw: bytes, source: str) -> None:
         raise RuntimeError(
             f"saved analysis was produced under feature schema {result.get('ml_feature_schema')!r}, "
             f"not {SCHEMA_VERSION!r}; analyse the mail again or drop analysis_result: {source}")
-    # Parsed like the analyzer parses it, so normalised header values compare equal.
-    message = BytesParser(policy=policy.default).parsebytes(raw, headersonly=True)
-    saved_headers = {str(name).lower(): " ".join(str(value).split())
-                     for name, value in (result.get("metadata") or {}).items()}
-    compared = 0
-    # Message-ID identifies the mail; Date is only a fallback when it is absent.
-    for name in ("message-id", "date"):
-        try:
-            current = message.get(name)
-        except (ValueError, TypeError, IndexError):
-            current = None
-        if current is None or name not in saved_headers:
-            continue
-        compared += 1
-        if " ".join(str(current).split()) != saved_headers[name]:
-            raise RuntimeError(f"saved analysis belongs to a different mail ({name} differs): {source}")
-        break
-    if not compared:
-        raise RuntimeError(f"saved analysis cannot be matched to the EML (no Message-ID or Date): {source}")
+    # Bound by content: a matching Message-ID or Date is not enough, because
+    # mails of one campaign can share them while the body differs.
+    if result.get("eml_sha256") != mail_digest(raw):
+        raise RuntimeError(f"saved analysis was not produced from this mail (content differs): {source}")
 
 
 def analyze_one(row: dict, mode: str = "offline") -> dict:
@@ -198,8 +170,11 @@ def main():
     args.output.parent.mkdir(parents=True, exist_ok=True)
     errors = 0
     modes = {}
+    # Written under a temporary name: an interrupted run never leaves a
+    # partial evidence file where a complete one is expected.
+    partial = args.output.with_name(args.output.name + ".partial")
     with ProcessPoolExecutor(max_workers=workers) as pool, \
-            args.output.open("w", encoding="utf-8") as handle:
+            partial.open("w", encoding="utf-8") as handle:
         for index, item in enumerate(pool.map(analyze_one, rows, [args.mode] * len(rows),
                                               chunksize=16 if args.mode == "offline" else 1), 1):
             modes[item["extraction_mode"]] = modes.get(item["extraction_mode"], 0) + 1
@@ -210,7 +185,9 @@ def main():
     print(json.dumps({"rows": len(rows), "errors": errors, "output": str(args.output),
                       "extraction_modes": modes, "runtime_options": MODES[args.mode]}, ensure_ascii=False))
     if errors:
+        partial.unlink(missing_ok=True)
         raise SystemExit(f"{errors} analyses failed")
+    os.replace(partial, args.output)
 
 
 if __name__ == "__main__":

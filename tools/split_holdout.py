@@ -18,6 +18,11 @@ from collections import Counter
 import hashlib
 import json
 from pathlib import Path
+import sys
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.insert(0, str(PROJECT_ROOT))
 
 
 def in_holdout(group_id: str, fraction: float, seed: str) -> bool:
@@ -36,6 +41,17 @@ def split_rows(rows: list[dict], fraction: float, seed: str) -> tuple[list[dict]
         target = holdout if in_holdout(group, fraction, seed) else train
         target.append({**row, "split": "test" if target is holdout else "train"})
     return train, holdout
+
+
+def check_no_shared_mail(train: list[dict], holdout: list[dict]) -> None:
+    """Identical mail filed under two groups would otherwise sit on both sides."""
+    from email_analyzer.mail_identity import mail_digest
+    digest = lambda row: mail_digest(Path(row["eml"]).read_bytes())
+    held = {digest(row): row["eml"] for row in holdout}
+    for row in train:
+        if digest(row) in held:
+            raise ValueError(f"the same mail is in both splits: {row['eml']} and {held[digest(row)]}; "
+                             "give both copies one group_id or remove the duplicate")
 
 
 def summarize(rows: list[dict]) -> dict:
@@ -59,6 +75,7 @@ def main() -> None:
                 path = Path(row[key])
                 row[key] = str((path if path.is_absolute() else base / path).resolve())
     train, holdout = split_rows(rows, args.fraction, args.seed)
+    check_no_shared_mail(train, holdout)
     report = {"seed": args.seed, "fraction": args.fraction, "train": summarize(train), "holdout": summarize(holdout)}
     for name, part in (("train", train), ("holdout", holdout)):
         if set(report[name]["labels"]) != {"0", "1"}:
