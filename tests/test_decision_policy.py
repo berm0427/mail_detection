@@ -62,6 +62,47 @@ class DecisionPolicyTests(unittest.TestCase):
         decision = combine_evidence(data)
         self.assertEqual(decision["verdict"], "no_signal")
         self.assertEqual(decision["attachment_scan"]["failures"], 1)
+        self.assertEqual(decision["attachment_scan"]["threats"], 0)
+        self.assertFalse(any(item["reflected"] for item in decision["signals"]))
+
+    def test_incomplete_attachment_scan_requests_review_for_every_failure_status(self):
+        for status in ("error", "timeout", "unavailable", "disabled"):
+            data = result()
+            data["attachments"] = [{"malware_scan": {"status": status}}]
+            decision = combine_evidence(data)
+            self.assertEqual(decision["verdict"], "no_signal", status)
+            self.assertEqual(decision["overall_status"], "review_required", status)
+            self.assertTrue(decision["review_required"], status)
+            self.assertEqual(decision["review_observations"], ["attachment_scan_incomplete"], status)
+            observed = next(item for item in decision["signals"] if item["id"] == "attachment_scan_incomplete")
+            self.assertFalse(observed["reflected"])
+            self.assertEqual(observed["severity"], "advisory")
+            self.assertEqual(observed["details"]["statuses"], [status])
+
+    def test_incomplete_scan_counts_each_failed_attachment_and_ignores_completed_ones(self):
+        data = result()
+        data["attachments"] = [{"malware_scan": {"status": "clean"}}, {"malware_scan": {"status": "error"}},
+                               {"malware_scan": {"status": "timeout"}}]
+        decision = combine_evidence(data)
+        observed = next(item for item in decision["signals"] if item["id"] == "attachment_scan_incomplete")
+        self.assertEqual(observed["details"]["statuses"], ["error", "timeout"])
+        self.assertIn("2건", observed["summary"])
+
+    def test_completed_scans_do_not_request_review(self):
+        for status in ("clean", "clean_static"):
+            data = result()
+            data["attachments"] = [{"malware_scan": {"status": status}}]
+            decision = combine_evidence(data)
+            self.assertEqual(decision["overall_status"], "no_signal", status)
+            self.assertFalse(decision["review_required"], status)
+
+    def test_incomplete_scan_does_not_downgrade_ml_positive(self):
+        data = result(semantic=0.99)
+        data["attachments"] = [{"malware_scan": {"status": "error"}}]
+        decision = combine_evidence(data)
+        self.assertEqual(decision["verdict"], "suspicious")
+        self.assertEqual(decision["overall_status"], "suspicious")
+        self.assertIn("attachment_scan_incomplete", decision["review_observations"])
 
     def test_other_observations_are_reference_only(self):
         data = result(

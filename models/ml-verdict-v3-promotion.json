@@ -17,10 +17,18 @@
     "real_email_audit": {
       "rows": 8,
       "correct": 5,
-      "false_positives": ["email5", "email7"],
-      "false_negatives": ["email6"],
-      "used_for_model_selection": false,
-      "note": "Small independent audit; recorded for failure analysis only."
+      "false_positives": [
+        "email5",
+        "email7"
+      ],
+      "false_negatives": [
+        "email6"
+      ],
+      "used_for_model_selection": true,
+      "note": "Not an independent audit. These eight emails were consulted repeatedly while the features and decision policy were designed, so the counts are a development-set observation, not a performance estimate.",
+      "independent": false,
+      "role": "development_case_set",
+      "record_corrected": "2026-11-13: previously recorded as used_for_model_selection=false / 'independent audit'."
     }
   },
   "known_limitations": [

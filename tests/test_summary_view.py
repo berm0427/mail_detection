@@ -69,6 +69,37 @@ class SummaryViewTests(unittest.TestCase):
         self.assertIn("검토 관측 · 첨부파일 백신 엔진 위협 보고 1건", top[3])
         self.assertNotIn("검토 관측 · ML 판정", top[3])
 
+    def test_incomplete_attachment_scan_is_not_shown_as_no_signal(self):
+        from email_analyzer.engine_view import engine_rows
+        analysed_result = analysed(semantic=0.0)
+        analysed_result["attachments"] = [{"malware_scan": {"status": "error"}}]
+        analysed_result["decision"] = combine_evidence(analysed_result)
+        summary = build_analysis_summary(analysed_result)
+        self.assertIn("[종합 상태] 🔎 검토 필요", summary)
+        self.assertIn("첨부파일 검사 미완료 1건 · 악성으로 계산하지 않음", summary)
+        self.assertNotIn("탐지된 위험 신호 없음", summary)
+        top = engine_rows(analysed_result)[0]
+        self.assertIn("검토 필요 · ML 판정 기준 미만 · 검토 관측 1건", top[2])
+
+    def test_unchecked_analyses_are_listed_without_changing_status(self):
+        analysed_result = analysed(semantic=0.0, page_analysis={"status": "limited", "omitted": 2, "pages": [
+            {"status": "ok", "requested_host": "fine.example"},
+            {"status": "error", "requested_host": "dead.example", "reason": "gaierror"}]})
+        analysed_result["engine_results"]["razor"] = {"status": "error"}
+        analysed_result["decision"] = combine_evidence(analysed_result)
+        self.assertEqual(analysed_result["decision"]["overall_status"], "no_signal")
+        self.assertFalse(analysed_result["decision"]["review_required"])
+        summary = build_analysis_summary(analysed_result)
+        self.assertIn("[종합 상태] ℹ️ 탐지된 위험 신호 없음", summary)
+        self.assertIn("[확인하지 못한 검사 · 판정과 종합 상태에 반영되지 않음]", summary)
+        self.assertIn("목적지 페이지 미수집: dead.example (gaierror)", summary)
+        self.assertIn("목적지 페이지 수집 한도 초과: 2건", summary)
+        self.assertIn("엔진 실행 실패: razor", summary)
+        self.assertNotIn("fine.example", summary)
+
+    def test_fully_checked_result_has_no_unchecked_section(self):
+        self.assertNotIn("[확인하지 못한 검사", build_analysis_summary(analysed(semantic=0.0)))
+
     def test_saved_result_without_overall_status_still_requests_review(self):
         legacy = {"verdict": "no_signal", "session_path": "s", "decision": {"signals": [
             {"id": "attachment_antivirus_report", "reflected": False, "summary": "첨부파일 백신 엔진 위협 보고 1건"}]}}

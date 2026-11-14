@@ -19,3 +19,9 @@ docs/
 
 # Local paper and manuscript materials
 research/
+
+# Labelled real mail manifests (local paths, private mail)
+mail_body/labelled/
+
+# Imported external text datasets (kept local)
+mail_body/external/

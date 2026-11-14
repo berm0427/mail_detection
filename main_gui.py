@@ -98,6 +98,14 @@ def build_analysis_summary(result):
         summary += "\n[검토 필요 관측 · 판정에 자동 반영되지 않음]\n"
         for item in observations:
             summary += f" • {item.get('summary')}\n"
+    # Coverage gaps are listed separately: they are not risk observations and
+    # do not change the verdict or the overall status.
+    from email_analyzer.observations import unchecked_analyses
+    unchecked = unchecked_analyses(result)
+    if unchecked:
+        summary += "\n[확인하지 못한 검사 · 판정과 종합 상태에 반영되지 않음]\n"
+        for line in unchecked:
+            summary += f" • {line}\n"
 
     header = result.get('header') or {}
     organization_type = header.get('organization_type') or 'unknown'

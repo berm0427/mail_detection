@@ -49,6 +49,16 @@ class MlVerdictTests(unittest.TestCase):
         self.assertEqual(features["external_action_domain_present"], 1.0)
         self.assertEqual(features["attachment_threat_count"], 1.0)
 
+    def test_incomplete_attachment_scan_does_not_change_ml_features(self):
+        # Training extraction runs with scans disabled; a failed or disabled
+        # scan must look exactly like a completed clean scan to the model.
+        clean = observed_result()
+        clean["attachments"] = [{"malware_scan": {"status": "clean"}}]
+        for status in ("disabled", "error", "timeout", "unavailable"):
+            incomplete = observed_result()
+            incomplete["attachments"] = [{"malware_scan": {"status": status}}]
+            self.assertEqual(ml_verdict_feature_dict(incomplete), ml_verdict_feature_dict(clean), status)
+
     def test_failed_semantic_engine_is_unavailable_not_low_risk(self):
         result = observed_result()
         result["engine_results"]["semantic_ml"] = {"status": "error", "score": 0.0}

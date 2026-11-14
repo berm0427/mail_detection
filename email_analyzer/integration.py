@@ -1194,6 +1194,12 @@ class IntegratedAnalyzer:
             
             from email_analyzer.decision import combine_evidence
             result['decision'] = combine_evidence(result)
+            # Lets a saved result be reused for training only while the feature
+            # definitions it was observed under are still current.
+            from email_analyzer.ml_verdict_features import SCHEMA_VERSION as _ML_FEATURE_SCHEMA
+            result['ml_feature_schema'] = _ML_FEATURE_SCHEMA
+            from email_analyzer.mail_identity import mail_digest as _mail_digest
+            result['eml_sha256'] = _mail_digest(Path(email_path).read_bytes())
             result['verdict'] = result['decision']['verdict']
 
             # Record the research fusion result in parallel.  It is deliberately

@@ -14,6 +14,13 @@ from email_analyzer.html_review import html_review
 FAILED_SCAN_STATUSES = ('error', 'timeout', 'unavailable', 'disabled')
 
 
+def attachment_scan_failure_statuses(result: dict) -> list[str]:
+    """Statuses of attachment scans that did not complete, one per attachment."""
+    return [scan.get('status') for scan in
+            ((item.get('malware_scan') or {}) for item in result.get('attachments') or [])
+            if scan.get('status') in FAILED_SCAN_STATUSES]
+
+
 def attachment_scan_counts(result: dict) -> dict:
     scans = [(item.get('malware_scan') or {}) for item in result.get('attachments') or []]
     return {
@@ -64,6 +71,12 @@ def collect_observations(result: dict) -> list[dict]:
             {'signals': html['signals']})
     if counts['alerts']:
         add('attachment_structure_alert', 'attachment_scan', f"첨부파일 의심 구조 {counts['alerts']}건")
+    # An attachment that was not scanned is not evidence of malware, but "no
+    # signal" would overstate what was checked, so it is shown for review.
+    if counts['failures']:
+        add('attachment_scan_incomplete', 'attachment_scan',
+            f"첨부파일 검사 미완료 {counts['failures']}건 · 악성으로 계산하지 않음",
+            {'statuses': attachment_scan_failure_statuses(result)})
     if html_pair_positive(result):
         engine = (result.get('engine_results') or {}).get('html_pair_ml') or {}
         pair = (engine.get('details') or {}).get('highest_risk_pair') or {}
@@ -81,3 +94,24 @@ def unavailable_engines(result: dict) -> list[str]:
         if (engines.get(name) or {}).get('status') == 'error':
             names.append(name)
     return names
+
+
+def unchecked_analyses(result: dict) -> list[str]:
+    """Checks that could not be completed, as display lines.
+
+    These are coverage gaps, not risk observations: a dead destination or a
+    failed engine says nothing about the message.  They are listed so the
+    summary does not imply more was checked than was, and they change neither
+    the verdict nor the overall status.
+    """
+    lines = []
+    page = result.get('page_analysis') or {}
+    for item in page.get('pages') or []:
+        if item.get('status') != 'ok':
+            lines.append(f"목적지 페이지 미수집: {item.get('requested_host', 'URL')} "
+                         f"({item.get('reason', item.get('status'))})")
+    if page.get('omitted'):
+        lines.append(f"목적지 페이지 수집 한도 초과: {page['omitted']}건")
+    for name in unavailable_engines(result):
+        lines.append(f"엔진 실행 실패: {name}")
+    return lines

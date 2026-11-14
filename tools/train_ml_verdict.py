@@ -118,6 +118,20 @@ def stem_positions(rows, name):
     return positions
 
 
+def training_data_limitation(evidence):
+    """State how the training evidence was observed instead of assuming it is synthetic."""
+    modes = {}
+    for row in evidence:
+        mode = row.get("extraction_mode") or "offline"
+        modes[mode] = modes.get(mode, 0) + 1
+    if set(modes) <= {"offline"}:
+        return ("All training rows were extracted offline (no network, scanners or Razor); "
+                "the synthetic corpus uses reserved .example domains.")
+    counts = ", ".join(f"{count} {mode}" for mode, count in sorted(modes.items()))
+    return (f"Training evidence by extraction mode: {counts}. Network-dependent features can only "
+            "be learned from the live and saved_live rows.")
+
+
 def validate_evidence_rows(evidence):
     for index, row in enumerate(evidence):
         if row.get("feature_schema") != SCHEMA_VERSION:
@@ -134,6 +148,27 @@ def validate_evidence_rows(evidence):
         group = row.get("group_id")
         if not isinstance(group, (str, int)) or isinstance(group, bool) or not str(group).strip():
             raise ValueError(f"evidence row {index}: missing or invalid group_id")
+
+
+def verify_evidence_binding(training, evidence, order, manifest_base):
+    """Every evidence row must describe the mail currently at the manifest path.
+
+    Returns the combined digest of the training mails for the artifact.
+    """
+    from email_analyzer.mail_identity import combined_digest, mail_digest
+    digests = []
+    for evidence_row, cache_index in zip(evidence, order):
+        recorded = evidence_row.get("eml_sha256")
+        if not recorded:
+            raise ValueError("evidence has no eml_sha256; re-extract it with the current extractor")
+        path = Path(training[cache_index]["eml"])
+        path = path if path.is_absolute() else manifest_base / path
+        if mail_digest(path.read_bytes()) != recorded:
+            raise ValueError(f"training EML changed since its evidence was extracted: {path}")
+        digests.append(recorded)
+    if len(set(digests)) != len(digests):
+        raise ValueError("the training manifest contains the same mail more than once")
+    return combined_digest(digests)
 
 
 def evidence_order(training, evidence):
@@ -226,6 +261,11 @@ def stage_bytes(destination, content):
         raise
 
 
+def artifact_bytes(payload) -> bytes:
+    """The one serialisation used for every written artifact (so its hash can be recorded)."""
+    return (json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False) + "\n").encode("utf-8")
+
+
 def write_json_bundle(items):
     """Stage every JSON first, then replace; roll back ordinary commit failures.
 
@@ -233,8 +273,7 @@ def write_json_bundle(items):
     transaction without a reader-aware pointer protocol.
     """
     # Serialization errors (e.g. NaN) surface here, before any file is touched.
-    encoded = [(path, (json.dumps(payload, ensure_ascii=False, indent=2, allow_nan=False) + "\n")
-                .encode("utf-8")) for path, payload in items]
+    encoded = [(path, artifact_bytes(payload)) for path, payload in items]
     staged, backups, replaced = {}, {}, []
     preserve_backups = False
     try:
@@ -311,6 +350,7 @@ def parse_args():
     parser.add_argument("--semantic-artifact", type=Path, required=True)
     parser.add_argument("--embedding-model", type=Path, required=True)
     parser.add_argument("--semantic-model-id", default="dise-multilingual-semantic-v4")
+    parser.add_argument("--verdict-model-id", default=VERDICT_MODEL_ID)
     args = parser.parse_args()
     if args.outer_folds < 2 or args.inner_folds < 2:
         parser.error("--outer-folds and --inner-folds must be at least 2")
@@ -338,6 +378,7 @@ def main():
     evidence, evidence_sha = read_manifest(evidence_path)
     validate_evidence_rows(evidence)
     order = evidence_order(training, evidence)
+    training_mail_digest = verify_evidence_binding(training, evidence, order, training_path.parent)
     embeddings = load_embeddings(cache_path, len(training))[order]
     labels = np.asarray([int(row["label"]) for row in evidence], dtype=int)
     groups = np.asarray([str(row["group_id"]) for row in evidence])
@@ -398,7 +439,7 @@ def main():
         "selection": SEMANTIC_SELECTION,
     }
     artifact = {
-        "model_id": VERDICT_MODEL_ID,
+        "model_id": args.verdict_model_id,
         "feature_schema": SCHEMA_VERSION,
         "feature_names": list(FEATURE_NAMES),
         "coef": final_coef.tolist(),
@@ -409,11 +450,15 @@ def main():
         "training_groups": int(group_count),
         "semantic_input": {"source": SEMANTIC_SOURCE,
                            **{key: semantic_artifact[key]
-                              for key in ("model_id", "regularization_c", "manifest_sha256")}},
+                              for key in ("model_id", "regularization_c", "manifest_sha256")},
+                           # Exact bytes of the semantic artifact written with this verdict model.
+                           "artifact_sha256": hashlib.sha256(artifact_bytes(semantic_artifact)).hexdigest()},
         "untrained_features": [name for name, value in zip(FEATURE_NAMES, untrained) if value],
         "evidence_manifest_sha256": evidence_sha,
+        "training_manifest_sha256": training_sha,
+        "training_mail_digest": training_mail_digest,
         "limitations": [
-            "All training rows are synthetic and use reserved .example domains.",
+            training_data_limitation(evidence),
             "Features listed in untrained_features had no variation and carry no learned weight.",
             "external_action_domain_present has limited normal-mail coverage; its learned weight "
             "requires validation on labelled normal mail with legitimate cross-domain click or form destinations. "
